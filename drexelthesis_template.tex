@@ -1,0 +1,141 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% drexelthesis_template.tex
+% Christopher D. Cera (cera AT cs.drexel.edu) on 3/17/2004
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some of this template probably came from these people too:
+%     Mitchell Peabody 2002
+%     David T. McWherter 2000-07-13
+%     Vincent A. Cicirello 1999-02-13
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[12pt]{drexelthesis}
+
+\usepackage{url}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{graphics}
+\usepackage{subfigure}
+\usepackage{psfig}
+
+\usepackage{courier}
+\usepackage{times}
+\usepackage{mathptmx}
+\usepackage{rotating}
+\usepackage{tocloft}
+
+\doublespacing
+
+\title{Secure and Knowledge-based Collaborative Computer-Aided Design}
+
+\author{Christopher D.~Cera}
+\advisor{William C.~Regli, Ph.~D.~}
+
+\begin{document}
+
+\maketitle
+
+\begin{preliminary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\vspace*{3.25in}
+\begin{center}
+\begin{spacing}{1}
+\copyright ~Copyright 2004 \\
+Christopher D.{} Cera.  All Rights Reserved.
+\end{spacing}
+\end{center}
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{page}{2}
+
+\date{} % Purposely left blank
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{dedication}
+
+\end{dedication}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{acknowledgements}
+
+\end{acknowledgements}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\cfttoctitlefont}{\hfill\normalfont\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftchapleader}{\cftsecleader}
+\renewcommand{\cftchapfont}{\normalfont}
+\setlength{\cftbeforechapskip}{\cftbeforesecskip}
+\renewcommand{\cftchappagefont}{}
+\mytableofcontents\newpage
+
+\renewcommand{\cftlottitlefont}{\hfill\normalfont\bfseries}
+\renewcommand{\cftafterlottitle}{\hfill}
+\addcontentsline{toc}{chapter}{List of Tables}
+\setlength{\baselineskip}{0.5\baselineskip}
+\listoftables\newpage
+
+\renewcommand{\cftloftitlefont}{\hfill\normalfont\bfseries}
+\renewcommand{\cftafterloftitle}{\hfill}
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures\newpage
+\setlength{\baselineskip}{2.0\baselineskip}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{Abstract}
+\begin{abstract}
+
+
+\end{abstract}
+
+\clearpage
+\end{preliminary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                
+\thispagestyle{empty}
+\newpage
+\
+
+\setcounter{page}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER:                                                         INTRODUCTION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Introduction}
+\label{chap:introduction}
+
+Lame-o citation just to make bibliography working at a first pass~\cite{CERA:CGA:2002}.  Every thesis should cite this paper though \ldots it's very important.
+
+% Insert thesis here .....  :-D
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+\addcontentsline{toc}{chapter}{Bibliography}
+\begin{spacing}{1.0}
+\bibliographystyle{plain}
+\bibliography{drexelthesis_template.bib}
+\end{spacing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                
+\end{document}
