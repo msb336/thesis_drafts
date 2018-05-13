@@ -137,7 +137,7 @@ An intrinsic shape signature consists of two things:
 \end{enumerate}
 
 \subparagraph{3D Shape Feature Extraction}
-The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances ρi in each bin [1].
+The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances $\rho_{i}$ in each bin [1].
 
 \begin{figure}
 \centering
@@ -243,7 +243,7 @@ The speed, accuracy, and versatility of a CNN are functions of the number of hid
 With our goal being to isolate specific objects in a structural health monitoring setting, the ideal segmentation method is a supervised learning algorithm, such as a convolutional neural network, that semantically parses the point cloud based on a training set of pre-defined cloud objects [9]. However, due to time limitations, and a lack of training data relevant to our objects of interest, this is not possible. Instead we explore a series of unsupervised clustering methods on the assumption that objects are distinct enough in relative cloud neighborhoods to be properly segmented.
 \subparagraph{Methods Used}
 \subsubsection{K-means Clustering}
-K-means clustering is an iterative method that groups $n$-dimensional datasets into $k$ clusters based on a minimization of the Euclidean distance cost function $|x-c|^{2}$. Initially, $k$ centroids are placed randomly inside the dataset, and all data points are placed in bins $S$ depending on which centroid minimizes their cost function. At each iteration, the cluster centroids $c_{i}$ are re-calculated. Criteria for convergence is a maximum Euclidean distance change $σ$ between centroid position $c_{n}$ and $c_{n+1}$.
+K-means clustering is an iterative method that groups $n$-dimensional datasets into $k$ clusters based on a minimization of the Euclidean distance cost function $|x-c|^{2}$. Initially, $k$ centroids are placed randomly inside the dataset, and all data points are placed in bins $S$ depending on which centroid minimizes their cost function. At each iteration, the cluster centroids $c_{i}$ are re-calculated. Criteria for convergence is a maximum Euclidean distance change $\sigma$ between centroid position $c_{n}$ and $c_{n+1}$.
 \begin{gather*}
 	arg min_{S} \sum{i=1}^{k} \sum{x \in S_{i}} |x - c_{i}|^{2}
 \end{gather*}
@@ -424,8 +424,8 @@ for ( i = 0, \ldots, N-1 )
 \begin{lstlisting}[escapeinside={(*}{*)}]
 \end{lstlisting}
 
-\begin{table}
-\begin{centering}
+\begin{table}[h]
+\centering
 \caption[Effect of increasing scale in a scale space reconstruction]{Effect of increasing scale in a scale space reconstruction}
 \begin{tabular}{ | c | c | c | }
 \hline
@@ -445,7 +445,6 @@ Scale Space 10 & \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
 \\
 \hline
 \end{tabular}
-\end{centering}
 \end{table}
 
 
@@ -463,10 +462,61 @@ Now that the objects in the cloud are properly segmented, they must be meshed in
 The first criterion for surface mesh compatibility with volumetric conversion is “water-tightness.” Meaning, there are no gaps, holes, or unbounded edges in the triangulation. These gaps can be quantified as any edge in a polyhedron that is referenced by no other polyhedron in the triangulation.
 The other criteria are more abstract in nature and are more difficult to detect and handle independently. We define these criteria as mesh “Quality.” Quality is a quantification of the level of simplicity of a triangulation object by evaluating ratios of different elements in the triangulation.
 
+\begin{figure}
+	\centering
+		\includegraphics[width=2in]{triangulation_definitions.JPG}
+		\caption[Definitions for triangulation quality measures]
+		{Definitions for triangulation quality measures. $R$ = circumsphere radius, $r$ = inscribed sphere radius, $l$ = edge length.}
+		\label{fig:meshquality}
+\end{figure}
+
+\begin{table}
+	\centering
+		\caption{Quantification of mesh quality}
+		\begin{tabular}{| c | c |}
+			\hline
+			Inner/outer radius edge ratios & $Q_{1} = \frac{l_{min}}{R}$, $Q_{2} = \frac{r}{l_{min}}$
+			\\ \hline
+			Aspect ratio & $Q_{3} = \frac{r}{R}$
+			\\ \hline
+			Edge ratio & $Q_{4} = \frac{l_{min}}{l_{max}}$
+			\\ \hline
+			Volume ratio & $Q_{5} = \frac{V}{l_{max}^{3}}$
+			\\ \hline
+		\end{tabular}
+\end{table}
+
+\begin{figure}
+	\centering
+		\includegraphics[width=3in]{bad_tetrahedra.JPG}
+		\caption[Examples of poor quality tetrahedra]
+		{Common examples of poor quality tetrahedra}
+		\label{fig:badtetrahedra}
+\end{figure}
+
+Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:badtetrahedra}.
 
 
 
+\subsubsection{Voronoi Relaxation / Lloyd's Algorithm}
 
+\begin{figure}
+	\centering
+		\includegraphics[width=3in]{voronoirelaxation.PNG}
+		\caption[Demonstration of voronoi relaxation over several iterations]
+		{From right to left: Voronoi relaxation over 1 iteration, 5 iterations, 10 iterations, and 15 iterations}
+		\label{fig:voronoirelaxation}
+\end{figure}
+
+Voronoi  relaxation  operates  on  the  same  principle  as  k-means  clustering.  At  each  iteration,  the  centroid  of  each  Voronoi  region  is  calculated,  and  the  concurrent  vertex  is  moved  to  the  centroidal  location.  At  convergence,  the  resulting  mesh  is  uniform  in  tetrahedron/triangulation  size.  Voronoi  relaxation  can  modify  a  shape’s  topology  significant  due  to  its  heavy  smoothing  capabilities  [17].
+
+\subsubsection{Optimal Delaunay Triangulation}
+
+\subsubsection{Mesh Perturbation}
+While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  [5]. 
+
+\subsubsection{Mesh Exudation}
+Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  [6]. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -480,6 +530,16 @@ The other criteria are more abstract in nature and are more difficult to detect 
 \chapter{Technical Approach}
 \label{chap:technical}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Chapter			Results
+\chapter{Results}
+\label{chap:results}
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter: 		Conclusion
 \chapter{Conclusion}
@@ -490,20 +550,6 @@ The other criteria are more abstract in nature and are more difficult to detect 
 %Chapter: 		Future Work
 \chapter{Future Work}
 \label{chap:future}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

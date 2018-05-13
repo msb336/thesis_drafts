@@ -17,8 +17,35 @@
 \contentsline {subsubsection}{Position Data}{4}
 \contentsline {subsubsection}{Intrinsic Shape Signatures}{4}
 \contentsline {subparagraph}{Intrinsic Reference Frame Calculation}{4}
-\contentsline {chapter}{\numberline {3}Hypothesis Statement}{5}
-\contentsline {chapter}{\numberline {4}Technical Approach}{6}
-\contentsline {chapter}{\numberline {5}Conclusion}{7}
-\contentsline {chapter}{\numberline {6}Future Work}{8}
-\contentsline {chapter}{Bibliography}{9}
+\contentsline {subparagraph}{3D Shape Feature Extraction}{5}
+\contentsline {subsection}{\numberline {2.3.2}Flitering}{6}
+\contentsline {subsection}{\numberline {2.3.3}Down-sampling}{6}
+\contentsline {subsection}{\numberline {2.3.4}Dealing with Occlusion}{7}
+\contentsline {section}{\numberline {2.4}Machine Learning for Object Recognition and Segmentation}{9}
+\contentsline {subsection}{\numberline {2.4.1}Supervised Methods --- Neural Networks}{9}
+\contentsline {subparagraph}{Definitions}{9}
+\contentsline {subparagraph}{Convolutional Neural Networks}{10}
+\contentsline {subsection}{\numberline {2.4.2}Unsupervised Methods}{14}
+\contentsline {subparagraph}{Methods Used}{14}
+\contentsline {subsubsection}{K-means Clustering}{14}
+\contentsline {subsubsection}{Fuzzy C-means Clustering}{15}
+\contentsline {subsubsection}{Aggomerative and Dvisive Hierarchical Clustering}{15}
+\contentsline {subsubsection}{Euclidean Distance Clustering}{16}
+\contentsline {subsubsection}{Comparison of Methods}{17}
+\contentsline {subsection}{\numberline {2.4.3}Converting a Discrete Point Cloud to a Bounded Area Surface Mesh}{17}
+\contentsline {subsubsection}{Advancing Front / Marching Triangles}{18}
+\contentsline {subsubsection}{Scale Space Reconstruction Method}{19}
+\contentsline {subsubsection}{Hole Patching, Fairing, and Refinement}{21}
+\contentsline {subsection}{\numberline {2.4.4}Mesh Optimization}{21}
+\contentsline {subsubsection}{Criteria for Mesh Quality and Failure Criteria for Volumetric Conversion}{22}
+\contentsline {subparagraph}{Failure Criteria}{22}
+\contentsline {subsubsection}{Voronoi Relaxation / Lloyd's Algorithm}{24}
+\contentsline {subsubsection}{Optimal Delaunay Triangulation}{24}
+\contentsline {subsubsection}{Mesh Perturbation}{24}
+\contentsline {subsubsection}{Mesh Exudation}{25}
+\contentsline {chapter}{\numberline {3}Hypothesis Statement}{26}
+\contentsline {chapter}{\numberline {4}Technical Approach}{27}
+\contentsline {chapter}{\numberline {5}Results}{28}
+\contentsline {chapter}{\numberline {6}Conclusion}{29}
+\contentsline {chapter}{\numberline {7}Future Work}{30}
+\contentsline {chapter}{Bibliography}{31}

@@ -1,61 +1,65 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.5.9)  11 MAY 2018 13:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  13 MAY 2018 17:53
 entering extended mode
-**./thesis.tex
-(thesis.tex
-LaTeX2e <2017-04-15>
-Babel <3.18> and hyphenation patterns for 75 language(s) loaded.
-(drexelthesis.cls
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**thesis.tex
+(./thesis.tex
+LaTeX2e <2018-04-01> patch level 2
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+(./drexelthesis.cls
 Document Class: drexelthesis 2000/07/13 Drexel University Thesis class
-("C:\Program Files\MiKTeX 2.9\tex\latex\setspace\setspace.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\tools\indentfirst.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/indentfirst.sty
 Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
-) (report.cls
+)
+(./report.cls
 Document Class: report 1999/01/07 v1.4a Standard LaTeX document class
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\size12.clo"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
-\c@part=\count79
-\c@chapter=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
+\c@part=\count80
+\c@chapter=\count81
+\c@section=\count82
+\c@subsection=\count83
+\c@subsubsection=\count84
+\c@paragraph=\count85
+\c@subparagraph=\count86
+\c@figure=\count87
+\c@table=\count88
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 ))
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2017/09/02 v2.17a AMS math features
 \@mathmargin=\skip43
 
 For additional information on amsmath, use the `?' option.
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks14
 \ex@=\dimen103
 ))
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen104
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count88
+\inf@bad=\count89
 LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count89
-\leftroot@=\count90
+\uproot@=\count90
+\leftroot@=\count91
 LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count91
-\DOTSCASE@=\count92
+\classnum@=\count92
+\DOTSCASE@=\count93
 LaTeX Info: Redefining \ldots on input line 472.
 LaTeX Info: Redefining \dots on input line 475.
 LaTeX Info: Redefining \cdots on input line 596.
@@ -64,15 +68,15 @@ LaTeX Info: Redefining \cdots on input line 596.
 \big@size=\dimen105
 LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count93
-\c@MaxMatrixCols=\count94
+\macc@depth=\count94
+\c@MaxMatrixCols=\count95
 \dotsspace@=\muskip10
-\c@parentequation=\count95
-\dspbrk@lvl=\count96
+\c@parentequation=\count96
+\dspbrk@lvl=\count97
 \tag@help=\toks15
-\row@=\count97
-\column@=\count98
-\maxfields@=\count99
+\row@=\count98
+\column@=\count99
+\maxfields@=\count100
 \andhelp@=\toks16
 \eqnshift@=\dimen106
 \alignsep@=\dimen107
@@ -86,40 +90,161 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \mathdisplay@stack=\toks18
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
-) (thesis.aux)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count101
+\lst@gtempboxa=\box28
+\lst@token=\toks20
+\lst@length=\count102
+\lst@currlwidth=\dimen114
+\lst@column=\count103
+\lst@pos=\count104
+\lst@lostspace=\dimen115
+\lst@width=\dimen116
+\lst@newlines=\count105
+\lst@lineno=\count106
+\lst@maxwidth=\dimen117
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count107
+\lst@skipnumbers=\count108
+\lst@framebox=\box29
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+
+(./thesis.aux)
 \openout1 = `thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+
+(/usr/local/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count109
+\scratchdimen=\dimen118
+\scratchbox=\box30
+\nofMPsegments=\count110
+\nofMParguments=\count111
+\everyMPshowfont=\toks21
+\MPscratchCnt=\count112
+\MPscratchDim=\dimen119
+\MPnumerator=\count113
+\makeMPintoPDFobject=\count114
+\everyMPtoPDFconversion=\toks22
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2018/01/30 v0.27 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+\c@lstlisting=\count115
 
 [1
 
-{C:/Users/msb336/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2
+{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2
 
-]
-[3
+] [3
 
-] (thesis.toc)
+] (./thesis.toc)
 \tf@toc=\write3
 \openout3 = `thesis.toc'.
 
- [4] (thesis.lot)
+ [4] (./thesis.lot)
 \tf@lot=\write4
 \openout4 = `thesis.lot'.
 
  [5
 
-] (thesis.lof)
+] (./thesis.lof)
 \tf@lof=\write5
 \openout5 = `thesis.lof'.
 
@@ -131,14 +256,6 @@ LaTeX Font Info:    ... okay on input line 11.
 
 ]
  1.
-Missing character: There is no â in font cmr12!
-Missing character: There is no € in font cmr12!
-Missing character: There is no “ in font cmr12!
-Missing character: There is no â in font cmr12!
-Missing character: There is no € in font cmr12!
-Missing character: There is no “ in font cmr12!
-Missing character: There is no Ã in font cmr12!
-Missing character: There is no © in font cmr12!
 [1
 
 ] [2]
@@ -146,52 +263,393 @@ Missing character: There is no © in font cmr12!
 [3
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 116.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 119.
 
- ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+ (/usr/local/texlive/2018/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 119.
  [4]
+<images/ISSfeaturevector2.jpg, id=45, 201.00093pt x 188.20313pt>
+File: images/ISSfeaturevector2.jpg Graphic file (type jpg)
+<use images/ISSfeaturevector2.jpg>
+Package pdftex.def Info: images/ISSfeaturevector2.jpg  used on input line 144.
+(pdftex.def)             Requested size: 201.00043pt x 188.20265pt.
+<images/ISSfeaturevector.jpg, id=46, 215.30438pt x 197.98969pt>
+File: images/ISSfeaturevector.jpg Graphic file (type jpg)
+<use images/ISSfeaturevector.jpg>
+Package pdftex.def Info: images/ISSfeaturevector.jpg  used on input line 144.
+(pdftex.def)             Requested size: 215.30385pt x 197.9892pt.
+ [5]
+<images/l_block_pt_cloud10pnoise.jpg, id=53, 275.52937pt x 283.0575pt>
+File: images/l_block_pt_cloud10pnoise.jpg Graphic file (type jpg)
+<use images/l_block_pt_cloud10pnoise.jpg>
+Package pdftex.def Info: images/l_block_pt_cloud10pnoise.jpg  used on input lin
+e 156.
+(pdftex.def)             Requested size: 144.54pt x 148.4951pt.
+<images/l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg, id=54, 255.95625pt x 217
+.5628pt>
+File: images/l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg Graphic file (type j
+pg)
+<use images/l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg>
+Package pdftex.def Info: images/l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg  
+used on input line 156.
+(pdftex.def)             Requested size: 144.54pt x 122.86014pt.
+<images/l_block_pt_cloud.jpg, id=55, 253.69781pt x 252.19218pt>
+File: images/l_block_pt_cloud.jpg Graphic file (type jpg)
+<use images/l_block_pt_cloud.jpg>
+Package pdftex.def Info: images/l_block_pt_cloud.jpg  used on input line 166.
+(pdftex.def)             Requested size: 144.54pt x 143.68561pt.
+<images/l_block_pt_cloudDOWNSAMPLE025.jpg, id=56, 289.08pt x 281.55188pt>
+File: images/l_block_pt_cloudDOWNSAMPLE025.jpg Graphic file (type jpg)
+<use images/l_block_pt_cloudDOWNSAMPLE025.jpg>
+Package pdftex.def Info: images/l_block_pt_cloudDOWNSAMPLE025.jpg  used on inpu
+t line 166.
+(pdftex.def)             Requested size: 144.54pt x 140.77559pt.
+
+[6 <./images/ISSfeaturevector2.jpg> <./images/ISSfeaturevector.jpg>]
+<images/occluded_man.jpg, id=60, 304.88907pt x 148.30406pt>
+File: images/occluded_man.jpg Graphic file (type jpg)
+<use images/occluded_man.jpg>
+Package pdftex.def Info: images/occluded_man.jpg  used on input line 176.
+(pdftex.def)             Requested size: 304.88832pt x 148.30368pt.
+ [7 <./images/l_block_pt_cloud10pnoise.jpg> <./images/l_block_pt_cloud10pnoiseF
+ILTEREDk100std05.jpg>] [8 <./images/l_block_pt_cloud.jpg> <./images/l_block_pt_
+cloudDOWNSAMPLE025.jpg> <./images/occluded_man.jpg>]
+<images/cnn.png, id=67, 520.19344pt x 160.34906pt>
+File: images/cnn.png Graphic file (type png)
+<use images/cnn.png>
+Package pdftex.def Info: images/cnn.png  used on input line 198.
+(pdftex.def)             Requested size: 433.62pt x 133.66222pt.
+ [9] [10 <./images/cnn.png>]
+<images/cnnReLu.png, id=74, 370.38374pt x 174.6525pt>
+File: images/cnnReLu.png Graphic file (type png)
+<use images/cnnReLu.png>
+Package pdftex.def Info: images/cnnReLu.png  used on input line 216.
+(pdftex.def)             Requested size: 361.34999pt x 170.39609pt.
+<images/cnn_flow.png, id=76, 451.6875pt x 97.86563pt>
+File: images/cnn_flow.png Graphic file (type png)
+<use images/cnn_flow.png>
+Package pdftex.def Info: images/cnn_flow.png  used on input line 224.
+(pdftex.def)             Requested size: 433.62pt x 93.95589pt.
+ [11]
+[12 <./images/cnnReLu.png> <./images/cnn_flow.png>] [13] [14] [15]
+<images/divisiveAgglomerative.png, id=99, 395.22656pt x 226.59656pt>
+File: images/divisiveAgglomerative.png Graphic file (type png)
+<use images/divisiveAgglomerative.png>
+Package pdftex.def Info: images/divisiveAgglomerative.png  used on input line 2
+76.
+(pdftex.def)             Requested size: 289.07999pt x 165.7391pt.
+<images/2d-cluster-tests/k-means/concentric.jpg, id=100, 357.58594pt x 309.4059
+4pt>
+File: images/2d-cluster-tests/k-means/concentric.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/k-means/concentric.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/k-means/concentric.jpg  used o
+n input line 293.
+(pdftex.def)             Requested size: 56.9055pt x 49.23685pt.
+<images/2d-cluster-tests/fcm/concentric.jpg, id=101, 384.6872pt x 400.49625pt>
+File: images/2d-cluster-tests/fcm/concentric.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/fcm/concentric.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/fcm/concentric.jpg  used on in
+put line 295.
+(pdftex.def)             Requested size: 56.9055pt x 50.82336pt.
+<images/2d-cluster-tests/agglomerative/concentric.jpg, id=103, 330.48468pt x 31
+0.91156pt>
+File: images/2d-cluster-tests/agglomerative/concentric.jpg Graphic file (type j
+pg)
+<use images/2d-cluster-tests/agglomerative/concentric.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/agglomerative/concentric.jpg  
+used on input line 297.
+(pdftex.def)             Requested size: 56.9055pt x 43.7347pt.
+<images/2d-cluster-tests/euclidean-distance/concentric.jpg, id=105, 217.5628pt 
+x 187.45032pt>
+File: images/2d-cluster-tests/euclidean-distance/concentric.jpg Graphic file (t
+ype jpg)
+<use images/2d-cluster-tests/euclidean-distance/concentric.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/euclidean-distance/concentric.
+jpg  used on input line 301.
+(pdftex.def)             Requested size: 56.9055pt x 49.02766pt.
+<images/2d-cluster-tests/k-means/lines.jpg, id=106, 195.73125pt x 207.77625pt>
+File: images/2d-cluster-tests/k-means/lines.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/k-means/lines.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/k-means/lines.jpg  used on inp
+ut line 304.
+(pdftex.def)             Requested size: 42.67912pt x 45.3051pt.
+<images/2d-cluster-tests/fcm/lines.jpg, id=107, 127.22531pt x 146.04562pt>
+File: images/2d-cluster-tests/fcm/lines.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/fcm/lines.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/fcm/lines.jpg  used on input l
+ine 306.
+(pdftex.def)             Requested size: 42.67912pt x 48.99298pt.
+<images/2d-cluster-tests/agglomerative/lines.jpg, id=108, 176.15813pt x 209.281
+88pt>
+File: images/2d-cluster-tests/agglomerative/lines.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/agglomerative/lines.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/agglomerative/lines.jpg  used 
+on input line 308.
+(pdftex.def)             Requested size: 42.67912pt x 43.81099pt.
+<images/2d-cluster-tests/euclidean-distance/lines.jpg, id=110, 234.8775pt x 268
+.00125pt>
+File: images/2d-cluster-tests/euclidean-distance/lines.jpg Graphic file (type j
+pg)
+<use images/2d-cluster-tests/euclidean-distance/lines.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/euclidean-distance/lines.jpg  
+used on input line 312.
+(pdftex.def)             Requested size: 42.67912pt x 38.35635pt.
+<images/2d-cluster-tests/k-means/blob.jpg, id=112, 290.58563pt x 290.58563pt>
+File: images/2d-cluster-tests/k-means/blob.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/k-means/blob.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/k-means/blob.jpg  used on inpu
+t line 315.
+(pdftex.def)             Requested size: 42.67912pt x 34.31953pt.
+<images/2d-cluster-tests/fcm/blob.jpg, id=114, 182.93344pt x 170.13562pt>
+File: images/2d-cluster-tests/fcm/blob.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/fcm/blob.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/fcm/blob.jpg  used on input li
+ne 317.
+(pdftex.def)             Requested size: 42.67912pt x 39.69371pt.
+<images/2d-cluster-tests/agglomerative/blob.jpg, id=116, 295.1025pt x 295.1025p
+t>
+File: images/2d-cluster-tests/agglomerative/blob.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/agglomerative/blob.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/agglomerative/blob.jpg  used o
+n input line 319.
+(pdftex.def)             Requested size: 42.67912pt x 34.44862pt.
+<images/2d-cluster-tests/euclidean-distance/blob.jpg, id=118, 313.9228pt x 302.
+63063pt>
+File: images/2d-cluster-tests/euclidean-distance/blob.jpg Graphic file (type jp
+g)
+<use images/2d-cluster-tests/euclidean-distance/blob.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/euclidean-distance/blob.jpg  u
+sed on input line 323.
+(pdftex.def)             Requested size: 42.67912pt x 33.40393pt.
+<images/2d-cluster-tests/k-means/solid_circles.jpg, id=120, 295.1025pt x 243.91
+125pt>
+File: images/2d-cluster-tests/k-means/solid_circles.jpg Graphic file (type jpg)
+
+<use images/2d-cluster-tests/k-means/solid_circles.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/k-means/solid_circles.jpg  use
+d on input line 326.
+(pdftex.def)             Requested size: 42.67912pt x 27.04523pt.
+<images/2d-cluster-tests/fcm/circles.jpg, id=122, 197.98969pt x 177.66376pt>
+File: images/2d-cluster-tests/fcm/circles.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/fcm/circles.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/fcm/circles.jpg  used on input
+ line 328.
+(pdftex.def)             Requested size: 42.67912pt x 26.03069pt.
+<images/2d-cluster-tests/agglomerative/solid_circles.jpg, id=124, 222.07968pt x
+ 185.94469pt>
+File: images/2d-cluster-tests/agglomerative/solid_circles.jpg Graphic file (typ
+e jpg)
+<use images/2d-cluster-tests/agglomerative/solid_circles.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/agglomerative/solid_circles.jp
+g  used on input line 330.
+(pdftex.def)             Requested size: 42.67912pt x 24.79729pt.
+<images/2d-cluster-tests/euclidean-distance/solid_circles.jpg, id=126, 214.5515
+6pt x 194.97844pt>
+File: images/2d-cluster-tests/euclidean-distance/solid_circles.jpg Graphic file
+ (type jpg)
+<use images/2d-cluster-tests/euclidean-distance/solid_circles.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/euclidean-distance/solid_circl
+es.jpg  used on input line 334.
+(pdftex.def)             Requested size: 42.67912pt x 21.80489pt.
+<images/2d-cluster-tests/k-means/plane.jpg, id=128, 208.52907pt x 221.32687pt>
+File: images/2d-cluster-tests/k-means/plane.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/k-means/plane.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/k-means/plane.jpg  used on inp
+ut line 337.
+(pdftex.def)             Requested size: 42.67912pt x 33.6514pt.
+<images/2d-cluster-tests/fcm/plane.jpg, id=130, 135.50626pt x 127.97812pt>
+File: images/2d-cluster-tests/fcm/plane.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/fcm/plane.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/fcm/plane.jpg  used on input l
+ine 339.
+(pdftex.def)             Requested size: 42.67912pt x 31.34608pt.
+<images/2d-cluster-tests/agglomerative/plane.jpg, id=132, 214.55156pt x 204.765
+pt>
+File: images/2d-cluster-tests/agglomerative/plane.jpg Graphic file (type jpg)
+<use images/2d-cluster-tests/agglomerative/plane.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/agglomerative/plane.jpg  used 
+on input line 341.
+(pdftex.def)             Requested size: 42.67912pt x 29.41118pt.
+<images/2d-cluster-tests/euclidean-distance/plane.jpg, id=134, 293.59688pt x 29
+3.59688pt>
+File: images/2d-cluster-tests/euclidean-distance/plane.jpg Graphic file (type j
+pg)
+<use images/2d-cluster-tests/euclidean-distance/plane.jpg>
+Package pdftex.def Info: images/2d-cluster-tests/euclidean-distance/plane.jpg  
+used on input line 345.
+(pdftex.def)             Requested size: 42.67912pt x 34.40424pt.
+
+Overfull \hbox (24.71855pt too wide) in paragraph at lines 289--349
+ [] 
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[16 <./images/divisiveAgglomerative.png>] [17 <./images/2d-cluster-tests/fcm/co
+ncentric.jpg> <./images/2d-cluster-tests/agglomerative/concentric.jpg> <./image
+s/2d-cluster-tests/agglomerative/lines.jpg> <./images/2d-cluster-tests/euclidea
+n-distance/lines.jpg> <./images/2d-cluster-tests/k-means/blob.jpg> <./images/2d
+-cluster-tests/fcm/blob.jpg> <./images/2d-cluster-tests/agglomerative/blob.jpg>
+ <./images/2d-cluster-tests/euclidean-distance/blob.jpg> <./images/2d-cluster-t
+ests/k-means/solid_circles.jpg> <./images/2d-cluster-tests/fcm/circles.jpg> <./
+images/2d-cluster-tests/agglomerative/solid_circles.jpg> <./images/2d-cluster-t
+ests/euclidean-distance/solid_circles.jpg> <./images/2d-cluster-tests/k-means/p
+lane.jpg> <./images/2d-cluster-tests/fcm/plane.jpg> <./images/2d-cluster-tests/
+agglomerative/plane.jpg> <./images/2d-cluster-tests/euclidean-distance/plane.jp
+g> <./images/2d-cluster-tests/k-means/concentric.jpg> <./images/2d-cluster-test
+s/euclidean-distance/concentric.jpg> <./images/2d-cluster-tests/k-means/lines.j
+pg> <./images/2d-cluster-tests/fcm/lines.jpg>]
+<images/delaunay.png, id=159, 210.7875pt x 210.7875pt>
+File: images/delaunay.png Graphic file (type png)
+<use images/delaunay.png>
+Package pdftex.def Info: images/delaunay.png  used on input line 366.
+(pdftex.def)             Requested size: 210.78699pt x 210.78699pt.
+ [18 <./images/delaunay.png>]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 386.
+
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 386.
+ [19]
+File: images/l_block_pt_cloud.jpg Graphic file (type jpg)
+<use images/l_block_pt_cloud.jpg>
+Package pdftex.def Info: images/l_block_pt_cloud.jpg  used on input line 432.
+(pdftex.def)             Requested size: 85.35826pt x 84.85143pt.
+File: images/l_block_pt_cloud10pnoise.jpg Graphic file (type jpg)
+<use images/l_block_pt_cloud10pnoise.jpg>
+Package pdftex.def Info: images/l_block_pt_cloud10pnoise.jpg  used on input lin
+e 434.
+(pdftex.def)             Requested size: 85.35826pt x 87.69077pt.
+<images/scalespace/clean/scalespace3.png, id=168, 903.375pt x 644.4075pt>
+File: images/scalespace/clean/scalespace3.png Graphic file (type png)
+<use images/scalespace/clean/scalespace3.png>
+Package pdftex.def Info: images/scalespace/clean/scalespace3.png  used on input
+ line 438.
+(pdftex.def)             Requested size: 85.35826pt x 60.88503pt.
+<images/scalespace/10pnoise/scale3.png, id=169, 903.375pt x 644.4075pt>
+File: images/scalespace/10pnoise/scale3.png Graphic file (type png)
+<use images/scalespace/10pnoise/scale3.png>
+Package pdftex.def Info: images/scalespace/10pnoise/scale3.png  used on input l
+ine 438.
+(pdftex.def)             Requested size: 85.35826pt x 60.88503pt.
+<images/scalespace/clean/scalespace5.png, id=170, 903.375pt x 644.4075pt>
+File: images/scalespace/clean/scalespace5.png Graphic file (type png)
+<use images/scalespace/clean/scalespace5.png>
+Package pdftex.def Info: images/scalespace/clean/scalespace5.png  used on input
+ line 441.
+(pdftex.def)             Requested size: 85.35826pt x 60.88503pt.
+<images/scalespace/10pnoise/scale5.png, id=171, 903.375pt x 644.4075pt>
+File: images/scalespace/10pnoise/scale5.png Graphic file (type png)
+<use images/scalespace/10pnoise/scale5.png>
+Package pdftex.def Info: images/scalespace/10pnoise/scale5.png  used on input l
+ine 441.
+(pdftex.def)             Requested size: 85.35826pt x 60.88503pt.
+<images/scalespace/clean/scalespace10.png, id=172, 903.375pt x 644.4075pt>
+File: images/scalespace/clean/scalespace10.png Graphic file (type png)
+<use images/scalespace/clean/scalespace10.png>
+Package pdftex.def Info: images/scalespace/clean/scalespace10.png  used on inpu
+t line 444.
+(pdftex.def)             Requested size: 85.35826pt x 60.88503pt.
+<images/scalespace/10pnoise/scale10.png, id=173, 903.375pt x 644.4075pt>
+File: images/scalespace/10pnoise/scale10.png Graphic file (type png)
+<use images/scalespace/10pnoise/scale10.png>
+Package pdftex.def Info: images/scalespace/10pnoise/scale10.png  used on input 
+line 444.
+(pdftex.def)             Requested size: 85.35826pt x 60.88503pt.
+
+Overfull \hbox (49.43672pt too wide) in paragraph at lines 430--448
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[20] [21 <./images/scalespace/clean/scalespace3.png (PNG copy)> <./images/scale
+space/10pnoise/scale3.png (PNG copy)> <./images/scalespace/clean/scalespace5.pn
+g (PNG copy)> <./images/scalespace/10pnoise/scale5.png (PNG copy)> <./images/sc
+alespace/clean/scalespace10.png (PNG copy)> <./images/scalespace/10pnoise/scale
+10.png (PNG copy)>]
+<images/triangulation_definitions.JPG, id=180, 711.4078pt x 575.14874pt>
+File: images/triangulation_definitions.JPG Graphic file (type jpg)
+<use images/triangulation_definitions.JPG>
+Package pdftex.def Info: images/triangulation_definitions.JPG  used on input li
+ne 467.
+(pdftex.def)             Requested size: 144.54pt x 116.85312pt.
+<images/bad_tetrahedra.JPG, id=181, 453.19313pt x 330.48468pt>
+File: images/bad_tetrahedra.JPG Graphic file (type jpg)
+<use images/bad_tetrahedra.JPG>
+Package pdftex.def Info: images/bad_tetrahedra.JPG  used on input line 491.
+(pdftex.def)             Requested size: 216.81pt x 158.10638pt.
+
+
+LaTeX Warning: Reference `fig:badtetrahedra' on page 22 undefined on input line
+ 497.
+
+<images/voronoirelaxation.PNG, id=182, 210.0648pt x 55.407pt>
+File: images/voronoirelaxation.PNG Graphic file (type png)
+<use images/voronoirelaxation.PNG>
+Package pdftex.def Info: images/voronoirelaxation.PNG  used on input line 505.
+(pdftex.def)             Requested size: 216.81pt x 57.1865pt.
+[22 <./images/triangulation_definitions.JPG>] [23 <./images/bad_tetrahedra.JPG>
+] [24 <./images/voronoirelaxation.PNG>] [25]
  3.
-[5
+[26
 
 ]
  4.
-[6
+[27
 
 ]
  5.
-[7
+[28
 
 ]
  6.
-[8
+[29
 
 ]
-No file thesis.bbl.
-[9] (thesis.aux)
+ 7.
+[30
+
+] [31] (./thesis.aux)
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 976 strings out of 493305
- 11768 string characters out of 3138872
- 67653 words of memory out of 3000000
- 4561 multiletter control sequences out of 15000+200000
- 7357 words of font info for 27 fonts, out of 3000000 for 9000
+ 4002 strings out of 492649
+ 59054 string characters out of 6129622
+ 123241 words of memory out of 5000000
+ 7797 multiletter control sequences out of 15000+600000
+ 7357 words of font info for 27 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,9n,21p,790b,185s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fon
-ts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on thesis.pdf (17 pages, 77125 bytes).
+ 41i,14n,32p,831b,1536s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.p
+fb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pf
+b></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb>
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></
+usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
+r/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/l
+ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loca
+l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local
+/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/t
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on thesis.pdf (39 pages, 1889402 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
+ 258 PDF objects out of 1000 (max. 8388607)
+ 142 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 302 words of extra memory for PDF output out of 10000 (max. 10000000)
 
