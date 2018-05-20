@@ -1,6 +1,7 @@
 
 \ExecuteOptions{letterpaper,oneside,12pt,onecolumn,final,openany}
 \documentclass[12pt]{drexelthesis}
+\usepackage[numbers]{natbib}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{listings}
@@ -39,12 +40,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mytableofcontents\newpage
 
-\addcontentsline{toc}{chapter}{List of Tables}
-\setlength{\baselineskip}{0.5\baselineskip}
-\listoftables\newpage
 
-\addcontentsline{toc}{chapter}{List of Figures}
-\listoffigures\newpage
+\setlength{\baselineskip}{0.5\baselineskip}
+\listoftables \newpage
+
+
+\listoffigures \newpage
 \setlength{\baselineskip}{2.0\baselineskip}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -76,19 +77,21 @@ Surface reconstruction from a 3D point cloud is not a novel problem. In the past
 %%
 \subsection{Geographical Topography Mapping}
 \label{subsec:topographymapping}
-In 2009, José Lerma and his team of archaeologists began using Terrestrial laser scanning in tandem with close proximity photogrammetry to render high resolution 3D surface models of ancient caves in Spain. Lerma et. al. are general in their description of their meshing method, which is most likely due to their non-computer programming oriented backgrounds. However, their pipeline involves sensor fusion between their laser scanner, which returns a pure point cloud with an origin at the center of the instrument, and deduced point clouds from photogrammetry data. The result is an impressive, high resolution surface mesh that accurately captures the features relevant to an archaeologist, but provide no useful information in terms of structural health monitoring %[1].
-In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to provide 3D mapping of earthwork projects for surveyors %[2].
+In 2009, José Lerma and his team of archaeologists began using Terrestrial laser scanning in tandem with close proximity photogrammetry to render high resolution 3D surface models of ancient caves in Spain. Lerma et. al. are general in their description of their meshing method, which is most likely due to their non-computer programming oriented backgrounds. However, their pipeline involves sensor fusion between their laser scanner, which returns a pure point cloud with an origin at the center of the instrument, and deduced point clouds from photogrammetry data. The result is an impressive, high resolution surface mesh that accurately captures the features relevant to an archaeologist, but provide no useful information in terms of structural health monitoring \cite{RN50}.
+
+In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
 %%
 \subsection{Building Informational Modeling}
 \label{subsec:BIM}
 %[3]
+\cite{RN30}
 %%
 \subsection{Aerial Scanning for GPS Overlay
 \label(subsec:UAVscanning}
 %%
 \subsection{Semi-Automated Point Cloud to FEA modeling}
 \label{subsec:SemiFEA}
-%[4] [5] [6] [7]
+\cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,7 +104,7 @@ In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to pro
 There are many ways of collecting point cloud data, ranging from implicit methods where the collection tool does not return direct xyz point data, such as stereogrammetry and structure from motion, to explicit methods where the direct return is a 3-dimensional position output, such as LiDAR, laser scanning and ultrasonic sensing. Each collection technique has its own set of parameters, accuracy ratings, and speed of collection / calculation.
 \subsection{Implicit collection methods: Stereogrammetry and Structure from Motion}
 \label{subsec:implicit}
-[8]
+\cite{RN20}
 \subsection{Explicit Methods: LiDAR, Laser Scanning, and Ultrasonic Sensing}
 \label{subsec:explicit}
 %%
@@ -122,39 +125,41 @@ An intrinsic shape signature consists of two things:
 \subparagraph{Intrinsic Reference Frame Calculation}
 \begin{enumerate}
 	\item Compute a weight for each point $p_{i}$ inversely related to the number of points within 2-norm distance $r_{density}$:
-
-		\begin{gather*}
+	
+		\begin{equation}
 		w_{i}=  \frac{1}{||p_{j} \mid |p_{j}-p_{i}| < r_{density}||}
-		\end{gather*}
+		\end{equation}
 		This weight is used to compensate for uneven sampling of the 3D points, so that points at sparsely sampled regions contribute more than points at densely sampled regions. 
 
 	\item Compute a weighted scatter matrix $cov(p_{i})$ for $p_{i}$ using all points $p_{j}$ within distance $r_{frame}$:
-		\begin{gather*}
+	
+		\begin{equation}
 		cov(p_{i})= \sum{|p_{j}-p{i}| < r_{frame}}\frac{w_{j}(p_{j}-p_{i})(p_{j}-p{i})^{T}}{ \sum{|p_{j}-p{i}| < r_{frame}}w_{j}}
-		\end{gather*}
+		\end{equation}
+		
 	\item Compute the covariance matrix eigenvalues in order of decreasing magnitude and their resulting eigenvectors.
-	\item $p_{i}$ is now the origin of the intrinsic frame, with $e^{1}$, $e^{2}$, and their cross product as the $x$, $y$, and $z$ axes, respectively [1].
+	\item $p_{i}$ is now the origin of the intrinsic frame, with $e^{1}$, $e^{2}$, and their cross product as the $x$, $y$, and $z$ axes, respectively \cite{RN60}.
 \end{enumerate}
 
 \subparagraph{3D Shape Feature Extraction}
-The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances $\rho_{i}$ in each bin [1].
+The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances $\rho_{i}$ in each bin \cite{RN60}.
 
 \begin{figure}
 \centering
 \includegraphics{ISSfeaturevector2.jpg}  \includegraphics{ISSfeaturevector.jpg}
-\caption[Intrinsic Shape Signature feature vectors]{Feature vector calculation via spherical bin decomposition [1]}
+\caption[Intrinsic Shape Signature feature vectors]{\centering Feature vector calculation via spherical bin decomposition \cite{RN60}.}
 \end{figure}
 
 \subsection{Flitering}
 To minimize the amount of noise in the resulting dataset, a statistical approach requiring each point to have k neighbors within d standard deviations from the mean density radius of the cloud. This allows for controlled outlier removal, and a smoother cloud with fewer sharp edges.
-\begin{gather*}
+\begin{equation}
 	P_{x} = p_{i} \mid \sum_{j=1}^n |p_{j} - p_{i}| \leq (r_{density} + d) \geq k
-\end{gather*}
+\end{equation}
 
 \begin{figure}
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud10pnoise.jpg} \includegraphics[width=2in]{l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg}
-\caption[Effects of noise filter on simulated point cloud objects]{The effects of noise filtering on a simulated L block with 10\% induced noise.}
+\caption[Effects of noise filter on simulated point cloud objects]{\centering The effects of noise filtering on a simulated L block with 10\% induced noise.}
 \end{figure}
 
 
@@ -164,7 +169,7 @@ Down-sampling is the process of fixing a point cloud’s mean density to a voxel
 \begin{figure}
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud} \includegraphics[width=2in]{l_block_pt_cloudDOWNSAMPLE025.jpg}
-\caption[Effects of down-sampling on simulated point cloud objects]{A simulated L block point cloud down-sampled with voxel size = 0.25 $cm^{3}$.}
+\caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $cm^{3}$.}
 \end{figure}
 
 
@@ -174,8 +179,76 @@ Occlusion is a common issue in the perception world, defined by the lack of info
 \begin{figure}
 \centering
 \includegraphics{occluded_man.jpg}
-\caption[Demonstration of occlusion]{Section of a building occluded by an object in the foreground [11].}
+\caption[Demonstration of occlusion]{\centering Section of a building occluded by an object in the foreground \cite{RN13}.}
 \end{figure}
+
+\subsubsection{Range Segementation}
+\label{subsubsec:rangeseg}
+In urban scanning situations, it is nearly impossible to avoid scan noise. This can come in the form of humans passing by, parked cars, street lights, other buildings, trees, bushes, and a slew of other objects that may come between the scanner and the desired object. Biasuttia et. al. propose a way to cast these interruptions to the surface they desire to map by converting the xyz point cloud to a range image --- a three parameter map of distance $r$ from the device plotted against $\theta$ and $\phi$, the rotation about the $z$ and $x$ axes, respectively.
+
+Once the points are cast to a range image, a range histogram is created. The histogram is segmented into $S$ classes, and the centroid of each class is calculated using the following equation.
+
+\begin{equation}
+	C_{s}^{i} = \frac{\sum_{b\in C_{s}^{i}} b  \times h_{s}(b)}{\sum_{b\in C_{s}^{i}}h_{s}(b)}
+\end{equation}
+
+Any centroids within some user-defined distance, $\tau$, are merged as a single cloud.
+
+\begin{equation}
+	d(C_{s}^{i}, C_{r}^{j}) = |C_{s}^{i} - C_{r}^{j}|
+\end{equation}
+
+An algorithm built under the pretext of Gaussian diffusion is then used to project points with a significantly different normals to conform with their range image neighbors. This approach requires structured data that is also time-stamped. In the equation below, $u$ represents the $(\phi, \theta)$ coordinates of a point the merged dataset, and $\Omega$  represents the full range image of the merged dataset, and $\eta$ represents the orthogonal projection of each pixel in the range image. The aim is to solve the following disocclusion problem.
+
+\begin{equation}
+		\begin{cases}
+			\frac{\partial u}{\partial t} - \Delta u = 0 \in \Omega \times (0,T) \\
+			u(0,x) = u_{0}(0) \in \Omega
+		\end{cases}
+\end{equation}
+
+When scanning large objects, this method proves to be quite effective at removing sources of noise that are significantly smaller than the object being scanned. For buildings, bridges, and large-scale structures, this is a necessary first step in removing excess noise / unnecessary information from the cloud \cite{RN13}.
+
+
+\subsubsection{Informed Shape Estimation}
+Occlusion is the cause of two main problems. The first being the unnecessary information provided by objects blocking the instruments view to our desired target, which is dealt with via the diffusion of objects from the foreground into the background via the range segmentation method show in the previous section. The second --- far more relevant to the approach outlined in this thesis --- is the lack of complete information provided by the sensor. This can be most easily explained by making an analogy to photography. If one takes a picture of the front of a box, there is no possible way to say with certainty what the back of the box looks like. In 3D point processing, the problem is the same. Informed shape estimation attempts to tackle this problem by applying a shape with known parameters to the object point cloud and modifying the shape parameters to minimize the following cost function:
+
+\begin{equation}
+	C = \sum_{i=0}^{N}{p(i) - p_{proj}(i)}
+\end{equation}
+
+Where $N$ represents the number of points in the set, $p(i)$ represents the $i^{th}$ point in the set, and $p_{proj}(i)$ represents the closest point on the applied shape who's unit normal vector matches within some tolerance, $\tau$.
+
+\begin{equation}
+	p_{proj}(i) = arg_{min} \frac{p(i) \bullet l(j)}{||l(j)||} \in p_{normal}(i) \bullet l_{normal}(j) \geq \tau
+\end{equation}
+
+\begin{equation}
+	\label{eq:newtonraph}
+	x_{k+1} = x_{k} - \frac{C(x_{k})}{C'(x_{k})}
+\end{equation}
+
+Using a Newton Raphson interative regression, shown in equation \ref{eq:newtonraph} the cross section parameters are modified to minimize the cost required to projection points to the estimated surface. This technique is iterated throughout the long axis of the object, allowing for crucial information such as deformation to be retained. The power in this method is in it's ability to fill information in heavily occluded areas, at the cost of having a narrow scope. Informed shape estimation makes the following assumptions:
+
+\begin{enumerate}
+	\item Objection deformation is planar. Calculating the length plane removes the information involving multi-axial deformation.
+	\item Cross-section is undamaged thoughout the length of the object. Information regarding damage which alters the objects cross section will be lost when points are projected to the estimated cross section.
+	\item The target object can be defined via simple parameters such as length, height, width, and thickness.
+\end{enumerate}
+
+\begin{figure}
+	\centering
+		\includegraphics[width=3in]{cross-section-estimation/flowchart.jpg}
+	\caption[Flow chart of informed shape estimation algorithm]{\centering A flowchart of the informed shape estimation algorithm.}
+\end{figure}
+
+
+
+
+
+
+
+ 
 
 
 %%
@@ -184,9 +257,11 @@ Occlusion is a common issue in the perception world, defined by the lack of info
 \subsection{Supervised Methods --- Neural Networks}
 \subparagraph{Definitions}
 It is difficult to define how a Convolutional Neural Network works without first defining a convolution. To detect distinctive features in a dataset – from a machine’s perspective – the dataset needs to be modified to enunciate those features. Key features in machine vision include edges, corners, and areas with distinctive geometry. Convolutions are the key to bringing these features to the forefront of the image.
-A convolution kernel is a weighted square matrix of dimensions m, and depth equaling the rank of the feature space of the dataset. The kernel acts as a filter for the image as it strides from supervoxel to supervoxel. At each step, the dot product of the kernel with data values inside the current super-voxel provide a convolved image of the dataset while retaining characteristic features. The equation below illustrates the math behind a convolution kernel. C represents the convolved image, w the weight matrix, I the original image, m the size of the kernel, and i represents the voxel position.
+A convolution kernel is a weighted square matrix of dimensions m, and depth equaling the rank of the feature space of the dataset. The kernel acts as a filter for the image as it strides from supervoxel to supervoxel. At each step, the dot product of the kernel with data values inside the current super-voxel provide a convolved image of the dataset while retaining characteristic features. The equation below illustrates the math behind a convolution kernel. $C$ represents the convolved image, and $x_{i}$ the $i^{th}$ point of $N$ points located inside the voxel.
 
-[N DIMENSIONAL CONVOLUTION EQUATION]
+\begin{equation}
+	C_{new} = \frac{\sum_{i}^{N}  x_{i}}{N}
+\end{equation}
 
 Another type of convolution is called pooling, or subsampling. This convolution steps through the dataset with a stride value greater than one, resulting in a smaller image of the original set. In pooling, the kernel will pull either the largest intensity from each super-voxel, or the average intensity of the data points inside the super-voxel. This allows for the machine to decrease the size of the dataset while maintaining distinctive features.
 
@@ -194,19 +269,21 @@ Another type of convolution is called pooling, or subsampling. This convolution 
 Convolutional Neural Networks (CNNs) are modeled after the visual cortex in the brain. They consist of layers of convolutional networks. Each network contains “neurons” with simple feature reception fields. Through layers upon layers of these networks, objects can be classified. The biases and weights on these networks can be adjusted based on learning algorithms REF 1 in proposal. CNNs have become the standard in feature classification for image processing, but the accuracy that they provide comes at the price of processing time. 
 Every CNN can be broken down into the following steps: Convolution, max/mean pooling, activation function, fully connected layer, repeat. The diagram below illustrates the overarching structure of a basic Convolutional Neural Network:
 \begin{figure}
-\centering
-\includegraphics[width=6in]{cnn.png}
-\caption[High level flow chart of a convolutional neural network]{Map of a convolutional neural network with two hidden layers [ref]}
+	\centering
+		\includegraphics[width=6in]{cnn.png}
+	\caption[High level flow chart of a convolutional neural network]{\centering Map of a convolutional neural network with two hidden layers [ref]}
 \end{figure}
 
 In the case of point cloud processing, the input is a raw xyz set of some size n x 3. The first step in the network is a series of convolutions of the dataset. Each kernel in the layer contains m x m x 3 trainable weights, which are iteratively modified using a steepest descent numerical solver during the training phase of the system. The convolved images are stacked in a block, called a feature map, or convolutional layer. From there, the convolved images are pooled (or subsampled) to condense the size of the image stack. 
 At this point, there is a large stack of feature maps draw from the original input dataset. In a simple linear system, these features are combined into a single weighted summation function, where the input is each individual feature value, and the output is a vector representing the probability of the image belonging to a certain class.
-\[
+
+\begin{equation}
 \begin{bmatrix}
 C_{1} \\
 \vdots \\
 C_{n}
-\end{bmatrix}  =  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix} \]
+\end{bmatrix}  =  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix}
+\end{equation}
 
 The equation above represents the transformation from feature space to the “fully connected layer.” $C_{i}$ represents the probability of the input image belonging to class $i$, and $f_{i}$ represents the value of the ith feature in the feature map. 
 Linear classification methods limit the versatility of the CNN, as many object distinctions do not follow a linear pattern in $n$-dimensional space. To account for this, most CNNs – including the ones utilized in this paper – incorporate a de-linearizing element dubbed the “activation function.” The activation function applies a nonlinear operation to the values in the convolution layer, which allows for the CNN to become a very powerful nonlinear fit function. Typical activation functions include the hyperbolic tangent function, the sigmoid function, and – most popularly – the rectifier function. Each of these functions are show in the figure below:
@@ -214,7 +291,7 @@ Linear classification methods limit the versatility of the CNN, as many object d
 \begin{figure}
 \centering
 \includegraphics[width=5in]{cnnReLu.png}
-\caption[Common CNN non-linear activation functions]{Visualization of commonly used non-linear activation functions}
+\caption[Common CNN non-linear activation functions]{\centering Visualization of commonly used non-linear activation functions}
 \end{figure}
 
 From input to output, all CNNs have the same skeleton structure, with a varying number of layers between the raw input and the fully connected layer:
@@ -222,31 +299,34 @@ From input to output, all CNNs have the same skeleton structure, with a varying 
 \begin{figure}
 \centering
 \includegraphics[width=6in]{cnn_flow.png}
-\caption[Block diagram of CNN flow]{Block diagram of a CNN$'$s skeleton structure}
+\caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
 \end{figure}
 
 For the system to be accurate, the weights for each convolution and connection must be trained. This training is done through a process called backpropagation. An image-set of known classifications is fed to the untrained system, and the error between the system’s classification and the true classification of each image is used to update the weights iteratively until the machine’s class prediction closely resembles ground truth. Most algorithms use numerical solving methods to sharply diminish the number of iterations required for convergence. The “gradient descent” method is commonly used in the machine learning world due to its rapid convergence properties and low computational complexity. The method is shown below:
 
-\begin{gather*}
+\begin{equation}
 	x_{k+1} = x_{k} - \gamma \nabla F(x_{k})
-\end{gather*}
- \[ F(x) =
+\end{equation}
+
+\begin{equation}
+ F(x) =
 \begin{bmatrix}
 C_{1} \\
 \vdots \\
 C_{n}
-\end{bmatrix}  -  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix} \]
+\end{bmatrix}  -  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix} 
+\end{equation}
 
-The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset [12].
+The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset \cite{RN7}.
 
 \subsection{Unsupervised Methods}
-With our goal being to isolate specific objects in a structural health monitoring setting, the ideal segmentation method is a supervised learning algorithm, such as a convolutional neural network, that semantically parses the point cloud based on a training set of pre-defined cloud objects [9]. However, due to time limitations, and a lack of training data relevant to our objects of interest, this is not possible. Instead we explore a series of unsupervised clustering methods on the assumption that objects are distinct enough in relative cloud neighborhoods to be properly segmented.
+With our goal being to isolate specific objects in a structural health monitoring setting, the ideal segmentation method is a supervised learning algorithm, such as a convolutional neural network, that semantically parses the point cloud based on a training set of pre-defined cloud objects \cite{RN72}. However, due to time limitations, and a lack of training data relevant to our objects of interest, this is not possible. Instead we explore a series of unsupervised clustering methods on the assumption that objects are distinct enough in relative cloud neighborhoods to be properly segmented.
 \subparagraph{Methods Used}
 \subsubsection{K-means Clustering}
 K-means clustering is an iterative method that groups $n$-dimensional datasets into $k$ clusters based on a minimization of the Euclidean distance cost function $|x-c|^{2}$. Initially, $k$ centroids are placed randomly inside the dataset, and all data points are placed in bins $S$ depending on which centroid minimizes their cost function. At each iteration, the cluster centroids $c_{i}$ are re-calculated. Criteria for convergence is a maximum Euclidean distance change $\sigma$ between centroid position $c_{n}$ and $c_{n+1}$.
-\begin{gather*}
+\begin{equation}
 	arg min_{S} \sum{i=1}^{k} \sum{x \in S_{i}} |x - c_{i}|^{2}
-\end{gather*}
+\end{equation}
 
 [PROS, CONS, AND GENERAL USAGE CASES]
 
@@ -254,15 +334,15 @@ K-means clustering is an iterative method that groups $n$-dimensional datasets i
 
 Fuzzy C-means (FCM) is very similar to K-means clustering. Once again, points are iteratively grouped to k centroids based on their Euclidean distance to the centroid. The significant difference is that points do not belong exclusively to a single group. Instead, points are weighted by their degree of belonging in each cluster.
 
-\begin{gather*}
+\begin{equation}
 	c_{k} = \frac{\sum{x}w_{k}(x)^{m}x}{\sum{x}w_{k}(x)^{m}}
-\end{gather*}
+\end{equation}
 
 Each point is provided a weight vector w [0, 1] for its likelihood of belonging in each cluster, where the weight function is as follows:
 
-\begin{gather*}
+\begin{equation}
 	w_{ij} = \frac{1}{\sum_{k=1}^{c}(\frac{|x_{i}-c_{j}|}{|x_{i}-c_{k}|})^{\frac{2}{m-1}}}
-\end{gather*}
+\end{equation}
 
 [PROS, CONS, AND GENERAL USAGE CASES]
 
@@ -355,22 +435,22 @@ Surface meshing is the science of inferring a continuous shape topology from a d
 Delaunay triangulation finds its routes in Voronoi tessellation, a method of constructing non-overlapping geometrical tiles. Voronoi tessellation states the following:
 For a given set of points in space, $\{P_{k}\}$ --- $k$ = 1, \ldots, $K$, the regions \{$V_{k}$\} are polygons assigned to each seed point $P_{k}$, such that $V_{k}$ represents the space closer to $P_{k}$ than any other point in the set.
 
-\begin{gather*}
+\begin{equation}
 	V_{k} = \{P_{i} \mid |p - P_{i}| < |p - P_{j}|, \forall j \neq i \}
-\end{gather*}
+\end{equation}
 
-If every point pair sharing a Voronoi boundary are connected, the result is a triangulation object encasing the pointset. This object is referred to as a Delaunay triangulation [13].
+If every point pair sharing a Voronoi boundary are connected, the result is a triangulation object encasing the pointset. This object is referred to as a Delaunay triangulation \cite{RN65}.
 
 \begin{figure}
 \centering
 \includegraphics{delaunay.png}
-\caption[2D delaunay triangulation]{Visual represention of a 2-dimensional delaunay triangulation process}
+\caption[2D delaunay triangulation]{\centering Visual represention of a 2-dimensional delaunay triangulation process}
 \end{figure}
 
 \subsubsection{Advancing Front / Marching Triangles}
 The Advancing Front method is common in computer graphics software – especially in procedurally generated games – because of it’s speed and computational simplicity.
 [DEFINITION, USAGE, AND 2D EXAMPLE]
- [14]
+\cite{RN54}.
 
 \subsubsection{Scale Space Reconstruction Method}
 At a grand scale, the Scale Space Reconstruction Method aims to optimize surface meshing in the face of discrete point cloud data. No matter how accurate or dense a point cloud may be, there is no way to verify the topology defined by the cloud is accurate to the true object topology. To simplify this ill-posed problem, and reduce mesh quality damage due to noisy points, the Scale Space algorithm casts the raw point cloud to a space of scale N by iteratively calculating the mean curvature of a neighborhood of points and casting each point pk to it’s nearest point on the curve. This results in a far more uniform point cloud, which can mesh via Delaunay triangulation at a high quality level. Once the meshing has occurred, the pointset is then recast to its original scale to maintain complex features. 
@@ -387,7 +467,7 @@ for ( (*$p$*) in (*$P$*) )
 		remove (*$p$*)
 	set (*$p_{bar} = \frac{\sum_{q \in neighbors} w(q)q}{\sum_{q \in neighbors}w(q)}$*)
 	set (*$C = \sum_{q \in neighbors} w(q)(q-p_{bar})(q-p_{bar})^{2}$*)
-	set (*$v_{0} = min eigenvector(C)$*)
+	set (*$v_{0} = arg_{min} eigenvector(C)$*)
 	set (*$p' = p - \langle p - p_{bar}, v_{0} \rangle v_{0}$*)
 	(*$p' \cdot n = \frac{p-p'}{|p-p'|} \cdot sign(\langle p - p', p \cdot n \rangle ) $*	
 \end{lstlisting}
@@ -466,7 +546,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 	\centering
 		\includegraphics[width=2in]{triangulation_definitions.JPG}
 		\caption[Definitions for triangulation quality measures]
-		{Definitions for triangulation quality measures. $R$ = circumsphere radius, $r$ = inscribed sphere radius, $l$ = edge length.}
+		{\centering Definitions for triangulation quality measures. $R$ = circumsphere radius, $r$ = inscribed sphere radius, $l$ = edge length.}
 		\label{fig:meshquality}
 \end{figure}
 
@@ -490,7 +570,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 	\centering
 		\includegraphics[width=3in]{bad_tetrahedra.JPG}
 		\caption[Examples of poor quality tetrahedra]
-		{Common examples of poor quality tetrahedra}
+		{\centering Common examples of poor quality tetrahedra}
 		\label{fig:badtetrahedra}
 \end{figure}
 
@@ -504,19 +584,19 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 	\centering
 		\includegraphics[width=3in]{voronoirelaxation.PNG}
 		\caption[Demonstration of voronoi relaxation over several iterations]
-		{From right to left: Voronoi relaxation over 1 iteration, 5 iterations, 10 iterations, and 15 iterations}
+		{\centering From right to left: Voronoi relaxation over 1 iteration, 5 iterations, 10 iterations, and 15 iterations}
 		\label{fig:voronoirelaxation}
 \end{figure}
 
-Voronoi  relaxation  operates  on  the  same  principle  as  k-means  clustering.  At  each  iteration,  the  centroid  of  each  Voronoi  region  is  calculated,  and  the  concurrent  vertex  is  moved  to  the  centroidal  location.  At  convergence,  the  resulting  mesh  is  uniform  in  tetrahedron/triangulation  size.  Voronoi  relaxation  can  modify  a  shape’s  topology  significant  due  to  its  heavy  smoothing  capabilities  [17].
+Voronoi  relaxation  operates  on  the  same  principle  as  k-means  clustering.  At  each  iteration,  the  centroid  of  each  Voronoi  region  is  calculated,  and  the  concurrent  vertex  is  moved  to  the  centroidal  location.  At  convergence,  the  resulting  mesh  is  uniform  in  tetrahedron/triangulation  size.  Voronoi  relaxation  can  modify  a  shape’s  topology  significant  due  to  its  heavy  smoothing  capabilities  \cite{RN61}.
 
 \subsubsection{Optimal Delaunay Triangulation}
 
 \subsubsection{Mesh Perturbation}
-While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  [5]. 
+While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN31}. 
 
 \subsubsection{Mesh Exudation}
-Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  [6]. 
+Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN38}. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -536,6 +616,63 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 %Chapter			Results
 \chapter{Results}
 \label{chap:results}
+\section{Simulated Data: Zero Noise}
+\subsection{Segmentation Method Comparison}
+
+
+
+
+\begin{figure}
+	\label{zeronoise:segcompare}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/all_methods.jpg}
+		\caption[Comparison of unsupervised segmentation techniques on a simulated dataset.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 cm and a maximum cluster size of 50,000 points.}
+\end{figure}
+
+
+
+\begin{figure}
+	\label{zeronoise:optimal}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/euclidean-d05max50000min3000.jpg}
+		\caption[Euclidean distance segmentation with ideal parameters.]{\centering  Euclidean clustering with radius of 0.5 cm, minimum cluster size of 3,000 points and a maximum cluster size of 50,000 points.}
+\end{figure}
+
+
+\subsection{Initial Meshing Methods}
+
+\begin{figure}
+	\label{zeronoise:advancingfront}
+	\centering
+		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
+		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
+\end{figure}
+
+\begin{figure}
+	\label{zeronoise:scalepspace2}
+	\centering
+		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
+		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
+\end{figure}
+
+\begin{figure}
+	\label{zeronoise:scalespace4}
+	\centering
+		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
+		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
+\end{figure}
+
+\begin{figure}
+	\label{zeronoise:scalespace15}
+	\centering
+		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
+		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
+\end{figure}
+
+
+\section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
+
+\subsection{Segmentation Method Comparison}
 
 
 
@@ -561,14 +698,14 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 \pagebreak
 \addcontentsline{toc}{chapter}{Bibliography}
 \begin{spacing}{1.0}
-\bibliographystyle{plain}
-%\bibliography{drexelthesis_template.bib}
+\bibliographystyle{IEEEtranN}
+\bibliography{references}
 \end{spacing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \thispagestyle{empty}
-\
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                                                                                                 
 \end{document}
