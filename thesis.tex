@@ -604,14 +604,23 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Chapter: 		Hypothesis
-\chapter{Hypothesis Statement}
-\label{chap:hypothesis}
+\chapter{Objective, Hypothesis, and Technical Approach}
+\label{chap:purposestatement}
+Autonomously isolated objects from point cloud data can be analyzed from a structural health monitoring perspective. 
+
+\section{Research Objective}
+The objective of this thesis is to develop and validate a software pipeline capable of segmenting point cloud data of some expected density $\rho$ and within some accuracy tolerance $\sigma$ into clusters of meaningful shapes, and convert the resulting clusters into surface meshes valid for conversion to simply connected volumes. The research described in this thesis is inarguably very wide in application and scope, but is geared specifically towards Structural Health Monitoring and Non-Destructive Test and Analysis. The results of this Master's thesis are a proving ground for rapid scanning, meshing, and analysis of real-world objects.
+
+\section{Hypothesis Statement}
+The claims being made in this thesis are the following:
+\begin{enumerated}
+	\item Point cloud scans oriented towards a specific object can be segmented to isolate said object with or without supervised clustering methods.
+	\item Providing a point cloud meets some required criteria, there is a generalized algorithm to convert raw clouds to volumetrically adaptable surface meshes.
+\end{enumerated}
+
+\section{Technical Approach}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Chapter: 		Technical Approach
-\chapter{Technical Approach}
-\label{chap:technical}
 
 
 
@@ -620,10 +629,25 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 \chapter{Results}
 \label{chap:results}
 \section{Simulated Data: Zero Noise}
+
+\begin{figure}
+	\label{zeronoise:raw}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise.jpg}
+		\caption[Simulated laboratory point cloud data with zero noise induced]{\centering Simulated laboratory point cloud data with zero noise induced.}
+\end{figure}
+
+
+\begin{figure}
+	\label{zeronoise:filtered}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise-DS01-k15std1.jpg}
+		\caption[Zero noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering Zero noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
+\end{figure}
+
+
+
 \subsection{Segmentation Method Comparison}
-
-
-
 
 \begin{figure}
 	\label{zeronoise:segcompare}
@@ -661,22 +685,77 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 \begin{figure}
 	\label{zeronoise:scalespace4}
 	\centering
-		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
+		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 \end{figure}
 
 \begin{figure}
 	\label{zeronoise:scalespace15}
 	\centering
-		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
+		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
 \end{figure}
 
 
 \section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
+\begin{figure}
+	\label{2cmnoise:raw}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/rawcloud.jpg}
+		\caption[Simulated point cloud with 2cm magnitude gaussian noise induced]{\centering  Simulated point cloud with 2cm magnitude gaussian noise induced.}
+\end{figure}
+
+\begin{figure}
+	\label{2cmnoise:filtered}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/DS01k15std1.jpg}
+		\caption[2 cm gaussian noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering 2 cm gaussian noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
+\end{figure}
 
 \subsection{Segmentation Method Comparison}
 
+\begin{figure}
+	\label{2cmnoise:segcompare}
+	\centering
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/comparison.jpg}
+		\caption[Comparison of unsupervised segmentation techniques on simulated dataset with induced noise.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 cm minimum cluster size of 3,000 and maximum cluster size of 50,000 points.}
+\end{figure}
+
+
+\subsection{Initial Mesh Methods}
+
+\begin{figure}
+	\label{2cmnoise:advancingfront}
+	\centering
+		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
+		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
+\end{figure}
+
+
+\begin{figure} 
+	\label{2cmnoise:scalepspace2}
+	\centering
+		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
+		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
+\end{figure}
+
+
+\begin{figure}
+	\label{2cmnoise:scalespace4}
+	\centering
+		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
+		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
+\end{figure}
+
+
+\begin{figure}
+	\label{2cmnoise:scalespace15}
+	\centering
+		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
+		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
+\end{figure}
+
+\subsection{Optimization}
 
 
 
