@@ -2,9 +2,25 @@
 \ExecuteOptions{letterpaper,oneside,12pt,onecolumn,final,openany}
 \documentclass[12pt]{drexelthesis}
 \usepackage[numbers]{natbib}
+
+
+\usepackage{placeins}
+\let\Oldsection\section
+\renewcommand{\section}{\FloatBarrier\Oldsection}
+
+\let\Oldsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\Oldsubsection}
+
+\let\Oldsubsubsection\subsubsection
+\renewcommand{\subsubsection}{\FloatBarrier\Oldsubsubsection}
+
+
+
+
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{listings}
+%\usepackage[section]{placeins}
 \graphicspath{{images/}}
 
 \title{Automated Conversion of 3D Point Clouds to FEA Compatible Meshes}
@@ -144,7 +160,7 @@ An intrinsic shape signature consists of two things:
 \subparagraph{3D Shape Feature Extraction}
 The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances $\rho_{i}$ in each bin \cite{RN60}.
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics{ISSfeaturevector2.jpg}  \includegraphics{ISSfeaturevector.jpg}
 \caption[Intrinsic Shape Signature feature vectors]{\centering Feature vector calculation via spherical bin decomposition \cite{RN60}.}
@@ -156,7 +172,7 @@ To minimize the amount of noise in the resulting dataset, a statistical approach
 	P_{x} = p_{i} \mid \sum_{j=1}^n |p_{j} - p_{i}| \leq (r_{density} + d) \geq k
 \end{equation}
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud10pnoise.jpg} \includegraphics[width=2in]{l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg}
 \caption[Effects of noise filter on simulated point cloud objects]{\centering The effects of noise filtering on a simulated L block with 10\% induced noise.}
@@ -166,17 +182,17 @@ To minimize the amount of noise in the resulting dataset, a statistical approach
 \subsection{Down-sampling}
 Down-sampling is the process of fixing a point cloud’s mean density to a voxel of size n. This is done by iterating the voxel throughout the cloud’s entire volume and replacing all points occupying a voxel with a single point in the mean position of the voxel.
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud} \includegraphics[width=2in]{l_block_pt_cloudDOWNSAMPLE025.jpg}
 \caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $cm^{3}$.}
 \end{figure}
 
 
-\subsection{Dealing with Occlusion}
+\subsection{Handling Occlusion} 
 Occlusion is a common issue in the perception world, defined by the lack of information in an image / 3D scan due to other objects blocking a direct view. A simple example: In 3D scene reconstruction from images, it is impossible to accurately reconstruct the contents inside an opaque box because we cannot see inside the box. This is occlusion. In the field, it is nearly impossible to fully avoid occluded datasets when scanning an object via LiDAR equipped UAVs. It is crucial to be able to develop methods to alleviate this problem.
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics{occluded_man.jpg}
 \caption[Demonstration of occlusion]{\centering Section of a building occluded by an object in the foreground \cite{RN13}.}
@@ -236,7 +252,7 @@ Using a Newton Raphson interative regression, shown in equation \ref{eq:newtonra
 	\item The target object can be defined via simple parameters such as length, height, width, and thickness.
 \end{enumerate}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 		\includegraphics[width=3in]{cross-section-estimation/flowchart.jpg}
 	\caption[Flow chart of informed shape estimation algorithm]{\centering A flowchart of the informed shape estimation algorithm.}
@@ -271,7 +287,7 @@ Another type of convolution is called pooling, or subsampling. This convolution 
 \subparagraph{Convolutional Neural Networks}
 Convolutional Neural Networks (CNNs) are modeled after the visual cortex in the brain. They consist of layers of convolutional networks. Each network contains “neurons” with simple feature reception fields. Through layers upon layers of these networks, objects can be classified. The biases and weights on these networks can be adjusted based on learning algorithms REF 1 in proposal. CNNs have become the standard in feature classification for image processing, but the accuracy that they provide comes at the price of processing time. 
 Every CNN can be broken down into the following steps: Convolution, max/mean pooling, activation function, fully connected layer, repeat. The diagram below illustrates the overarching structure of a basic Convolutional Neural Network:
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 		\includegraphics[width=6in]{cnn.png}
 	\caption[High level flow chart of a convolutional neural network]{\centering Map of a convolutional neural network with two hidden layers [ref]}
@@ -291,7 +307,7 @@ C_{n}
 The equation above represents the transformation from feature space to the “fully connected layer.” $C_{i}$ represents the probability of the input image belonging to class $i$, and $f_{i}$ represents the value of the ith feature in the feature map. 
 Linear classification methods limit the versatility of the CNN, as many object distinctions do not follow a linear pattern in $n$-dimensional space. To account for this, most CNNs – including the ones utilized in this paper – incorporate a de-linearizing element dubbed the “activation function.” The activation function applies a nonlinear operation to the values in the convolution layer, which allows for the CNN to become a very powerful nonlinear fit function. Typical activation functions include the hyperbolic tangent function, the sigmoid function, and – most popularly – the rectifier function. Each of these functions are show in the figure below:
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width=5in]{cnnReLu.png}
 \caption[Common CNN non-linear activation functions]{\centering Visualization of commonly used non-linear activation functions}
@@ -299,7 +315,7 @@ Linear classification methods limit the versatility of the CNN, as many object d
 
 From input to output, all CNNs have the same skeleton structure, with a varying number of layers between the raw input and the fully connected layer:
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width=6in]{cnn_flow.png}
 \caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
@@ -354,7 +370,7 @@ In Agglomerative clustering, each point is initially considered its own cluster.
 Divisive clustering approaches the clustering problem in an exactly opposite fashion. The algorithm initializes the dataset as a single cluster and iteratively splits the remaining clusters until reaching the same exit conditions as the Agglomerative method.
 
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width=4in]{divisiveAgglomerative.png}
 \caption[Comparison of divisive and agglomerative clustering methods]{Comparison of divisive and agglomerative hierarchical clustering}
@@ -444,7 +460,7 @@ For a given set of points in space, $\{P_{k}\}$ --- $k$ = 1, \ldots, $K$, the re
 
 If every point pair sharing a Voronoi boundary are connected, the result is a triangulation object encasing the pointset. This object is referred to as a Delaunay triangulation \cite{RN65}.
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics{delaunay.png}
 \caption[2D delaunay triangulation]{\centering Visual represention of a 2-dimensional delaunay triangulation process}
@@ -545,7 +561,7 @@ Now that the objects in the cloud are properly segmented, they must be meshed in
 The first criterion for surface mesh compatibility with volumetric conversion is “water-tightness.” Meaning, there are no gaps, holes, or unbounded edges in the triangulation. These gaps can be quantified as any edge in a polyhedron that is referenced by no other polyhedron in the triangulation.
 The other criteria are more abstract in nature and are more difficult to detect and handle independently. We define these criteria as mesh “Quality.” Quality is a quantification of the level of simplicity of a triangulation object by evaluating ratios of different elements in the triangulation.
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 		\includegraphics[width=2in]{triangulation_definitions.JPG}
 		\caption[Definitions for triangulation quality measures]
@@ -569,7 +585,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 		\end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 		\includegraphics[width=3in]{bad_tetrahedra.JPG}
 		\caption[Examples of poor quality tetrahedra]
@@ -583,7 +599,7 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 
 \subsubsection{Voronoi Relaxation / Lloyd's Algorithm}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 		\includegraphics[width=3in]{voronoirelaxation.PNG}
 		\caption[Demonstration of voronoi relaxation over several iterations]
@@ -612,13 +628,19 @@ Autonomously isolated objects from point cloud data can be analyzed from a struc
 The objective of this thesis is to develop and validate a software pipeline capable of segmenting point cloud data of some expected density $\rho$ and within some accuracy tolerance $\sigma$ into clusters of meaningful shapes, and convert the resulting clusters into surface meshes valid for conversion to simply connected volumes. The research described in this thesis is inarguably very wide in application and scope, but is geared specifically towards Structural Health Monitoring and Non-Destructive Test and Analysis. The results of this Master's thesis are a proving ground for rapid scanning, meshing, and analysis of real-world objects.
 
 \section{Hypothesis Statement}
-The claims being made in this thesis are the following:
-\begin{enumerated}
+The claims made in this thesis are the following:
+
+\begin{enumerate}
 	\item Point cloud scans oriented towards a specific object can be segmented to isolate said object with or without supervised clustering methods.
 	\item Providing a point cloud meets some required criteria, there is a generalized algorithm to convert raw clouds to volumetrically adaptable surface meshes.
-\end{enumerated}
+\end{enumerate}
+
+The second hypothesis attempts to nail down an explicit definition of what it means for a mesh to be volumetrically compatible. Determining what conditions a point cloud must meet to be properly meshed, and what modifications can be made and to what extent are all problems that have yet to be fleshed out completely in the domain of real world to simulation conversion technology. This thesis aims to quantify criteria for raw point clouds to be meshed properly, criteria for smoothing limits before the resulting volume can no longer be realistically considered to have similar properties to it's real world counterpart, and criteria for a surface mesh to be successful converted to a volume. 
+
+Knowing these limits allows for collection of point cloud data for the sake of information extraction to be much more educated. Defining criteria for the amount of a surface that must be visible in the cloud, accuracy limits, and smoothing limits are critical for creating an automated approach to finite element analysis on real objects with reliable results. The following chapters quantify the effect of parameter modification at each step of the algorithm.
 
 \section{Technical Approach}
+To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion.
 
 
 
@@ -630,15 +652,14 @@ The claims being made in this thesis are the following:
 \label{chap:results}
 \section{Simulated Data: Zero Noise}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:raw}
-	\centering
+		\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise.jpg}
 		\caption[Simulated laboratory point cloud data with zero noise induced]{\centering Simulated laboratory point cloud data with zero noise induced.}
 \end{figure}
 
-
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:filtered}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise-DS01-k15std1.jpg}
@@ -649,7 +670,7 @@ The claims being made in this thesis are the following:
 
 \subsection{Segmentation Method Comparison}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:segcompare}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/all_methods.jpg}
@@ -658,7 +679,7 @@ The claims being made in this thesis are the following:
 
 
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:optimal}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/euclidean-d05max50000min3000.jpg}
@@ -668,28 +689,29 @@ The claims being made in this thesis are the following:
 
 \subsection{Initial Meshing Methods}
 
-\begin{figure}
+
+\begin{figure}[!h]
 	\label{zeronoise:advancingfront}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:scalepspace2}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:scalespace4}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{zeronoise:scalespace15}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
@@ -698,14 +720,14 @@ The claims being made in this thesis are the following:
 
 
 \section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
-\begin{figure}
+\begin{figure}[!h]
 	\label{2cmnoise:raw}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/rawcloud.jpg}
 		\caption[Simulated point cloud with 2cm magnitude gaussian noise induced]{\centering  Simulated point cloud with 2cm magnitude gaussian noise induced.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{2cmnoise:filtered}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/DS01k15std1.jpg}
@@ -714,7 +736,7 @@ The claims being made in this thesis are the following:
 
 \subsection{Segmentation Method Comparison}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{2cmnoise:segcompare}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/comparison.jpg}
@@ -724,7 +746,7 @@ The claims being made in this thesis are the following:
 
 \subsection{Initial Mesh Methods}
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{2cmnoise:advancingfront}
 	\centering
 		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
@@ -732,7 +754,7 @@ The claims being made in this thesis are the following:
 \end{figure}
 
 
-\begin{figure} 
+\begin{figure}[!h] 
 	\label{2cmnoise:scalepspace2}
 	\centering
 		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
@@ -740,7 +762,7 @@ The claims being made in this thesis are the following:
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{2cmnoise:scalespace4}
 	\centering
 		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
@@ -748,7 +770,7 @@ The claims being made in this thesis are the following:
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[!h]
 	\label{2cmnoise:scalespace15}
 	\centering
 		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
