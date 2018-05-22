@@ -3,7 +3,7 @@
 \documentclass[12pt]{drexelthesis}
 \usepackage[numbers]{natbib}
 \usepackage{amssymb}
-
+\usepackage{siunitx}
 \usepackage{placeins}
 \let\Oldsection\section
 \renewcommand{\section}{\FloatBarrier\Oldsection}
@@ -76,7 +76,7 @@ This paper outlines a method to utilize machine learning in conjunction with adv
 \end{preliminary}
 \thispagestyle{empty}
 \newpage
-\
+
 
 \setcounter{page}{0}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,8 +102,8 @@ In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to pro
 %[3]
 \cite{RN30}
 %%
-\subsection{Aerial Scanning for GPS Overlay
-\label(subsec:UAVscanning}
+\subsection{Aerial Scanning for GPS Overlay}
+\label{subsec:UAVscanning}
 %%
 \subsection{Semi-Automated Point Cloud to FEA modeling}
 \label{subsec:SemiFEA}
@@ -160,7 +160,7 @@ An intrinsic shape signature consists of two things:
 \subparagraph{3D Shape Feature Extraction}
 The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances $\rho_{i}$ in each bin \cite{RN60}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics{ISSfeaturevector2.jpg}  \includegraphics{ISSfeaturevector.jpg}
 \caption[Intrinsic Shape Signature feature vectors]{\centering Feature vector calculation via spherical bin decomposition \cite{RN60}.}
@@ -172,7 +172,7 @@ To minimize the amount of noise in the resulting dataset, a statistical approach
 	P_{x} = p_{i} \mid \sum_{j=1}^n |p_{j} - p_{i}| \leq (r_{density} + d) \geq k
 \end{equation}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud10pnoise.jpg} \includegraphics[width=2in]{l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg}
 \caption[Effects of noise filter on simulated point cloud objects]{\centering The effects of noise filtering on a simulated L block with 10\% induced noise.}
@@ -182,7 +182,7 @@ To minimize the amount of noise in the resulting dataset, a statistical approach
 \subsection{Down-sampling}
 Down-sampling is the process of fixing a point cloud’s mean density to a voxel of size n. This is done by iterating the voxel throughout the cloud’s entire volume and replacing all points occupying a voxel with a single point in the mean position of the voxel.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud} \includegraphics[width=2in]{l_block_pt_cloudDOWNSAMPLE025.jpg}
 \caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $cm^{3}$.}
@@ -192,7 +192,7 @@ Down-sampling is the process of fixing a point cloud’s mean density to a voxel
 \subsection{Handling Occlusion} 
 Occlusion is a common issue in the perception world, defined by the lack of information in an image / 3D scan due to other objects blocking a direct view. A simple example: In 3D scene reconstruction from images, it is impossible to accurately reconstruct the contents inside an opaque box because we cannot see inside the box. This is occlusion. In the field, it is nearly impossible to fully avoid occluded datasets when scanning an object via LiDAR equipped UAVs. It is crucial to be able to develop methods to alleviate this problem.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics{occluded_man.jpg}
 \caption[Demonstration of occlusion]{\centering Section of a building occluded by an object in the foreground \cite{RN13}.}
@@ -252,7 +252,7 @@ Using a Newton Raphson interative regression, shown in equation \ref{eq:newtonra
 	\item The target object can be defined via simple parameters such as length, height, width, and thickness.
 \end{enumerate}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=3in]{cross-section-estimation/flowchart.jpg}
 	\caption[Flow chart of informed shape estimation algorithm]{\centering A flowchart of the informed shape estimation algorithm.}
@@ -287,7 +287,7 @@ Another type of convolution is called pooling, or subsampling. This convolution 
 \subparagraph{Convolutional Neural Networks}
 Convolutional Neural Networks (CNNs) are modeled after the visual cortex in the brain. They consist of layers of convolutional networks. Each network contains “neurons” with simple feature reception fields. Through layers upon layers of these networks, objects can be classified. The biases and weights on these networks can be adjusted based on learning algorithms REF 1 in proposal. CNNs have become the standard in feature classification for image processing, but the accuracy that they provide comes at the price of processing time. 
 Every CNN can be broken down into the following steps: Convolution, max/mean pooling, activation function, fully connected layer, repeat. The diagram below illustrates the overarching structure of a basic Convolutional Neural Network:
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=6in]{cnn.png}
 	\caption[High level flow chart of a convolutional neural network]{\centering Map of a convolutional neural network with two hidden layers [ref]}
@@ -307,7 +307,7 @@ C_{n}
 The equation above represents the transformation from feature space to the “fully connected layer.” $C_{i}$ represents the probability of the input image belonging to class $i$, and $f_{i}$ represents the value of the ith feature in the feature map. 
 Linear classification methods limit the versatility of the CNN, as many object distinctions do not follow a linear pattern in $n$-dimensional space. To account for this, most CNNs – including the ones utilized in this paper – incorporate a de-linearizing element dubbed the “activation function.” The activation function applies a nonlinear operation to the values in the convolution layer, which allows for the CNN to become a very powerful nonlinear fit function. Typical activation functions include the hyperbolic tangent function, the sigmoid function, and – most popularly – the rectifier function. Each of these functions are show in the figure below:
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=5in]{cnnReLu.png}
 \caption[Common CNN non-linear activation functions]{\centering Visualization of commonly used non-linear activation functions}
@@ -315,7 +315,7 @@ Linear classification methods limit the versatility of the CNN, as many object d
 
 From input to output, all CNNs have the same skeleton structure, with a varying number of layers between the raw input and the fully connected layer:
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=6in]{cnn_flow.png}
 \caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
@@ -340,7 +340,7 @@ The speed, accuracy, and versatility of a CNN are functions of the number of hid
 
 \subsection{Unsupervised Methods}
 With our goal being to isolate specific objects in a structural health monitoring setting, the ideal segmentation method is a supervised learning algorithm, such as a convolutional neural network, that semantically parses the point cloud based on a training set of pre-defined cloud objects \cite{RN72}. However, due to time limitations, and a lack of training data relevant to our objects of interest, this is not possible. Instead we explore a series of unsupervised clustering methods on the assumption that objects are distinct enough in relative cloud neighborhoods to be properly segmented.
-\subparagraph{Methods Used}
+
 \subsubsection{K-means Clustering}
 K-means clustering is an iterative method that groups $n$-dimensional datasets into $k$ clusters based on a minimization of the Euclidean distance cost function $|x-c|^{2}$. Initially, $k$ centroids are placed randomly inside the dataset, and all data points are placed in bins $S$ depending on which centroid minimizes their cost function. At each iteration, the cluster centroids $c_{i}$ are re-calculated. Criteria for convergence is a maximum Euclidean distance change $\sigma$ between centroid position $c_{n}$ and $c_{n+1}$.
 \begin{equation}
@@ -370,7 +370,7 @@ In Agglomerative clustering, each point is initially considered its own cluster.
 Divisive clustering approaches the clustering problem in an exactly opposite fashion. The algorithm initializes the dataset as a single cluster and iteratively splits the remaining clusters until reaching the same exit conditions as the Agglomerative method.
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=4in]{divisiveAgglomerative.png}
 \caption[Comparison of divisive and agglomerative clustering methods]{Comparison of divisive and agglomerative hierarchical clustering}
@@ -458,6 +458,7 @@ Surface meshes, in simple terms, are a series of connected areas defined by thei
 	\item A set of connection indices $I$, which dictate how the vertices connect to one another.
 \end{enumerate}
 
+In a fully bounded surface mesh, the combination of each triangulation object creates a shell, which represents the surface area of the shape.
 
 
 \subsubsection{Definition of a Volume Mesh}
@@ -465,7 +466,23 @@ A volume mesh is defined with the same parameters as a surface mesh, with the ke
 One application --- and the target application for this thesis --- is finite element analysis, a numerical method for solving structural analysis problems through discretization of individual elements in an $n$-dimensional geometry and calculating their relative parameters in reference to their connected neighbors.
 
 \subsubsection{Definition of a Boundary Representation (B-REP)}
+Boundary Representations, often called the ''skin'' of a solid object, consist of two parts: topology and geometry. The topological portion is made from the faces and vertices created by a surface mesh. In the boundary representation of an object, the edges bounding a triangulation object -- or face -- is defined as a loop. The geometric portion consists of equations defining the edges and faces. There are a number of different ways in which the geometry of an object's surface area can be modeled, but the most common is the Non-Uniform Rational Basis Spline (NURBS).
 
+\subsubsection{Non-Uniform Rational Basis Spline (NURBS)}
+NURBS curves are a method of interpolating a discrete set of points into a continous function.
+
+
+
+
+
+
+
+
+\begin{figure}
+	\centering
+		\includegraphics{cadTypes/brep.jpg}
+	\caption[Components of a boundary representation.]{\centering An overview of the components involved in a boundary representation of a solid object \cite{Stroud2006}.}
+\end{figure}
 
 
 \subsubsection{Delaunay Triangulation}
@@ -479,7 +496,7 @@ For a given set of points in space, $\{P_{k}\}$ --- $k$ = 1, \ldots, $K$, the re
 
 If every point pair sharing a Voronoi boundary are connected, the result is a triangulation object encasing the pointset. This object is referred to as a Delaunay triangulation \cite{RN65}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics{delaunay.png}
 \caption[2D delaunay triangulation]{\centering Visual represention of a 2-dimensional delaunay triangulation process}
@@ -488,7 +505,7 @@ If every point pair sharing a Voronoi boundary are connected, the result is a tr
 \subsubsection{Advancing Front / Marching Triangles}
 The Advancing Front method is common in computer graphics software – especially in procedurally generated games – because of it’s speed and computational simplicity.
 [DEFINITION, USAGE, AND 2D EXAMPLE]
-\cite{RN54}.
+\cite{RN66}.
 
 \subsubsection{Scale Space Reconstruction Method}
 At a grand scale, the Scale Space Reconstruction Method aims to optimize surface meshing in the face of discrete point cloud data. No matter how accurate or dense a point cloud may be, there is no way to verify the topology defined by the cloud is accurate to the true object topology. To simplify this ill-posed problem, and reduce mesh quality damage due to noisy points, the Scale Space algorithm casts the raw point cloud to a space of scale N by iteratively calculating the mean curvature of a neighborhood of points and casting each point pk to it’s nearest point on the curve. This results in a far more uniform point cloud, which can mesh via Delaunay triangulation at a high quality level. Once the meshing has occurred, the pointset is then recast to its original scale to maintain complex features. 
@@ -541,6 +558,7 @@ for ( i = 0, \ldots, N-1 )
 
 \begin{lstlisting}[escapeinside={(*}{*)}]
 \end{lstlisting}
+\cite{RN67}
 
 \begin{table}[h]
 \centering
@@ -580,7 +598,7 @@ Now that the objects in the cloud are properly segmented, they must be meshed in
 The first criterion for surface mesh compatibility with volumetric conversion is “water-tightness.” Meaning, there are no gaps, holes, or unbounded edges in the triangulation. These gaps can be quantified as any edge in a polyhedron that is referenced by no other polyhedron in the triangulation.
 The other criteria are more abstract in nature and are more difficult to detect and handle independently. We define these criteria as mesh “Quality.” Quality is a quantification of the level of simplicity of a triangulation object by evaluating ratios of different elements in the triangulation.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{triangulation_definitions.JPG}
 		\caption[Definitions for triangulation quality measures]
@@ -604,11 +622,11 @@ The other criteria are more abstract in nature and are more difficult to detect 
 		\end{tabular}
 \end{table}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=3in]{bad_tetrahedra.JPG}
 		\caption[Examples of poor quality tetrahedra]
-		{\centering Common examples of poor quality tetrahedra}
+		{\centering Common examples of poor quality tetrahedra \cite{RN68}.}
 		\label{fig:badtetrahedra}
 \end{figure}
 
@@ -618,7 +636,7 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 
 \subsubsection{Voronoi Relaxation / Lloyd's Algorithm}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=3in]{voronoirelaxation.PNG}
 		\caption[Demonstration of voronoi relaxation over several iterations]
@@ -631,10 +649,10 @@ Voronoi  relaxation  operates  on  the  same  principle  as  k-means  clustering
 \subsubsection{Optimal Delaunay Triangulation}
 
 \subsubsection{Mesh Perturbation}
-While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN31}. 
+While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN63}. 
 
 \subsubsection{Mesh Exudation}
-Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN38}. 
+Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -659,7 +677,18 @@ The second hypothesis attempts to nail down an explicit definition of what it me
 Knowing these limits allows for collection of point cloud data for the sake of information extraction to be much more educated. Defining criteria for the amount of a surface that must be visible in the cloud, accuracy limits, and smoothing limits are critical for creating an automated approach to finite element analysis on real objects with reliable results. The following chapters quantify the effect of parameter modification at each step of the algorithm.
 
 \section{Technical Approach}
-To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion.
+To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion. The goal is to accurately mimic the cloud resolution of the test device, and to proof the robustness of the algorithm at resolutions expected from other measurement devices. Simulated data has been crafted to model resolution, accuracy, and occlusion levels with the approaches that follow:
+\subsection{LiDAR: Velodyne HDL-32E}
+The Velodyne HDL-32E is a high end LiDAR device capable of collecting 700,000 points per second at a frame rate of 20 Hz (rotations per second). It is equipped with 32 lasers aligned from +\ang{10.67} to -\ang{30.67}
+
+Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud, but instead a spherical co-ordinate cloud, where each point is defined by $\phi$, it's angle about the $z$-axis, $\theta$, it's angle about the $y$-axis, and $r$, the absolute distance from the sensor. The return can be classified as ordered data, and easily mimicked in simulation by creating a series of solid objects, simulating the output of the LiDAR, and simulating the LiDAR motion. This allows for fast simulation of point cloud collection with varying levels of noise, occlusion, and sample rate.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{cloudCollection/velodyneLiDAR.jpg}
+		\caption[Velodyne LiDAR Operation]{Visualization of how to the Velodyne HDL-32E operates.}
+\end{figure}
+
 
 
 
@@ -671,14 +700,14 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 \label{chap:results}
 \section{Simulated Data: Zero Noise}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:raw}
 		\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise.jpg}
 		\caption[Simulated laboratory point cloud data with zero noise induced]{\centering Simulated laboratory point cloud data with zero noise induced.}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:filtered}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise-DS01-k15std1.jpg}
@@ -689,7 +718,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 
 \subsection{Segmentation Method Comparison}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:segcompare}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/all_methods.jpg}
@@ -698,7 +727,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:optimal}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/euclidean-d05max50000min3000.jpg}
@@ -709,7 +738,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 \subsection{Initial Meshing Methods}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:advancingfront}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
@@ -718,7 +747,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:scalepspace2}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
@@ -727,7 +756,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:scalespace4}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
@@ -736,7 +765,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{zeronoise:scalespace15}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
@@ -747,14 +776,14 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 
 
 \section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{2cmnoise:raw}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/rawcloud.jpg}
 		\caption[Simulated point cloud with 2cm magnitude gaussian noise induced]{\centering  Simulated point cloud with 2cm magnitude gaussian noise induced.}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{2cmnoise:filtered}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/DS01k15std1.jpg}
@@ -763,7 +792,7 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 
 \subsection{Segmentation Method Comparison}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{2cmnoise:segcompare}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/comparison.jpg}
@@ -773,34 +802,42 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 
 \subsection{Initial Mesh Methods}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{2cmnoise:advancingfront}
 	\centering
 		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
+		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
+		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 \end{figure}
 
 
-\begin{figure}[!h] 
+\begin{figure}[!ht] 
 	\label{2cmnoise:scalepspace2}
 	\centering
 		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
+		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
+		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 \end{figure}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{2cmnoise:scalespace4}
 	\centering
 		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
+		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
+		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 \end{figure}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\label{2cmnoise:scalespace15}
 	\centering
 		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
+		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
+		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
 \end{figure}
 
