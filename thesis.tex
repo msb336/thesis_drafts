@@ -317,7 +317,7 @@ From input to output, all CNNs have the same skeleton structure, with a varying 
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=6in]{cnn_flow.png}
+\includegraphics[width=6in]{cnn_flow.png} 
 \caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
 \end{figure}
 
@@ -469,7 +469,7 @@ One application --- and the target application for this thesis --- is finite ele
 Boundary Representations, often called the ''skin'' of a solid object, consist of two parts: topology and geometry. The topological portion is made from the faces and vertices created by a surface mesh. In the boundary representation of an object, the edges bounding a triangulation object -- or face -- is defined as a loop. The geometric portion consists of equations defining the edges and faces. There are a number of different ways in which the geometry of an object's surface area can be modeled, but the most common is the Non-Uniform Rational Basis Spline (NURBS).
 
 \subsubsection{Non-Uniform Rational Basis Spline (NURBS)}
-NURBS curves are a method of interpolating a discrete set of points into a continous function.
+NURBS curves are a method of interpolating a discrete set of points into a continous function. 
 
 
 
@@ -678,6 +678,7 @@ Knowing these limits allows for collection of point cloud data for the sake of i
 
 \section{Technical Approach}
 To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion. The goal is to accurately mimic the cloud resolution of the test device, and to proof the robustness of the algorithm at resolutions expected from other measurement devices. Simulated data has been crafted to model resolution, accuracy, and occlusion levels with the approaches that follow:
+
 \subsection{LiDAR: Velodyne HDL-32E}
 The Velodyne HDL-32E is a high end LiDAR device capable of collecting 700,000 points per second at a frame rate of 20 Hz (rotations per second). It is equipped with 32 lasers aligned from +\ang{10.67} to -\ang{30.67}
 
@@ -694,6 +695,8 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 
 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter			Results
 \chapter{Results}
@@ -701,17 +704,19 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 \section{Simulated Data: Zero Noise}
 
 \begin{figure}[!ht]
-	\label{zeronoise:raw}
+	
 		\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise.jpg}
 		\caption[Simulated laboratory point cloud data with zero noise induced]{\centering Simulated laboratory point cloud data with zero noise induced.}
+	\label{zeronoise:raw}
 \end{figure}
 
 \begin{figure}[!ht]
-	\label{zeronoise:filtered}
+	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise-DS01-k15std1.jpg}
 		\caption[Zero noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering Zero noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
+	\label{zeronoise:filtered}
 \end{figure}
 
 
@@ -723,125 +728,204 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/all_methods.jpg}
 		\caption[Comparison of unsupervised segmentation techniques on a simulated dataset.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 cm and a maximum cluster size of 50,000 points.}
+	\label{zeronoise:optimal}
 \end{figure}
 
 
 
 \begin{figure}[!ht]
-	\label{zeronoise:optimal}
+	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/euclidean-d05max50000min3000.jpg}
 		\caption[Euclidean distance segmentation with ideal parameters.]{\centering  Euclidean clustering with radius of 0.5 cm, minimum cluster size of 3,000 points and a maximum cluster size of 50,000 points.}
+
 \end{figure}
 
 
 \subsection{Initial Meshing Methods}
-
+In a zero noise situation, the advancing front method returns a nearly perfect mesh, with the exception of a poor quality polygon linking the rear segment of the mesh. This is caused by the ''marching triangles'' attempting to close the final corners of the mesh. This meshing method provides high quality meshes while maintaining accurate features in zero noise situations, but we will see when we introduce noise that Advancing Front quickly fails to produce a reliable initial mesh for successful optimization.
 
 \begin{figure}[!ht]
-	\label{zeronoise:advancingfront}
+	
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
 		\includegraphics[trim={0 3in 0 3in},clip,width=6in]{simulated-lab-scan/0noise/clean/advancingfront01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
+		\label{zeronoise:advancingfront}
 \end{figure}
 
+In Figure~\ref{zeronoise:scalespace2} we see the effects of Scale Space reconstruction at scale $S = 2$. The predominantly visible effect is the change in topology of the beam. because of the localized fnunction estimation that occurs during the scale-space casting phase, the planar surface of the beam is reconstructed with a parabolic shape. The overall thickness is reduced.
+
 \begin{figure}[!ht]
-	\label{zeronoise:scalepspace2}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
 		\includegraphics[width=6in]{simulated-lab-scan/0noise/clean/scalespace201.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
+	\label{zeronoise:scalespace2}
 \end{figure}
 
+As the beam is cast into higher and higher scale-spaces, the thickness of the beam is continually reduced. At scale-space 4 and higher -- shown in Figures~\ref{zeronoise:scalespace4} and \ref{zeronoise:scalespace15}, our beam thickness (originally $\frac{1}{4}$in) is reduced to zero. This is due again to the piecewise function estimation that occurs in the specified scale space. Once all of the points are cast down far enough, they are no longer registered as being in two separate neighborhoods, and are instead identified as belonging to the same 2-dimensional curve.
+
 \begin{figure}[!ht]
-	\label{zeronoise:scalespace4}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
 		\includegraphics[width=6in]{simulated-lab-scan/0noise/clean/scalespace401.png}
 		\includegraphics[trim={0.5in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/clean/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
+		\label{zeronoise:scalespace4}
 \end{figure}
 
 \begin{figure}[!ht]
-	\label{zeronoise:scalespace15}
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
 		\includegraphics[width=6in]{simulated-lab-scan/0noise/clean/scalespace1501.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/clean/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
+		\label{zeronoise:scalespace15}
 \end{figure}
+
+
+
+\subsection{Optimization}
+\subsubsection{Effects Voronoi Relaxation}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={6in 2in 3in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it00.png}
+		\includegraphics[width=6in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it01.png}
+		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it02.png}
+		\includegraphics[trim={1in 1in 1in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it03.png}
+		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:advancedlloyd}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it00.png}
+		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
+		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it02.png}
+		\includegraphics[trim={3in 2in 3.5in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering [Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace2lloyd}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={6in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it00.png}
+		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it01.png}
+		\includegraphics[trim={4.5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it02.png}
+		\includegraphics[trim={3in 4in 3.5in 4in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace4lloyd}
+\end{figure}
+
+\subsection{Effects of Delaunay Optimization}
+
+
+\subsection{Effects of Mesh Perturbation}
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={4in 2in 3in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd00.png}
+		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd01.png}
+		\includegraphics[trim={1in 1in 1in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd02.png}
+		\caption[Comparison of mesh before and after perturbation]{\centering  Comparison of mesh before and after perturbation.}
+	\label{zeronoise:advancedlloydperturb}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={1in 2in 1in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb00.png}
+		\includegraphics[trim={2in 2in 2in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb01.png}
+		\includegraphics[trim={1in 1in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb02.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation.}
+	\label{zeronoise:scalespace2lloydperturb}
+\end{figure}
+
+
 
 
 \section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
-\begin{figure}[!ht]
-	\label{2cmnoise:raw}
+\begin{figure}[!ht] 
+	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/rawcloud.jpg}
 		\caption[Simulated point cloud with 2cm magnitude gaussian noise induced]{\centering  Simulated point cloud with 2cm magnitude gaussian noise induced.}
+\label{2cmnoise:raw}
 \end{figure}
 
 \begin{figure}[!ht]
-	\label{2cmnoise:filtered}
+	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/DS01k15std1.jpg}
 		\caption[2 cm gaussian noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering 2 cm gaussian noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
+\label{2cmnoise:filtered}
 \end{figure}
 
 \subsection{Segmentation Method Comparison}
 
 \begin{figure}[!ht]
-	\label{2cmnoise:segcompare}
+	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/comparison.jpg}
 		\caption[Comparison of unsupervised segmentation techniques on simulated dataset with induced noise.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 cm minimum cluster size of 3,000 and maximum cluster size of 50,000 points.}
+\label{2cmnoise:segcompare}
 \end{figure}
 
 
 \subsection{Initial Mesh Methods}
 
 \begin{figure}[!ht]
-	\label{2cmnoise:advancingfront}
+	
 	\centering
 		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
 		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
+		\label{2cmnoise:advancingfront}
 \end{figure}
 
 
 \begin{figure}[!ht] 
-	\label{2cmnoise:scalepspace2}
+	
 	\centering
 		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
 		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
+		\label{2cmnoise:scalepspace2}
 \end{figure}
 
 
 \begin{figure}[!ht]
-	\label{2cmnoise:scalespace4}
+	
 	\centering
 		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
 		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
+		\label{2cmnoise:scalespace4}
 \end{figure}
 
 
 \begin{figure}[!ht]
-	\label{2cmnoise:scalespace15}
+	
 	\centering
 		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
 		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
+		\label{2cmnoise:scalespace15}
 \end{figure}
 
 \subsection{Optimization}
+
 
 
 
