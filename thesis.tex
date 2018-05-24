@@ -185,7 +185,7 @@ Down-sampling is the process of fixing a point cloud’s mean density to a voxel
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=2in]{l_block_pt_cloud} \includegraphics[width=2in]{l_block_pt_cloudDOWNSAMPLE025.jpg}
-\caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $cm^{3}$.}
+\caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $in^{3}$.}
 \end{figure}
 
 
@@ -468,20 +468,42 @@ One application --- and the target application for this thesis --- is finite ele
 \subsubsection{Definition of a Boundary Representation (B-REP)}
 Boundary Representations, often called the ''skin'' of a solid object, consist of two parts: topology and geometry. The topological portion is made from the faces and vertices created by a surface mesh. In the boundary representation of an object, the edges bounding a triangulation object -- or face -- is defined as a loop. The geometric portion consists of equations defining the edges and faces. There are a number of different ways in which the geometry of an object's surface area can be modeled, but the most common is the Non-Uniform Rational Basis Spline (NURBS).
 
-\subsubsection{Non-Uniform Rational Basis Spline (NURBS)}
-NURBS curves are a method of interpolating a discrete set of points into a continous function. 
-
-
-
-
-
-
-
-
 \begin{figure}
 	\centering
 		\includegraphics{cadTypes/brep.jpg}
 	\caption[Components of a boundary representation.]{\centering An overview of the components involved in a boundary representation of a solid object \cite{Stroud2006}.}
+\end{figure}
+
+\subsubsection{Non-Uniform Rational Basis Spline (NURBS)}
+NURBS curves are a method of interpolating a discrete set of vertex points into a continous function. Each vertex point is considered a ``control point,'' and a series of smooth polynomials are concatenated locally over individual sets of control points. An $n$-dimensional NURBS curve $f(u)$ can be defined ast the following:
+
+\begin{equation}
+	f(u) = \frac    {   \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) P_{i} }
+				 {  \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) }
+	\label{nurbs:weightedbspline}
+ \end{equation}
+ 
+ Where $P_{i}$ represents the $i^{th}$ control point, $n$ represents the polynomial degree of the blending function, $B_{i,d}(u)$, and $w_{i}$ represents the weight of the $i^{th}$ control point. We simplify this equation accordingly by inserting the rational basis function relationship described in Equation~\ref{nurbs:rationalbasis} to the piecewise B-Spline equation shown in Equation~\ref{nurbs:weightedbspline}.
+ 
+\begin{equation}
+	R_{i}(u) = \frac    {   w_{i} B_{i,n}(u)}
+				 {  \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) }
+	\label{nurbs:rationalbasis}
+ \end{equation}
+ 
+ Leaving us with the following relationship:
+ 
+ \begin{equation}
+ 	f(u) = \sum_{i=0}^{K-1} R_{i,d}(u) P_{i}
+\end{equation}
+
+Using these weighted concatenations, smooth surfaces are generated from a series of sharp geometric edges.
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{cadTypes/nurbs.png}
+	\caption[Example of a 2-dimensional nurbs spline.]{\centering A 2-dimensional example of a nurbs spline. Green points represent the control points, $P$, black lines represent their connectivity, and the blue line represents one possible nurbs spline.}
 \end{figure}
 
 
@@ -743,7 +765,7 @@ While not necessary in the zero noise case, filtering and downsampling prove to 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise-DS01-k15std1.jpg}
-		\caption[Zero noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering Zero noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
+		\caption[Zero noise simulated data after being filtered with voxel size of 0.1 $in^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering Zero noise simulated data after being filtered with voxel size of $0.1 in^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
 	\label{zeronoise:filtered}
 \end{figure}
 
@@ -755,7 +777,7 @@ While not necessary in the zero noise case, filtering and downsampling prove to 
 	\label{zeronoise:segcompare}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/all_methods.jpg}
-		\caption[Comparison of unsupervised segmentation techniques on a simulated dataset.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 cm and a maximum cluster size of 50,000 points.}
+		\caption[Comparison of unsupervised segmentation techniques on a simulated dataset.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 in and a maximum cluster size of 50,000 points.}
 	\label{zeronoise:optimal}
 \end{figure}
 
@@ -765,7 +787,7 @@ While not necessary in the zero noise case, filtering and downsampling prove to 
 	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/euclidean-d05max50000min3000.jpg}
-		\caption[Euclidean distance segmentation with ideal parameters.]{\centering  Euclidean clustering with radius of 0.5 cm, minimum cluster size of 3,000 points and a maximum cluster size of 50,000 points.}
+		\caption[Euclidean distance segmentation with ideal parameters.]{\centering  Euclidean clustering with radius of 0.5 in, minimum cluster size of 3,000 points and a maximum cluster size of 50,000 points.}
 
 \end{figure}
 
@@ -892,7 +914,7 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/DS01k15std1.jpg}
-		\caption[2 cm gaussian noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering 2 cm gaussian noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
+		\caption[2 cm gaussian noise simulated data after being filtered with voxel size of 0.1 $in^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering 2 cm gaussian noise simulated data after being filtered with voxel size of $0.1 in^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
 \label{2cmnoise:filtered}
 \end{figure}
 
