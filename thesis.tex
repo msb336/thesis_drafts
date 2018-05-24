@@ -486,6 +486,7 @@ NURBS curves are a method of interpolating a discrete set of points into a conti
 
 
 \subsubsection{Delaunay Triangulation}
+\label{subsubsec:delaunay}
 Surface meshing is the science of inferring a continuous shape topology from a discrete, $n$-dimensional point cloud. There are many different approaches to converting from discrete points to surface meshes, but at their core, nearly all of them rely on the Delaunay triangulation method.
 Delaunay triangulation finds its routes in Voronoi tessellation, a method of constructing non-overlapping geometrical tiles. Voronoi tessellation states the following:
 For a given set of points in space, $\{P_{k}\}$ --- $k$ = 1, \ldots, $K$, the regions \{$V_{k}$\} are polygons assigned to each seed point $P_{k}$, such that $V_{k}$ represents the space closer to $P_{k}$ than any other point in the set.
@@ -647,6 +648,15 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 Voronoi  relaxation  operates  on  the  same  principle  as  k-means  clustering.  At  each  iteration,  the  centroid  of  each  Voronoi  region  is  calculated,  and  the  concurrent  vertex  is  moved  to  the  centroidal  location.  At  convergence,  the  resulting  mesh  is  uniform  in  tetrahedron/triangulation  size.  Voronoi  relaxation  can  modify  a  shape’s  topology  significant  due  to  its  heavy  smoothing  capabilities  \cite{RN61}.
 
 \subsubsection{Optimal Delaunay Triangulation}
+Delaunay triangulation, as described in section~\ref{subsubsec:delaunay}, optimizes the connectivity for a finite point set through voronoi propagation. To calculate the optimal triangulation of the pointset defined by a discrete set of vertices, the vertices are unfixed from their intial points in space. As a caveat, because this optimization method involves shift the locations of the vertices, the topology of the mesh is altered in the process.
+
+To define an optimal triangulation, given a continuous convex function $f$ on $\Omega$ and $1 \leq p \leq \inf$, and triangulation $\tau^{\ast} \in P_{N}$ we use the following criteria:
+
+\begin{equation}
+	Q ( \tau^{\ast}  , f, p) = \substack{inf \\ _{\tau \in P_{N}} } (\tau , f, p)
+\end{equation}
+
+[[ what does this mean / what does it mean to be optimal ]]
 
 \subsubsection{Mesh Perturbation}
 While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN63}. 
@@ -659,7 +669,7 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 % Chapter: 		Hypothesis
 \chapter{Objective, Hypothesis, and Technical Approach}
 \label{chap:purposestatement}
-Autonomously isolated objects from point cloud data can be analyzed from a structural health monitoring perspective. 
+Raw point clouds can be autonomously segmented into intuitive objects with or without supervised machine learning methods. The resulting objects can be converted from discrete point clouds to CAD models and volumetric meshes fully compatible with finite element analysis methods.
 
 \section{Research Objective}
 The objective of this thesis is to develop and validate a software pipeline capable of segmenting point cloud data of some expected density $\rho$ and within some accuracy tolerance $\sigma$ into clusters of meaningful shapes, and convert the resulting clusters into surface meshes valid for conversion to simply connected volumes. The research described in this thesis is inarguably very wide in application and scope, but is geared specifically towards Structural Health Monitoring and Non-Destructive Test and Analysis. The results of this Master's thesis are a proving ground for rapid scanning, meshing, and analysis of real-world objects.
@@ -669,7 +679,7 @@ The claims made in this thesis are the following:
 
 \begin{enumerate}
 	\item Point cloud scans oriented towards a specific object can be segmented to isolate said object with or without supervised clustering methods.
-	\item Providing a point cloud meets some required criteria, there is a generalized algorithm to convert raw clouds to volumetrically adaptable surface meshes.
+	\item Provided a point cloud meets some required criteria, there is a generalized algorithm to convert raw clouds to volumetrically adaptable surface meshes.
 \end{enumerate}
 
 The second hypothesis attempts to nail down an explicit definition of what it means for a mesh to be volumetrically compatible. Determining what conditions a point cloud must meet to be properly meshed, and what modifications can be made and to what extent are all problems that have yet to be fleshed out completely in the domain of real world to simulation conversion technology. This thesis aims to quantify criteria for raw point clouds to be meshed properly, criteria for smoothing limits before the resulting volume can no longer be realistically considered to have similar properties to it's real world counterpart, and criteria for a surface mesh to be successful converted to a volume. 
@@ -678,6 +688,11 @@ Knowing these limits allows for collection of point cloud data for the sake of i
 
 \section{Technical Approach}
 To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion. The goal is to accurately mimic the cloud resolution of the test device, and to proof the robustness of the algorithm at resolutions expected from other measurement devices. Simulated data has been crafted to model resolution, accuracy, and occlusion levels with the approaches that follow:
+
+\subsection{General: Zero Noise}
+We explore the pipeline with a fabricrated point cloud of varying resolutions.
+[[explain more??]]
+
 
 \subsection{LiDAR: Velodyne HDL-32E}
 The Velodyne HDL-32E is a high end LiDAR device capable of collecting 700,000 points per second at a frame rate of 20 Hz (rotations per second). It is equipped with 32 lasers aligned from +\ang{10.67} to -\ang{30.67}
@@ -690,6 +705,8 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 		\caption[Velodyne LiDAR Operation]{Visualization of how to the Velodyne HDL-32E operates.}
 \end{figure}
 
+\subsection{Stereogrammetry and Photogrammetry}
+Stereogrammetry and Photogrammetry are both highly dependent on the camera quality, speed of motion, and feature density of the image. As these methods depend on matching descriptive features between images, the resulting cloud is typically far more sparse than what would be obtained with a LiDAR device.
 
 
 
@@ -702,17 +719,28 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 \chapter{Results}
 \label{chap:results}
 \section{Simulated Data: Zero Noise}
+The first iteration of our algorithm is the control set, and first step in the ground-up development of the pipeline. There is no noise induced in the system, and all objects are significantly separated in 3-dimensional space. Figure~\ref{zeronoise:raw} shows the point cloud. The total number of points in the cloud is [[insert number of points]], average point to point distance is [[insert point to point distance]], and beam point-to-point distance is [[insert beam point to point distance]]. Beam dimensions are 3.048m (10ft) with a cross-section of the following specifications:
+
+
+\begin{centering}
+Width: 12.7cm (5in)
+\\Height: 12.7cm (5in)
+\\Thickness: 0.635cm (0.25in) \\
+\end{centering}
+
 
 \begin{figure}[!ht]
-	
 		\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise.jpg}
 		\caption[Simulated laboratory point cloud data with zero noise induced]{\centering Simulated laboratory point cloud data with zero noise induced.}
 	\label{zeronoise:raw}
 \end{figure}
 
+
+While not necessary in the zero noise case, filtering and downsampling prove to be crucial portions of the algorithm. In Figure~\ref{zeronoise:filtered} we apply a filter to remove any points with fewer than 15 neighbors, where neighbors are defined as being within one standard deviation plus the average point-to-point distance of the entire cloud. After filtering, the cloud is subsampled to have a maximum density of 0.1 centimeters squared.
+
+
 \begin{figure}[!ht]
-	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/sim-lab-0noise-DS01-k15std1.jpg}
 		\caption[Zero noise simulated data after being filtered with voxel size of 0.1 $cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering Zero noise simulated data after being filtered with voxel size of $0.1 cm^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
@@ -809,7 +837,7 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
 		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it02.png}
 		\includegraphics[trim={3in 2in 3.5in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering [Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace2lloyd}
 \end{figure}
 
@@ -925,7 +953,30 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 \end{figure}
 
 \subsection{Optimization}
+\subsubsection{Effects of Voronoi Relaxation}
 
+Advanced front does not meet the requirement for convergence of voronoi relaxation [[WHY]]
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it00.png}
+		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it01.png}
+		\includegraphics[trim={2.5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it02.png}
+		\includegraphics[trim={2in 4in 3in 3.5in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace2lloyd}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it00.png}
+		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it01.png}
+		\includegraphics[trim={4in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it02.png}
+		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace4lloyd}
+\end{figure}
 
 
 
