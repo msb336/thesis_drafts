@@ -712,7 +712,7 @@ Knowing these limits allows for collection of point cloud data for the sake of i
 To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion. The goal is to accurately mimic the cloud resolution of the test device, and to proof the robustness of the algorithm at resolutions expected from other measurement devices. Simulated data has been crafted to model resolution, accuracy, and occlusion levels with the approaches that follow:
 
 \subsection{General: Zero Noise}
-We explore the pipeline with a fabricrated point cloud of varying resolutions.
+We explore the pipeline with a fabricated point cloud of varying resolutions.
 [[explain more??]]
 
 
@@ -727,12 +727,32 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 		\caption[Velodyne LiDAR Operation]{Visualization of how to the Velodyne HDL-32E operates.}
 \end{figure}
 
+Figure~\ref{technical:lidarcompare} shows a comparison between a single frame of simulated HDL-32E LiDAR data and a true scan with the device. The simulation proves to be quite similar in results to the true scans, which will prove to be useful for future endeavors beyond this one.
+
+\begin{figure}
+	\centering
+		\includegraphics[width=2in]{cloudCollection/lidar5frames.png}
+		\includegraphics[width=2in]{cloudCollection/lidarSimulatedCollection.JPG}
+		%% [[Replace this with an actual single scan sim]]
+	\caption[Comparison of simulated and real HDL-32E scan data]{\centering Comparison of simulated and real HDL-32E scan data.}
+	\label{technical:lidarcompare}
+\end{figure}
+
+
 \subsection{Stereogrammetry and Photogrammetry}
 Stereogrammetry and Photogrammetry are both highly dependent on the camera quality, speed of motion, and feature density of the image. As these methods depend on matching descriptive features between images, the resulting cloud is typically far more sparse than what would be obtained with a LiDAR device.
 
 
+\subsection{Segmentation Method Exploration}
 
 
+\subsection{Initial Mesh Exploration}
+
+
+\subsection{Optimization Steps}
+
+
+\subsection{Final Mesh Verification}
 
 
 
@@ -874,10 +894,10 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
 
-\subsection{Effects of Delaunay Optimization}
+\subsubsection{Effects of Delaunay Optimization}
 
 
-\subsection{Effects of Mesh Perturbation}
+\subsubsection{Effects of Mesh Perturbation}
 
 \begin{figure}[!ht]
 	\centering
@@ -977,7 +997,7 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 \subsection{Optimization}
 \subsubsection{Effects of Voronoi Relaxation}
 
-Advanced front does not meet the requirement for convergence of voronoi relaxation [[WHY]]
+Due to the unbounded nature of the surface mesh generated via the Advancing Front method, shown in Figure~\ref{2cmnoise:advancingfront}, the criteria for the relaxation algorithm to converge is not met. The vertex points expand into $n$-dimensional space indefinitely until the algorithm crashes. %%[[Add more detail]]
 
 \begin{figure}[!ht]
 	\centering
@@ -990,6 +1010,8 @@ Advanced front does not meet the requirement for convergence of voronoi relaxati
 \end{figure}
 
 
+
+
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it00.png}
@@ -999,6 +1021,59 @@ Advanced front does not meet the requirement for convergence of voronoi relaxati
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
+
+
+
+\section{HDL-32E LiDAR Scan Data}
+To test the true robustness of the algorithm, a real scan of a real object of potential interest is necessary. The object for the following test is a 10 foot long beam, with a width and height of 5 inches, and a thickness of 0.25 inches.
+
+Before viewing the test results, note the thickness of the beam is smaller than the rated accuracy of the LiDAR device. This combined with sensor mobility limited to the xy plane at a height similar to that of the beam proved to cause a severely limited view of the entire beam.
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{cloudCollection/lidar5frames.png}
+		\caption[Individual LiDAR scan frame]{\centering Individual frame from LiDAR scan. Image contains 32,000 points.}
+	\label{lidarresults:singlescan}
+\end{figure}
+
+Concatenating the frames recorded over the entire 30 second test would result in a point cloud of 210 million points, so instead the concatenation was created out of 100 frames deemed to be the most critical in terms of information provided to the beam's shape characteristics. Figure~\ref{lidarresults:concatenatedraw}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{images/real-lab-scans/rawscan0.png}
+		\includegraphics[width=2in]{images/real-lab-scans/rawscan1.png}
+		\includegraphics[width=2in]{images/real-lab-scans/rawscan2.png}
+		\caption[Concatenation of 100 individual LiDAR scan frames]{\centering Concatenation of 100 individual LiDAR scan frames.}
+	\label{lidarresults:concatenated}
+\end{figure}
+
+The same filtering method as the previous sections is applied to the concatenated point cloud, resulting in the much cleaner looking point cloud shown in Figure~\ref{lidarresults:filtered}.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{images/real-lab-scans/filtered0.png}
+		\includegraphics[width=2in]{images/real-lab-scans/filtered1.png}
+		\includegraphics[width=2in]{images/real-lab-scans/filtered2.png}
+		\caption[Concatenated LiDAR scans after noise filtering and down sampling]{\centering Concatenated LiDAR scans after noise filtering and down sampling.}
+	\label{lidarresults:filtered}
+\end{figure}
+
+\subsection{Segmentation Method Comparison}
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{images/real-lab-scans/euclidean0.png}
+		\includegraphics[width=2in]{images/real-lab-scans/euclidean1.png}
+		\includegraphics[width=2in]{images/real-lab-scans/euclidean2.png}
+		\caption[Euclidean clustering results on HDL-32E LiDAR scans]{\centering Results after euclidean clustering.}
+	\label{lidarresults:euclidean}
+\end{figure}
+
+\subsection{Initial Meshing Methods}
+
+\subsection{Optimization}
 
 
 
