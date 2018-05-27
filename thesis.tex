@@ -99,7 +99,7 @@ In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to pro
 %%
 \subsection{Building Informational Modeling}
 \label{subsec:BIM}
-%[3]
+
 \cite{RN30}
 %%
 \subsection{Aerial Scanning for GPS Overlay}
@@ -131,14 +131,19 @@ There are many ways of collecting point cloud data, ranging from implicit method
 \label{sec:preprocessing}
 \subsection{Registration}
 \subsubsection{Position Data}
+[[fill in]]
 \subsubsection{Intrinsic Shape Signatures}
 To stitch individual frames together, distinctive, repeatable features from each frame are found, and the most likely transformation between the frames is calculated via RANSAC estimation. There are numerous ways to classify distinctive features, but in this paper, we will focus on Intrinsic Shape Signatures due to its reliability and computational efficiency.
 An intrinsic shape signature consists of two things:
-\begin{itemize}
-	\item An intrinsic reference frame
-	\item A highly discriminative feature vector encoding the 3D shape characteristics
-\end{itemize}
+
+\begin{enumerate}
+	\item An intrinsic reference frame.
+	\item A highly discriminative feature vector encoding the 3D shape characteristics.
+\end{enumerate}
+
 \subparagraph{Intrinsic Reference Frame Calculation}
+To calculate the orientation of the Intrinsic Reference Frame, we evaluate the relationship of a point, $p_{i}$, with the points inside of it's neighborhood. The neighborhood is described by any points within distance $r_{density}$ to interest point, $p_{i}$.
+
 \begin{enumerate}
 	\item Compute a weight for each point $p_{i}$ inversely related to the number of points within 2-norm distance $r_{density}$:
 	
@@ -150,7 +155,7 @@ An intrinsic shape signature consists of two things:
 	\item Compute a weighted scatter matrix $cov(p_{i})$ for $p_{i}$ using all points $p_{j}$ within distance $r_{frame}$:
 	
 		\begin{equation}
-		cov(p_{i})= \sum{|p_{j}-p{i}| < r_{frame}}\frac{w_{j}(p_{j}-p_{i})(p_{j}-p{i})^{T}}{ \sum{|p_{j}-p{i}| < r_{frame}}w_{j}}
+		cov(p_{i})= \sum{|p_{j}-p_{i}| < r_{frame}}\frac{w_{j}(p_{j}-p_{i})(p_{j}-p_{i})^{T}}{ \sum{|p_{j}-p_{i}| < r_{frame}}w_{j}}
 		\end{equation}
 		
 	\item Compute the covariance matrix eigenvalues in order of decreasing magnitude and their resulting eigenvectors.
@@ -161,9 +166,9 @@ An intrinsic shape signature consists of two things:
 The goal of the extraction is to create a view invariant “feature” vector providing us with some unique qualities about the point relationships within the intrinsic reference frame. At each point in the point cloud, or in increments of voxel stride size s, we build a sphere of some desired radius r centered at pi and divide it into 66 distinct partitions in angular space ($\theta, \psi$). A distinctive feature vector with 66 values is then computed by summing the radial distances $\rho_{i}$ in each bin \cite{RN60}.
 
 \begin{figure}[!ht]
-\centering
-\includegraphics{ISSfeaturevector2.jpg}  \includegraphics{ISSfeaturevector.jpg}
-\caption[Intrinsic Shape Signature feature vectors]{\centering Feature vector calculation via spherical bin decomposition \cite{RN60}.}
+	\centering
+		\includegraphics{ISSfeaturevector2.jpg}  \includegraphics{ISSfeaturevector.jpg}
+	\caption[Intrinsic Shape Signature feature vectors]{\centering Feature vector calculation via spherical bin decomposition \cite{RN60}.}
 \end{figure}
 
 \subsection{Flitering}
@@ -173,19 +178,29 @@ To minimize the amount of noise in the resulting dataset, a statistical approach
 \end{equation}
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[width=2in]{l_block_pt_cloud10pnoise.jpg} \includegraphics[width=2in]{l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg}
-\caption[Effects of noise filter on simulated point cloud objects]{\centering The effects of noise filtering on a simulated L block with 10\% induced noise.}
+	\centering
+		\includegraphics[width=2in]{l_block_pt_cloud10pnoise.jpg} \includegraphics[width=2in]{l_block_pt_cloud10pnoiseFILTEREDk100std05.jpg}
+	\caption[Effects of noise filter on simulated point cloud objects]{\centering The effects of noise filtering on a simulated L block with 10\% induced noise.}
 \end{figure}
 
 
 \subsection{Down-sampling}
-Down-sampling is the process of fixing a point cloud’s mean density to a voxel of size n. This is done by iterating the voxel throughout the cloud’s entire volume and replacing all points occupying a voxel with a single point in the mean position of the voxel.
+Down-sampling is the process of fixing a point cloud’s mean density to a voxel of size n. This is done by iterating the voxel throughout the cloud’s entire volume and replacing all points occupying a voxel with a single point in the mean position of the voxel. For an $n$-dimensional feature-set, the downsampling equation can be defined by Equation~\ref{eq:nddownsample}
+
+\begin{equation}
+	\label{eq:nddownsample}
+	p_{new} (i) = \frac {\sum_{p(i) \in V}^{N} p(i) }  {N}
+\end{equation}
+
+Where $p(i)$ represents the $i^{th}$ point in the dataset, $V$ represents the bounding box of the voxel in $n$-dimensional space, and $N$ represents the total number of points inside the voxel. The result os this equation is the average position of the points inside the voxel.
+
+Figure~\ref{intro:downsampling} shows the results of a simulated shape of initial point-to-point average distance of 0.05 inches downsampled with a voxel size of 0.25 $in^{3}$.
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[width=2in]{l_block_pt_cloud} \includegraphics[width=2in]{l_block_pt_cloudDOWNSAMPLE025.jpg}
-\caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $in^{3}$.}
+	\centering
+		\includegraphics[width=2in]{l_block_pt_cloud} \includegraphics[width=2in]{l_block_pt_cloudDOWNSAMPLE025.jpg}
+	\caption[Effects of down-sampling on simulated point cloud objects]{\centering A simulated L block point cloud down-sampled with voxel size = 0.25 $in^{3}$.}
+	\label{intro:downsampling}
 \end{figure}
 
 
@@ -630,6 +645,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 \end{figure}
 
 \begin{table}
+	\label{table:meshquality}
 	\centering
 		\caption{Quantification of mesh quality}
 		\begin{tabular}{| c | c |}
@@ -658,7 +674,7 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 
 
 \subsubsection{Voronoi Relaxation / Lloyd's Algorithm}
-
+\label{optimization:voronoirelaxation}
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=3in]{voronoirelaxation.PNG}
@@ -712,8 +728,16 @@ Knowing these limits allows for collection of point cloud data for the sake of i
 To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion. The goal is to accurately mimic the cloud resolution of the test device, and to proof the robustness of the algorithm at resolutions expected from other measurement devices. Simulated data has been crafted to model resolution, accuracy, and occlusion levels with the approaches that follow:
 
 \subsection{General: Zero Noise}
-We explore the pipeline with a fabricated point cloud of varying resolutions.
-[[explain more??]]
+We explore the pipeline with a fabricated point cloud of varying resolutions. This point-cloud does not omit any features of the simulated room to mimic occlusion, and has zero simulated noise. In short, every point in the cloud is in it's true position in 3-dimensional space. These clouds shown below are optimal cases and are entirely unacquirable with any instruments in use today, or in the forseeable future. They do, however, serve as a proof of concept for the meshing pipeline as a form of optimal results. If the pipeline cannot work for the optimal case, it is pointless to attempt it's use on suboptimal clouds.
+
+[[add figures of each pointcloud set (also generate each pointcloud set)]]
+
+\subsection{General: Estimated Noise and Occlusion}
+As the instruments within the scope of this thesis vary in expense, acquireability, and technical specifications, it is necessary to simulate their expected results. We can do this by modeling each instrument's acquisition technique, and applying that technique to the simulated room point cloud at a high density. The following figure set outline the collection methods of each technique, and their simulated accuracy.
+
+[[ Add all these figures ]]
+
+
 
 
 \subsection{LiDAR: Velodyne HDL-32E}
@@ -770,6 +794,8 @@ Width: 12.7cm (5in)
 \\Thickness: 0.635cm (0.25in) \\
 \end{centering}
 
+Figure~\ref{zeronoise:raw} shows the unmodified pointcloud at high resolution. The dataset in this section has zero noise and zero occlusion, and provides insight into what each step of the mesh optimization process accomplishes. Including the ground plane, there are 17 distinct objects in this point cloud.
+
 
 \begin{figure}[!ht]
 		\centering
@@ -789,27 +815,30 @@ While not necessary in the zero noise case, filtering and downsampling prove to 
 	\label{zeronoise:filtered}
 \end{figure}
 
-
+The resulting cloud size is [[insert image size]], with an average point-to-point distance of 0.1 inches. Being able to actively control the point cloud density is crucial to have control over proper meshing parameters and fail conditions.
 
 \subsection{Segmentation Method Comparison}
+
+With the exception of euclidean distance clustering, each unsupervised clustering method requires a number of bins. For FCM and k-means, these bins represent the centroids of the clusters, and for Hierarchical, they represent the exit condition for number of divisions. Ideally, the number of bins should match the number of desired segmentations, so the bin size is set to 17. Euclidean clustering requires a minimum radius between points as an input. As the mean point-to-point distance is forced to 0.1 inches, we wish to set a higher value to encapsulate gaps in our surfaces which we will encounter in the non-ideal cases. Setting the distance to 0.5 inches proves to have satisfactory results.
 
 \begin{figure}[!ht]
 	\label{zeronoise:segcompare}
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/all_methods.jpg}
 		\caption[Comparison of unsupervised segmentation techniques on a simulated dataset.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 in and a maximum cluster size of 50,000 points.}
-	\label{zeronoise:optimal}
+	\label{zeronoise:compare}
 \end{figure}
 
-
+It is clear from the results in Figure~\ref{zeronoise:compare} that Euclidean clustering far outshines it's unsupervised brethren in ability to segment the noiseless point cloud in a meaningful way. To clear out the segments we do not wish to see, criteria on the minimum and maximum cloudsize can be imposed. In Figure~\ref{zeronoise:optimal} we impose a minimum cloud size of 3,000 points, and a maximum of 50,000.
 
 \begin{figure}[!ht]
-	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/euclidean-d05max50000min3000.jpg}
 		\caption[Euclidean distance segmentation with ideal parameters.]{\centering  Euclidean clustering with radius of 0.5 in, minimum cluster size of 3,000 points and a maximum cluster size of 50,000 points.}
-
+	\label{zeronoise:optimal}
 \end{figure}
+
+The filtering and segmentation parameters derived from this zero noise situation are adequate for isolating our beam from the rest of the point cloud. We will now evaluate the steps in the meshing technique.
 
 
 \subsection{Initial Meshing Methods}
@@ -819,7 +848,7 @@ In a zero noise situation, the advancing front method returns a nearly perfect m
 	
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
-		\includegraphics[trim={0 3in 0 3in},clip,width=6in]{simulated-lab-scan/0noise/clean/advancingfront01.png}
+		\includegraphics[trim={0 3in 0 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 		\label{zeronoise:advancingfront}
@@ -830,7 +859,7 @@ In Figure~\ref{zeronoise:scalespace2} we see the effects of Scale Space reconstr
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
-		\includegraphics[width=6in]{simulated-lab-scan/0noise/clean/scalespace201.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace201.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 	\label{zeronoise:scalespace2}
@@ -841,55 +870,63 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
-		\includegraphics[width=6in]{simulated-lab-scan/0noise/clean/scalespace401.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace401.png}
 		\includegraphics[trim={0.5in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/clean/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 		\label{zeronoise:scalespace4}
 \end{figure}
 
+Figure~\ref{zeronoise:scalespace15} shows the extremes of what the scale space reconstruction can do to alter the topology of a mesh. Because the points are cast to such a high scale, there is virtually no thickness between points on one side of the beam and points on the other. For this reason, the shape is cast as a 2-dimensional object. It is clear that casting an object like our beam to as high a scale as shown here is not viable for initial meshing. 
+
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
-		\includegraphics[width=6in]{simulated-lab-scan/0noise/clean/scalespace1501.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1501.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/clean/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
 		\label{zeronoise:scalespace15}
 \end{figure}
 
-
+In the zero noise case, Advancing Front reconstruction proves to be the most accurate to our beam's dimensions. However, as we will see in future sections, this method is not robust to noise. Both of these statements are unsurprising, as this reconstruction method does not modify the topology defined by the pointset provided, and therefor directly represents the shape defined by the input cloud.
 
 \subsection{Optimization}
 \subsubsection{Effects Voronoi Relaxation}
 
+Voronoi relaxation, defined in Section~\ref{optimization:voronoirelaxation}, aims to regulate the tetrahedral areas in the mesh by iteratively shifting point vertices to their respective voronoi centroids. This method is effective in increasing the mesh quality ratios defined in Table~\ref{table:meshquality}, with the exception of volume ratio, which can be visualized as slivers in the mesh (Figure~\ref{fig:badtetrahedra}).
+
+In Figure~\ref{zeronoise:advancedlloyd}, we see the relaxed mesh after 200 iterations of voronoi relaxation. Note the uniformity in tetrahedral area, as well as the change topology around the edges of the beam.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[trim={6in 2in 3in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it00.png}
-		\includegraphics[width=6in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it01.png}
+		\includegraphics[trim={3in 2in 3in 2in}, clip, width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it01.png}
 		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it02.png}
 		\includegraphics[trim={1in 1in 1in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it03.png}
 		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:advancedlloyd}
 \end{figure}
 
+Voronoi Relaxation has interesting effects of our scale space meshes. In Figure~\ref{zeronoise:scalespace2lloyd}, we see a relatively smooth, pock-marked version of our scale-space mesh. Notice on the left-most corner of our beam there are a few tall, narrow shapes. These shapes are the slivers remaining in the mesh. The next steps in the optimization process aim to remove these slivers.
 
 \begin{figure}[!ht]
+	
 	\centering
 		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it00.png}
-		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
+		\includegraphics[trim={3in 2in 3in 2in}, clip, width=3in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
 		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it02.png}
 		\includegraphics[trim={3in 2in 3.5in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace2lloyd}
 \end{figure}
 
+Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh is 2-dimensional due to the scale-space casting, but still shows the effects of voronoi relaxation quite vividly.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[trim={6in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it00.png}
-		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it01.png}
-		\includegraphics[trim={4.5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it02.png}
-		\includegraphics[trim={3in 4in 3.5in 4in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it03.png}
+		\includegraphics[trim={3.5in 2in 2.5in 2in}, clip, width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it01.png}
+		\includegraphics[trim={4.5in 2in 4.5in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it02.png}
+		\includegraphics[trim={3in 4in 3.5in 4in},clip,width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
@@ -1006,7 +1043,7 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 		\includegraphics[trim={2.5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it02.png}
 		\includegraphics[trim={2in 4in 3in 3.5in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
-	\label{zeronoise:scalespace2lloyd}
+	\label{2cmnoise:scalespace2lloyd}
 \end{figure}
 
 
@@ -1019,7 +1056,7 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 		\includegraphics[trim={4in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it02.png}
 		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
-	\label{zeronoise:scalespace4lloyd}
+	\label{2cmnoise:scalespace4lloyd}
 \end{figure}
 
 
