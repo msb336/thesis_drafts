@@ -171,7 +171,7 @@ The goal of the extraction is to create a view invariant “feature” vector pr
 	\caption[Intrinsic Shape Signature feature vectors]{\centering Feature vector calculation via spherical bin decomposition \cite{RN60}.}
 \end{figure}
 
-\subsection{Flitering}
+\subsection{Filtering}
 To minimize the amount of noise in the resulting dataset, a statistical approach requiring each point to have k neighbors within d standard deviations from the mean density radius of the cloud. This allows for controlled outlier removal, and a smoother cloud with fewer sharp edges.
 \begin{equation}
 	P_{x} = p_{i} \mid \sum_{j=1}^n |p_{j} - p_{i}| \leq (r_{density} + d) \geq k
@@ -203,14 +203,15 @@ Figure~\ref{intro:downsampling} shows the results of a simulated shape of initia
 	\label{intro:downsampling}
 \end{figure}
 
+Downsampling is crucial for processing poinclouds. The obvious benefit is decreased computation time, but it also allows for us to control the density of the point cloud. Controlling the cloud density allows for meshing parameters to be non-modular, as we can force the input cloud to an expected density. Section~\ref{subsec:meshing} describes the meshing steps in more detail.
 
 \subsection{Handling Occlusion} 
 Occlusion is a common issue in the perception world, defined by the lack of information in an image / 3D scan due to other objects blocking a direct view. A simple example: In 3D scene reconstruction from images, it is impossible to accurately reconstruct the contents inside an opaque box because we cannot see inside the box. This is occlusion. In the field, it is nearly impossible to fully avoid occluded datasets when scanning an object via LiDAR equipped UAVs. It is crucial to be able to develop methods to alleviate this problem.
 
 \begin{figure}[!ht]
-\centering
-\includegraphics{occluded_man.jpg}
-\caption[Demonstration of occlusion]{\centering Section of a building occluded by an object in the foreground \cite{RN13}.}
+	\centering
+		\includegraphics{occluded_man.jpg}
+	\caption[Demonstration of occlusion]{\centering Section of a building occluded by an object in the foreground \cite{RN13}.}
 \end{figure}
 
 \subsubsection{Range Segementation}
@@ -239,7 +240,6 @@ An algorithm built under the pretext of Gaussian diffusion is then used to proje
 \end{equation}
 
 When scanning large objects, this method proves to be quite effective at removing sources of noise that are significantly smaller than the object being scanned. For buildings, bridges, and large-scale structures, this is a necessary first step in removing excess noise / unnecessary information from the cloud \cite{RN13}.
-
 
 \subsubsection{Informed Shape Estimation}
 Occlusion is the cause of two main problems. The first being the unnecessary information provided by objects blocking the instruments view to our desired target, which is dealt with via the diffusion of objects from the foreground into the background via the range segmentation method show in the previous section. The second --- far more relevant to the approach outlined in this thesis --- is the lack of complete information provided by the sensor. This can be most easily explained by making an analogy to photography. If one takes a picture of the front of a box, there is no possible way to say with certainty what the back of the box looks like. In 3D point processing, the problem is the same. Informed shape estimation attempts to tackle this problem by applying a shape with known parameters to the object point cloud and modifying the shape parameters to minimize the following cost function:
@@ -331,9 +331,9 @@ Linear classification methods limit the versatility of the CNN, as many object d
 From input to output, all CNNs have the same skeleton structure, with a varying number of layers between the raw input and the fully connected layer:
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[width=6in]{cnn_flow.png} 
-\caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
+	\centering
+		\includegraphics[width=6in]{cnn_flow.png} 
+	\caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
 \end{figure}
 
 For the system to be accurate, the weights for each convolution and connection must be trained. This training is done through a process called backpropagation. An image-set of known classifications is fed to the untrained system, and the error between the system’s classification and the true classification of each image is used to update the weights iteratively until the machine’s class prediction closely resembles ground truth. Most algorithms use numerical solving methods to sharply diminish the number of iterations required for convergence. The “gradient descent” method is commonly used in the machine learning world due to its rapid convergence properties and low computational complexity. The method is shown below:
@@ -341,6 +341,8 @@ For the system to be accurate, the weights for each convolution and connection m
 \begin{equation}
 	x_{k+1} = x_{k} - \gamma \nabla F(x_{k})
 \end{equation}
+
+$F(x)$ is described as the residual function. It is the diference between the result of the cost function $C(x)$, and the current $x$ variable values.
 
 \begin{equation}
  F(x) =
@@ -351,7 +353,7 @@ C_{n}
 \end{bmatrix}  -  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix} 
 \end{equation}
 
-The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset \cite{RN7}.
+The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset \cite{RN7}. Because CNNs -- and all supervised learning methods -- require a large amount of training data, they do not fit within the scope of the proof of concept inside of this paper. However, supervised learning has proven to be one of the most effective forms of classification, and will be addressed in the future work section of this thesis.
 
 \subsection{Unsupervised Methods}
 With our goal being to isolate specific objects in a structural health monitoring setting, the ideal segmentation method is a supervised learning algorithm, such as a convolutional neural network, that semantically parses the point cloud based on a training set of pre-defined cloud objects \cite{RN72}. However, due to time limitations, and a lack of training data relevant to our objects of interest, this is not possible. Instead we explore a series of unsupervised clustering methods on the assumption that objects are distinct enough in relative cloud neighborhoods to be properly segmented.
@@ -362,7 +364,7 @@ K-means clustering is an iterative method that groups $n$-dimensional datasets i
 	arg min_{S} \sum{i=1}^{k} \sum{x \in S_{i}} |x - c_{i}|^{2}
 \end{equation}
 
-[PROS, CONS, AND GENERAL USAGE CASES]
+K-means clustering is arguably the most well known clustering method, and is useful for a massive variety of naïve classification problems. In any situation where the bin-size is known and the data is clearly separated in some feature space $\mathbb{R}^{n}$, k-means proves to be an effective clustering method. It's ease of implementation comes at the cost of computate. As with most unsupervised clustering methods, the major downside to k-means is it's non-reusability. Where supervised methods require their computational time upfront during the training phase, k-means requires significant computational time with every dataset. It does not develop a set of multiplier weights, so it must start the clustering algorithm from scratch with each new input set.
 
 \subsubsection{Fuzzy C-means Clustering}
 
@@ -378,7 +380,7 @@ Each point is provided a weight vector w [0, 1] for its likelihood of belonging 
 	w_{ij} = \frac{1}{\sum_{k=1}^{c}(\frac{|x_{i}-c_{j}|}{|x_{i}-c_{k}|})^{\frac{2}{m-1}}}
 \end{equation}
 
-[PROS, CONS, AND GENERAL USAGE CASES]
+Fuzzy clustering is differentiated from k-means in that points are not isolated to a singular cluster until the final thresholding step after FCM has reached it's exit criteria. This allows for all points in the dataset to continually effect the location of every cluster centroid. FCM finds it's worth in $n$-dimensional datasets that are not clearly segregated by their cost functions, but do have a series of denser clouds. FCM is even more computationally intensive than it's counterpart, k-means, because it must iteratively calculate the location of every point in relationship to every centroid, and then also calculate the weights of each point in reference to each centroid.
 
 \subsubsection{Aggomerative and Dvisive Hierarchical Clustering}
 In Agglomerative clustering, each point is initially considered its own cluster. Iteratively, the points are grouped together based on a user-defined cost function – in our case, Euclidean distance. The exit conditions for this method are either convergence upon a set of clusters, or a predefined number of clusters.
@@ -391,24 +393,30 @@ Divisive clustering approaches the clustering problem in an exactly opposite fas
 \caption[Comparison of divisive and agglomerative clustering methods]{Comparison of divisive and agglomerative hierarchical clustering}
 \end{figure}
 
+[[GENERAL USAGE, PROS, CONS]]
+
+Hierarchical clustering is not as computationally efficient as k-means or FCM, as the number of calculations it must make for each point is drastically higher. At each iteration, each point, $p_{i}$, is compared with every point inside of it's bin, to determine what bin it will be divided into. This means Hierarchical clustering methods occupy $\mathcal{O}(n^{3})$ time complexity space, and requires $\mathcal{O}(n^{2})$ memory. This makes Hierarchical clustering very unwieldy with medium and large datasets. However, it proves to be one of the more robust supervised segmentation algorithms, as the cost function is easily modifiable by the user.
+
 
 \subsubsection{Euclidean Distance Clustering}
-Perhaps the simplest of the algorithms listed above, Euclidean distance clustering operates on the pretense that objects are separated significantly enough spatially from another that clustering points based on their proximity to other points in the cloud is sufficient to properly segment the dataset. This algorithm involves no iterative process, and requires two inputs: Maximum point-to-point distance $r$, and minimum number of points per cluster $k$.
+Perhaps the simplest of the algorithms listed above, Euclidean distance clustering operates on the pretense that objects are separated significantly enough spatially from another that clustering points based on their proximity to other points in the cloud is sufficient to properly segment the dataset. This algorithm involves no iterative process, and requires three inputs: Maximum point-to-point distance, $r$, minimum number of points per cluster, $k_{min}$, and maximum number of points per cluster, $k_{max}$.
+
+Euclidean clustering occupies the lowest time complexity and memory space of it's unsupervised brethren, and does not require an expected bin-size.
 
 \subsubsection{Comparison of Methods}
 
  \begin{table}[h!]
-     \begin{center}
-           \caption[Comparison of Unsupervised clustering methods]{Comparision of unsupervised clustering methods on various simulated point clouds}
-     \begin{tabular}{ | c | p{3cm} | p{3cm} | p{3cm} | p{3cm} | }
+     \centering
+           \caption[Comparison of Unsupervised clustering methods]{\centering Comparision of unsupervised clustering methods on various simulated point clouds}
+     \begin{tabular}{ | c | c | c | c | c | }
      \hline
       K-means & Fuzzy C-means & Agglomerative & Divisive & Euclidean \\ 
       \hline
       		\includegraphics[width=2cm]{2d-cluster-tests/k-means/concentric.jpg}
       & 
-      		\includegraphics[trim={0 0 0 2cm},clip, width=2cm]{2d-cluster-tests/fcm/concentric.jpg}
+      		\includegraphics[trim={0 1cm 0 1cm},clip, width=2cm]{2d-cluster-tests/fcm/concentric.jpg}
       & 
-      		\includegraphics[trim={0 1cm 0 1cm},clip, width=2cm]{2d-cluster-tests/agglomerative/concentric.jpg}
+      		\includegraphics[width=2cm]{2d-cluster-tests/agglomerative/concentric.jpg}
       &
 
       &
@@ -417,7 +425,7 @@ Perhaps the simplest of the algorithms listed above, Euclidean distance clusteri
       
             \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/lines.jpg}
       & 
-             \includegraphics[width=1.5cm]{2d-cluster-tests/fcm/lines.jpg}    
+             \includegraphics[trim={0 1cm 0 0.5cm},clip,width=1.9cm]{2d-cluster-tests/fcm/lines.jpg}    
       & 
              \includegraphics[trim={0 1cm 0 0cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/lines.jpg}    
       &
@@ -434,37 +442,38 @@ Perhaps the simplest of the algorithms listed above, Euclidean distance clusteri
       &
 
       &
-           \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/euclidean-distance/blob.jpg} 
+           \includegraphics[trim={0 0.5cm 0 0.25cm},clip,width=1.5cm]{2d-cluster-tests/euclidean-distance/blob.jpg} 
       \\ \hline
       
-            \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/k-means/solid_circles.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/solid_circles.jpg}
       & 
-            \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/fcm/circles.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/fcm/circles.jpg}
       & 
-            \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/solid_circles.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/agglomerative/solid_circles.jpg}
       &
 
       &
-            \includegraphics[trim={0 1.5cm 0 1.5cm},clip,width=1.5cm]{2d-cluster-tests/euclidean-distance/solid_circles.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/euclidean-distance/solid_circles.jpg}
       \\ \hline
       
-            \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/k-means/plane.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/plane.jpg}
       & 
-            \includegraphics[trim={0 0cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/fcm/plane.jpg}
+            \includegraphics[trim={0 0cm 0 0.25cm},clip,width=1.75cm]{2d-cluster-tests/fcm/plane.jpg}
       & 
-            \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/plane.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/agglomerative/plane.jpg}
       &
       
       &
-            \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/euclidean-distance/plane.jpg}
+            \includegraphics[width=1.5cm]{2d-cluster-tests/euclidean-distance/plane.jpg}
       \\ \hline
       
       \end{tabular}
-      \end{center}
       \end{table}
 
+Observing the 2-dimensional sample data, it is clear Euclidean clustering has a significant edge over the other clustering methods. We will see in Chapter~\ref{chap:results} how it fairs upon 3-dimensional clouds.
 
-\subsection{Converting a Discrete Point Cloud to a Bounded Area Surface Mesh} 
+\subsection{Converting a Discrete Point Cloud to a Bounded Area Surface Mesh}
+\label{subsec:meshing}
 \subsubsection{Definition of a Surface Mesh}
 Surface meshes, in simple terms, are a series of connected areas defined by their vertices in $n$-dimensional space. The areas are typically triangles or tetrahedrons, and form together to define a continuous surface area using discrete data points. There are many ways to store surface mesh objects, but they all require two components:
 
@@ -475,6 +484,14 @@ Surface meshes, in simple terms, are a series of connected areas defined by thei
 
 In a fully bounded surface mesh, the combination of each triangulation object creates a shell, which represents the surface area of the shape.
 
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=3in]{points2surface/surface_mesh.png}
+	\caption[Simple example of surface mesh components]{Visualization of necessary components in a surface mesh.}
+	\label{meshing:surface_mesh}
+\end{figure}
+
+Typical file-types for surface meshes contain the location of the vertices in 3-dimensional space, followed by definitions for their connectivity in index form.
 
 \subsubsection{Definition of a Volume Mesh}
 A volume mesh is defined with the same parameters as a surface mesh, with the key difference being that it defines the entire exterior and interior of the object.
@@ -485,7 +502,7 @@ Boundary Representations, often called the ''skin'' of a solid object, consist o
 
 \begin{figure}
 	\centering
-		\includegraphics{cadTypes/brep.jpg}
+		\includegraphics[width=3in]{cadTypes/brep.jpg}
 	\caption[Components of a boundary representation.]{\centering An overview of the components involved in a boundary representation of a solid object \cite{Stroud2006}.}
 \end{figure}
 
@@ -494,7 +511,7 @@ NURBS curves are a method of interpolating a discrete set of vertex points into 
 
 \begin{equation}
 	f(u) = \frac    {   \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) P_{i} }
-				 {  \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) }
+				 	{  \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) }
 	\label{nurbs:weightedbspline}
  \end{equation}
  
@@ -502,7 +519,7 @@ NURBS curves are a method of interpolating a discrete set of vertex points into 
  
 \begin{equation}
 	R_{i}(u) = \frac    {   w_{i} B_{i,n}(u)}
-				 {  \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) }
+				 		{  \sum_{i=0}^{K-1} w_{i} B_{i,n}(u) }
 	\label{nurbs:rationalbasis}
  \end{equation}
  
@@ -542,8 +559,8 @@ If every point pair sharing a Voronoi boundary are connected, the result is a tr
 
 \subsubsection{Advancing Front / Marching Triangles}
 The Advancing Front method is common in computer graphics software – especially in procedurally generated games – because of it’s speed and computational simplicity.
-[DEFINITION, USAGE, AND 2D EXAMPLE]
-\cite{RN66}.
+
+In the Advancing Front method, a mesh is constructed by progressively adding tetrahedra starting at the boundaries of the previous surface elements. At each iteration, the mesh boundary is propagated further across the set of surface points. New tetrahedra are determined based on the minimal delaunay triangluation between the boundary vertices and unreferenced points in space. Each new triangulation object is created by adding a single unreferenced point at a time \cite{RN66}.
 
 \subsubsection{Scale Space Reconstruction Method}
 At a grand scale, the Scale Space Reconstruction Method aims to optimize surface meshing in the face of discrete point cloud data. No matter how accurate or dense a point cloud may be, there is no way to verify the topology defined by the cloud is accurate to the true object topology. To simplify this ill-posed problem, and reduce mesh quality damage due to noisy points, the Scale Space algorithm casts the raw point cloud to a space of scale N by iteratively calculating the mean curvature of a neighborhood of points and casting each point pk to it’s nearest point on the curve. This results in a far more uniform point cloud, which can mesh via Delaunay triangulation at a high quality level. Once the meshing has occurred, the pointset is then recast to its original scale to maintain complex features. 
@@ -554,15 +571,15 @@ At a grand scale, the Scale Space Reconstruction Method aims to optimize surface
 	
 	\textbf{Output:} A point $p'$, the result of one discrete step of the mean curvature calculation applied to $p$.
 \begin{lstlisting}[escapeinside={(*}{*)}]
-for ( (*$p$*) in (*$P$*) )
-	get (*$neighbors$*) from (*$p$*)
-	if num(neighbors) < 5
-		remove (*$p$*)
-	set (*$p_{bar} = \frac{\sum_{q \in neighbors} w(q)q}{\sum_{q \in neighbors}w(q)}$*)
-	set (*$C = \sum_{q \in neighbors} w(q)(q-p_{bar})(q-p_{bar})^{2}$*)
-	set (*$v_{0} = arg_{min} eigenvector(C)$*)
-	set (*$p' = p - \langle p - p_{bar}, v_{0} \rangle v_{0}$*)
-	(*$p' \cdot n = \frac{p-p'}{|p-p'|} \cdot sign(\langle p - p', p \cdot n \rangle ) $*	
+	for ( (*$p$*) in (*$P$*) )
+		get (*$neighbors$*) from (*$p$*)
+		if num(neighbors) < 5
+			remove (*$p$*)
+		set (*$p_{bar} = \frac{\sum_{q \in neighbors} w(q)q}{\sum_{q \in neighbors}w(q)}$*)
+		set (*$C = \sum_{q \in neighbors} w(q)(q-p_{bar})(q-p_{bar})^{2}$*)
+		set (*$v_{0} = arg_{min} eigenvector(C)$*)
+		set (*$p' = p - \langle p - p_{bar}, v_{0} \rangle v_{0}$*)
+		(*$p' \cdot n = \frac{p-p'}{|p-p'|} \cdot sign(\langle p - p', p \cdot n \rangle ) $*	
 \end{lstlisting}
 
 \textbf{Algorithm 2:} Scale Space Iterator
@@ -573,30 +590,23 @@ for ( (*$p$*) in (*$P$*) )
 
 
 \begin{lstlisting}[escapeinside={(*}{*)}]
-for (*$p$*) in (*$P$*)
-	set (*$p.origin = p$*)
-set idx = 0
-for ( i = 0, \ldots, N-1 )
-	new_idx = mod(idx, 2) + 1
-	for (*$p \in P_{idx}$*)
-		(*$p' = MCC(p, P_{idx}, r)$*)
-		store (*$p'$*) in (*$ P_{new_idx}$*)
-		(*$p'.origin = p.origin $*)
-	if ( idx > 0 )
-		remove (*$P_{idx}$*)
-	idx = new_idx
+	for (*$p$*) in (*$P$*)
+		set (*$p.origin = p$*)
+	set idx = 0
+	for ( i = 0, \ldots, N-1 )
+		new_idx = mod(idx, 2) + 1
+		for (*$p \in P_{idx}$*)
+			(*$p' = MCC(p, P_{idx}, r)$*)
+			store (*$p'$*) in (*$ P_{new_idx}$*)
+			(*$p'.origin = p.origin $*)
+		if ( idx > 0 )
+			remove (*$P_{idx}$*)
+		idx = new_idx
 \end{lstlisting}
 
-\textbf{Algorithm 3:} Back Projection to Final Mesh
+Using the Ball Pivoting Algorithm \cite{ballpivot}, a reconstruction is implemented that does not change the location of the smoothed vertex positions or add new vertex positions. In a nutshell, the Ball Pivoting Algorithm iterates a sphere of radius $r$ thoughout the pointcloud. If three points are located on the sphere, a triangulation with those vertices is created. If no points are found, the radius is expanded.
 
-	\textbf{Input:} A point set $P$, a number of iterations $N$, and a radius $r$
-	
-	\textbf{Output:} A modified point set $P_{N}$
-
-
-\begin{lstlisting}[escapeinside={(*}{*)}]
-\end{lstlisting}
-\cite{RN67}
+At this point, the vertices of the smoothed mesh are recast to zero-scale ( their initial points in the point cloud). The result is a mesh built based on a smoothed input, with minimual noise reduction in the process \cite{RN67}.
 
 \begin{table}[h]
 \centering
@@ -626,6 +636,8 @@ Scale Space 10 & \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
 
 \subsubsection{Hole Patching, Fairing, and Refinement}
 
+[[add definitions]]
+
 \subsection{Mesh Optimization}
 Now that the objects in the cloud are properly segmented, they must be meshed in a way that is both accurate to the real-world definition of the object and suitable to be converted from a surface mesh to a volumetric mesh.
 
@@ -644,8 +656,9 @@ The other criteria are more abstract in nature and are more difficult to detect 
 		\label{fig:meshquality}
 \end{figure}
 
-\begin{table}
-	\label{table:meshquality}
+It is easy to categorize meshes by quality via visual inspection, but in order to resolve low quality areas autonomously, we must define mathematically what it means to be "low quality." Table~\ref{table:meshquality} lists some of the ratios we will use in this thesis to define a mesh's quality level.
+
+\begin{table}[!ht]
 	\centering
 		\caption{Quantification of mesh quality}
 		\begin{tabular}{| c | c |}
@@ -659,6 +672,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 			Volume ratio & $Q_{5} = \frac{V}{l_{max}^{3}}$
 			\\ \hline
 		\end{tabular}
+		\label{table:meshquality}
 \end{table}
 
 \begin{figure}[!ht]
@@ -991,9 +1005,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
-		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
+		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 		\label{2cmnoise:advancingfront}
 \end{figure}
@@ -1002,9 +1016,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht] 
 	
 	\centering
-		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
-		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
+		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 		\label{2cmnoise:scalepspace2}
 \end{figure}
@@ -1013,9 +1027,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
-		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
+		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 		\label{2cmnoise:scalespace4}
 \end{figure}
@@ -1024,9 +1038,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
-		\includegraphics[width=6in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
+		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
 		\label{2cmnoise:scalespace15}
 \end{figure}
@@ -1086,7 +1100,7 @@ Concatenating the frames recorded over the entire 30 second test would result in
 	\label{lidarresults:concatenated}
 \end{figure}
 
-The same filtering method as the previous sections is applied to the concatenated point cloud, resulting in the much cleaner looking point cloud shown in Figure~\ref{lidarresults:filtered}.
+The same filtering method as the previous sections is applied to the concatenated point cloud, resulting in the much cleaner looking point cloud shown in Figure~\ref{lidarresults:filtered}. The result of the concatenation and filtering is sufficient to move on to the segmentation step. It is hard to see in the full concatenation, but the effects of concatenating multiple frames without using instrument location/pose data becomes apparent when isolating the beam. We will see these effects in the next section.
 
 \begin{figure}[!ht]
 	\centering
