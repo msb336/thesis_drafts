@@ -68,7 +68,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \addcontentsline{toc}{chapter}{Abstract}
 \begin{abstract}
-This paper outlines a method to utilize machine learning in conjunction with advanced meshing techniques to autonomously segment raw point cloud data and reconstruct the resulting segments into simply connected volumetric meshes.
+Technology today is increasing at a such a rate that structurally obselete objects are still in regular use throughout industry. While today's design and construction methods include CAD drawings, finite element models, and countless other digital analysis tools, many objects in the field do not have any support data available due to their age. In an attempt to solve this problem, this paper outlines a method utilizing machine learning in conjunction with advanced meshing techniques to autonomously segment raw point cloud data and reconstruct the resulting segments into simply connected meshes. We seek to quantify traits in unordered point clouds and surface meshes necessary for fully volumetric convertible surface meshes by evaluating readily available metrics and methods for determining mesh quality. This thesis proposes a method to convert real objects in the field into analyzable models with minimal user interface in the process.
 
 \end{abstract}
 
@@ -120,12 +120,15 @@ In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to pro
 There are many ways of collecting point cloud data, ranging from implicit methods where the collection tool does not return direct xyz point data, such as stereogrammetry and structure from motion, to explicit methods where the direct return is a 3-dimensional position output, such as LiDAR, laser scanning and ultrasonic sensing. Each collection technique has its own set of parameters, accuracy ratings, and speed of collection / calculation.
 \subsection{Implicit collection methods: Stereogrammetry and Structure from Motion}
 \label{subsec:implicit}
+[[fill in]]
 \cite{RN20}
 \subsection{Explicit Methods: LiDAR, Laser Scanning, and Ultrasonic Sensing}
 \label{subsec:explicit}
+[[fill in]]
 %%
 \section{Sensor Fusion}
 \label{sec:fusion}
+[[fill in]]
 %%
 \section{Point Cloud Pre-processing Methods}
 \label{sec:preprocessing}
@@ -475,6 +478,7 @@ Observing the 2-dimensional sample data, it is clear Euclidean clustering has a 
 \subsection{Converting a Discrete Point Cloud to a Bounded Area Surface Mesh}
 \label{subsec:meshing}
 \subsubsection{Definition of a Surface Mesh}
+\label{subsubsec:surfdef}
 Surface meshes, in simple terms, are a series of connected areas defined by their vertices in $n$-dimensional space. The areas are typically triangles or tetrahedrons, and form together to define a continuous surface area using discrete data points. There are many ways to store surface mesh objects, but they all require two components:
 
 \begin{enumerate}
@@ -636,7 +640,18 @@ Scale Space 10 & \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
 
 \subsubsection{Hole Patching, Fairing, and Refinement}
 
-[[add definitions]]
+Surface meshes, defined in Section~\ref{subsubsec:surfdef}, contain vertices and faces. Inherently, they do not contain any methods to maintain a bounded volume. For this reason, it is necessary to detect discontinuities in the mesh, and develop a method to resolve them. We will define two types of mesh edges in this section: A full edge, and a half edge.
+A full edge occurs when an edge is referenced by more than one polyhedral object. What this means in physical terms is that the edge is not on the boundary of the shape. Half edges, on the other hand, are only referenced by a single polyhedral object. Half edges are indicators of holes in the mesh, as they are unreferenced anywhere else in our surface area.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=3in]{edgevshalfedge.png}
+		\caption[Example of an edge vs. a half edge]{\centering A visualization of the difference between an edge and a half edge. Half edges are outlined in blue.}
+\end{figure}
+
+To remedy this, we run a delaunay triangulation search between half edges, and create the least costly triangulations. While this seals the mesh, the result is a non-uniform surface mesh, where the new sections have a far larger surface area than the surrounding mesh. For this reason, refinement is necessary to return the mesh to an isotropic state.
+
+[[REFINEMENT]]
 
 \subsection{Mesh Optimization}
 Now that the objects in the cloud are properly segmented, they must be meshed in a way that is both accurate to the real-world definition of the object and suitable to be converted from a surface mesh to a volumetric mesh.
@@ -651,12 +666,13 @@ The other criteria are more abstract in nature and are more difficult to detect 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{triangulation_definitions.JPG}
+		\includegraphics[width=3in]{bad_tetrahedra.JPG}
 		\caption[Definitions for triangulation quality measures]
-		{\centering Definitions for triangulation quality measures. $R$ = circumsphere radius, $r$ = inscribed sphere radius, $l$ = edge length.}
+		{\centering Definitions for triangulation quality measures, and typical shapes with poor quality. $R$ = circumsphere radius, $r$ = inscribed sphere radius, $l$ = edge length.}
 		\label{fig:meshquality}
 \end{figure}
 
-It is easy to categorize meshes by quality via visual inspection, but in order to resolve low quality areas autonomously, we must define mathematically what it means to be "low quality." Table~\ref{table:meshquality} lists some of the ratios we will use in this thesis to define a mesh's quality level.
+It is easy to categorize meshes by quality via visual inspection, but in order to resolve low quality areas autonomously, we must define mathematically what it means to be "low quality." Table~\ref{table:meshquality} lists some of the ratios we will use in this thesis to define a mesh's quality level. Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:meshquality}.
 
 \begin{table}[!ht]
 	\centering
@@ -675,15 +691,7 @@ It is easy to categorize meshes by quality via visual inspection, but in order t
 		\label{table:meshquality}
 \end{table}
 
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=3in]{bad_tetrahedra.JPG}
-		\caption[Examples of poor quality tetrahedra]
-		{\centering Common examples of poor quality tetrahedra \cite{RN68}.}
-		\label{fig:badtetrahedra}
-\end{figure}
 
-Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:badtetrahedra}.
 
 
 
@@ -691,7 +699,7 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 \label{optimization:voronoirelaxation}
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=3in]{voronoirelaxation.PNG}
+		\includegraphics[width=4in]{voronoirelaxation.PNG}
 		\caption[Demonstration of voronoi relaxation over several iterations]
 		{\centering From right to left: Voronoi relaxation over 1 iteration, 5 iterations, 10 iterations, and 15 iterations}
 		\label{fig:voronoirelaxation}
@@ -700,7 +708,7 @@ Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetri
 Voronoi  relaxation  operates  on  the  same  principle  as  k-means  clustering.  At  each  iteration,  the  centroid  of  each  Voronoi  region  is  calculated,  and  the  concurrent  vertex  is  moved  to  the  centroidal  location.  At  convergence,  the  resulting  mesh  is  uniform  in  tetrahedron/triangulation  size.  Voronoi  relaxation  can  modify  a  shape’s  topology  significant  due  to  its  heavy  smoothing  capabilities  \cite{RN61}.
 
 \subsubsection{Optimal Delaunay Triangulation}
-Delaunay triangulation, as described in section~\ref{subsubsec:delaunay}, optimizes the connectivity for a finite point set through voronoi propagation. To calculate the optimal triangulation of the pointset defined by a discrete set of vertices, the vertices are unfixed from their intial points in space. As a caveat, because this optimization method involves shift the locations of the vertices, the topology of the mesh is altered in the process.
+Delaunay triangulation, as described in Section~\ref{subsubsec:delaunay}, optimizes the connectivity for a finite point set through voronoi propagation. To calculate the optimal triangulation of the pointset defined by a discrete set of vertices, the vertices are unfixed from their intial points in space. As a caveat, because this optimization method involves shift the locations of the vertices, the topology of the mesh is altered in the process.
 
 To define an optimal triangulation, given a continuous convex function $f$ on $\Omega$ and $1 \leq p \leq \inf$, and triangulation $\tau^{\ast} \in P_{N}$ we use the following criteria:
 
@@ -906,7 +914,7 @@ In the zero noise case, Advancing Front reconstruction proves to be the most acc
 \subsection{Optimization}
 \subsubsection{Effects Voronoi Relaxation}
 
-Voronoi relaxation, defined in Section~\ref{optimization:voronoirelaxation}, aims to regulate the tetrahedral areas in the mesh by iteratively shifting point vertices to their respective voronoi centroids. This method is effective in increasing the mesh quality ratios defined in Table~\ref{table:meshquality}, with the exception of volume ratio, which can be visualized as slivers in the mesh (Figure~\ref{fig:badtetrahedra}).
+Voronoi relaxation, defined in Section~\ref{optimization:voronoirelaxation}, aims to regulate the tetrahedral areas in the mesh by iteratively shifting point vertices to their respective voronoi centroids. This method is effective in increasing the mesh quality ratios defined in Table~\ref{table:meshquality}, with the exception of volume ratio, which can be visualized as slivers in the mesh (Figure~\ref{fig:meshquality}).
 
 In Figure~\ref{zeronoise:advancedlloyd}, we see the relaxed mesh after 200 iterations of voronoi relaxation. Note the uniformity in tetrahedral area, as well as the change topology around the edges of the beam.
 
