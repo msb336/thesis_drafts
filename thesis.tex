@@ -272,11 +272,18 @@ Using a Newton Raphson interative regression, shown in equation \ref{eq:newtonra
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=3in]{cross-section-estimation/flowchart.jpg}
+		\includegraphics[width=5in]{cross-section-estimation/flowchart.png}
 	\caption[Flow chart of informed shape estimation algorithm]{\centering A flowchart of the informed shape estimation algorithm.}
 \end{figure}
 
 In many object scanning situations, it is not unreasonable to assume the cross-section of the object is known. Forcing the point cloud to conform to a uniform shape allows for avoidance of heavy amounts of noise.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{cross-section-estimation/noiselessbeam(10x10x5).JPG}
+		\includegraphics[width=2in]{cross-section-estimation/newtonraphsonconvergence(10x10x5).JPG}
+	\caption[Demonstration of the Informed Shape Estimation algorithm on a simulated point cloud.]{\centering Demonstration of the Shape Estimation algorithm on a simulated beam of known dimensions 10x10x5" (left). The iterator converges to dimensions 10.67x10.55x4.87".}
+\end{figure}
 
 
 
@@ -395,8 +402,6 @@ Divisive clustering approaches the clustering problem in an exactly opposite fas
 \includegraphics[width=4in]{divisiveAgglomerative.png}
 \caption[Comparison of divisive and agglomerative clustering methods]{Comparison of divisive and agglomerative hierarchical clustering}
 \end{figure}
-
-[[GENERAL USAGE, PROS, CONS]]
 
 Hierarchical clustering is not as computationally efficient as k-means or FCM, as the number of calculations it must make for each point is drastically higher. At each iteration, each point, $p_{i}$, is compared with every point inside of it's bin, to determine what bin it will be divided into. This means Hierarchical clustering methods occupy $\mathcal{O}(n^{3})$ time complexity space, and requires $\mathcal{O}(n^{2})$ memory. This makes Hierarchical clustering very unwieldy with medium and large datasets. However, it proves to be one of the more robust supervised segmentation algorithms, as the cost function is easily modifiable by the user.
 
@@ -779,7 +784,7 @@ Figure~\ref{technical:lidarcompare} shows a comparison between a single frame of
 	\centering
 		\includegraphics[width=2in]{cloudCollection/lidar5frames.png}
 		\includegraphics[width=2in]{cloudCollection/lidarSimulatedCollection.JPG}
-		%% [[Replace this with an actual single scan sim]]
+
 	\caption[Comparison of simulated and real HDL-32E scan data]{\centering Comparison of simulated and real HDL-32E scan data.}
 	\label{technical:lidarcompare}
 \end{figure}
@@ -837,7 +842,7 @@ While not necessary in the zero noise case, filtering and downsampling prove to 
 	\label{zeronoise:filtered}
 \end{figure}
 
-The resulting cloud size is [[insert image size]], with an average point-to-point distance of 0.1 inches. Being able to actively control the point cloud density is crucial to have control over proper meshing parameters and fail conditions.
+The resulting cloud size is [[insert cloud size]], with an average point-to-point distance of 0.1 inches. Being able to actively control the point cloud density is crucial to have control over proper meshing parameters and fail conditions.
 
 \subsection{Segmentation Method Comparison}
 
@@ -869,8 +874,8 @@ In a zero noise situation, the advancing front method returns a nearly perfect m
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
-		\includegraphics[trim={0 3in 0 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/advancingfront01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 		\label{zeronoise:advancingfront}
@@ -880,7 +885,7 @@ In Figure~\ref{zeronoise:scalespace2} we see the effects of Scale Space reconstr
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace201.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
@@ -891,9 +896,9 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace401.png}
-		\includegraphics[trim={0.5in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/clean/scalespace402.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 		\label{zeronoise:scalespace4}
 \end{figure}
@@ -902,9 +907,9 @@ Figure~\ref{zeronoise:scalespace15} shows the extremes of what the scale space r
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1501.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/clean/scalespace1502.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
 		\label{zeronoise:scalespace15}
 \end{figure}
@@ -920,10 +925,10 @@ In Figure~\ref{zeronoise:advancedlloyd}, we see the relaxed mesh after 200 itera
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={6in 2in 3in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it00.png}
-		\includegraphics[trim={3in 2in 3in 2in}, clip, width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it01.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it02.png}
-		\includegraphics[trim={1in 1in 1in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it03.png}
 		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:advancedlloyd}
 \end{figure}
@@ -933,10 +938,10 @@ Voronoi Relaxation has interesting effects of our scale space meshes. In Figure~
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it00.png}
-		\includegraphics[trim={3in 2in 3in 2in}, clip, width=3in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
-		\includegraphics[trim={6in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it02.png}
-		\includegraphics[trim={3in 2in 3.5in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace2lloyd}
 \end{figure}
@@ -945,10 +950,10 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={6in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it00.png}
-		\includegraphics[trim={3.5in 2in 2.5in 2in}, clip, width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it01.png}
-		\includegraphics[trim={4.5in 2in 4.5in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it02.png}
-		\includegraphics[trim={3in 4in 3.5in 4in},clip,width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
@@ -960,9 +965,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={4in 2in 3in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd00.png}
-		\includegraphics[trim={1in 1in 2in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd01.png}
-		\includegraphics[trim={1in 1in 1in 2in}, clip, width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd02.png}
 		\caption[Comparison of mesh before and after perturbation]{\centering  Comparison of mesh before and after perturbation.}
 	\label{zeronoise:advancedlloydperturb}
 \end{figure}
@@ -970,9 +975,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={1in 2in 1in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb00.png}
-		\includegraphics[trim={2in 2in 2in 2in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb01.png}
-		\includegraphics[trim={1in 1in 3in 3in},clip,width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb02.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation.}
 	\label{zeronoise:scalespace2lloydperturb}
 \end{figure}
@@ -1013,7 +1018,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={4.5in 1in 1in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
@@ -1024,7 +1029,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht] 
 	
 	\centering
-		\includegraphics[trim={5in 2in 1.5in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
@@ -1035,7 +1040,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={4.5in 2in 1.5in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
@@ -1046,7 +1051,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[trim={4in 2in 1.5in 3in},clip,width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
+		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
@@ -1060,10 +1065,10 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it00.png}
-		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it01.png}
-		\includegraphics[trim={2.5in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it02.png}
-		\includegraphics[trim={2in 4in 3in 3.5in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{2cmnoise:scalespace2lloyd}
 \end{figure}
@@ -1073,10 +1078,10 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it00.png}
-		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it01.png}
-		\includegraphics[trim={4in 2in 3in 3in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it02.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it03.png}
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{2cmnoise:scalespace4lloyd}
 \end{figure}
@@ -1220,6 +1225,8 @@ After running the Lloyd optimization on the reconstruction at scale 4, the diffe
 		\caption[Lloyd + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4lloyd}
 \end{figure}
+
+
 \subsubsection{Optimized Delaunay Triangulation}
 
 \begin{figure}[!ht]
@@ -1232,6 +1239,8 @@ After running the Lloyd optimization on the reconstruction at scale 4, the diffe
 		\caption[Lloyd + ODT +Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2lloydodt}
 \end{figure}
+
+It is hard to spot the differences in the mesh before and after ODT is applied, but the changes are visible. In Figure~\ref{lidar:scalespace4lloydodt} the mesh can be seen after the ODT optimization step. The main differences here are in the [[define the main differences in terms of what ODT does]]
 
 \begin{figure}[!ht]
 	\centering
@@ -1270,7 +1279,26 @@ After running the Lloyd optimization on the reconstruction at scale 4, the diffe
 
 \subsubsection{Exudation}
 
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2everything00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2everything01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2everything02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2everything03.png}
+		\caption[The full suite of optimization steps on the LiDAR reconstruction at $S$=2.]{\centering The full suite of optimization steps on the LiDAR reconstruction at $S$=2.}
+	\label{lidar:scalespace2everything}
+\end{figure}
 
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4everything00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4everything01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4everything02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4everything03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4everything04.png}
+		\caption[The full suite of optimization steps on the LiDAR reconstruction at $S$=4.]{\centering The full suite of optimization steps on the LiDAR reconstruction at $S$=4.}
+	\label{lidar:scalespace4everything}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter: 		Conclusion
