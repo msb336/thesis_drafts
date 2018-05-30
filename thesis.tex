@@ -1131,38 +1131,46 @@ The same filtering method as the previous sections is applied to the concatenate
 \end{figure}
 
 \subsection{Initial Meshing Methods}
-begin{figure}[!ht]
+
+The effects of the collection path and method are apparent in Figure~\ref{lidarresults:euclidean}. The radial data collection of the LiDAR device combined with the xy planar motion lock of the test path creates an uneven horizontal beam surface, almost occupying a sinusoidal wave space. This, along with the lack of thickness data provided by the LiDAR sensor, greatly affects the final topology of the mesh. Lack of information and noise-induction in datasets is a routine and unavoidable factor in discrete sensing, so an algorithm that can optimize a volumetrically compatible mesh topology with incomplete or inaccurate datasets is invaluable in the sensing field.
+
+Figure~\ref{lidar:advancefront} shows the results of a raw advancing front meshing procedure on the segmented beam point cloud. Without any compensation in the form of noise reduction or shape complexity reduction, the resulting surface mesh from this method is not one comprehensive surface area, but a series of tangentially connected shapes. Because many of these smaller shapes are bounded within themselves, they do not contain half edges, and are not picked up by the hole filling algorithms implemented in the pipeline. For non-ideal datasets, noise compensation is required for a comprehensive mesh to be created.
+
+
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/advancedfront00.png}
-		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{real-lab-scans/meshed/advancedfront01.png}
-		\includegraphics[trim={4in 2in 3in 3in},clip,width=2in]{real-lab-scans/meshed/advancedfront02.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/advancedfront03.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/advancedfront04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/advancedfront00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/advancedfront01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/advancedfront02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/advancedfront03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/advancedfront04.png}
 		\caption[Advancing front reconstruction of segmented LiDAR data]{\centering Advancing front reconstruction of resulting beam point cloud.}
 	\label{lidar:advancefront}
 \end{figure}
 
+Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset using the scale space reconstruction method, at a scale of 2. While the mesh does not represent the beam accurately, and does not meet all of the criteria for a volumetric conversion compatibility, the topology represents one continuous surface, and is far smoother than the original input data. This mesh can be seen to fail by visual inspection. In the [[bottom right image (label these images individually)]], two spires can be seen at the bottom of the beam. Beyond this, the horizontal section of the beam is still represented as a volumeless surface. This is not compatible with volumetric conversion.
 
-
-begin{figure}[!ht]
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/scalespace200.png}
-		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{real-lab-scans/meshed/scalespace201.png}
-		\includegraphics[trim={4in 2in 3in 3in},clip,width=2in]{real-lab-scans/meshed/scalespace202.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/scalespace203.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/scalespace204.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/scalespace205.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace200.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace201.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace202.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace203.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace204.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace205.png}
 		\caption[Scale space reconstruction at scale $S$=2 of segmented LiDAR data]{\centering Scale space reconstruction at scale $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2}
 \end{figure}
 
-begin{figure}[!ht]
+Reducing the input point cloud to scale space 4 provides similar results to scale space 2, the difference being in the smoothing level. This extra smoothing is most visible in the [[first image on the left]]. There are far less ridges in the vertical face than in scale space 2. While moving to higher scale spaces almost always guarantees a smoother reconstruction, it comes at the price of moving farther away from the true collected topology of the object.
+
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/scalespace400.png}
-		\includegraphics[trim={5in 2in 2in 3in},clip,width=2in]{real-lab-scans/meshed/scalespace401.png}
-		\includegraphics[trim={4in 2in 3in 3in},clip,width=2in]{real-lab-scans/meshed/scalespace402.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/scalespace403.png}
-		\includegraphics[trim={2in 4in 2.5in 4in},clip,width=2in]{real-lab-scans/meshed/scalespace404.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace400.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace401.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace402.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace403.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/scalespace404.png}
 		\caption[Scale space reconstruction at scale $S$=4 of segmented LiDAR data]{\centering Scale space reconstruction at scale $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4}
 \end{figure}
@@ -1170,61 +1178,67 @@ begin{figure}[!ht]
 
 \subsection{Optimization}
 
+Unlike the simulated cases, none of the initial methods for the LiDAR collection dataset produce fully compatible meshes on a first pass. This is undoubtedly due to the incorporation of occlusion in the dataset. The steps involved in the optimization process smooth the input meshes which meet the baseline criteria of having a single surface area to volumetric conversion compatible surface meshes, but the topology of the resulting mesh is not indicative of the true beam shape. To maintain the true shape, more informative point cloud data is necessary, or informed shape estimation must be used to rebuild the mesh to be more indicative of it's true to life properties.
+
 \subsubsection{Effects of LLoyd Optimization}
 
-begin{figure}[!ht]
+As in previous sections, the first step in the optimization process is Lloyd optimization -- otherwise known as voronoi relaxation. This is the last step we will incorporate the advancing front mesh, as it is clear this method is not optimal for non-ideal point clouds. Figure~\ref{lidar:advancefrontlloyd} shows the results of lloyd optimization on the advancing front mesh.
+
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/advancedfrontlloyd00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/advancedfrontlloyd01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/advancedfrontlloyd02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/advancedfrontlloyd03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/advancedfrontlloyd04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/advancedlloyd00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/advancedlloyd01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/advancedlloyd02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/advancedlloyd03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/advancedlloyd04.png}
 		\caption[Lloyd + Advancing front reconstruction of segmented LiDAR data]{\centering Lloyd + Advancing front reconstruction of resulting beam point cloud.}
 	\label{lidar:advancefrontlloyd}
 \end{figure}
 
-begin{figure}[!ht]
+The effect of Lloyd optimization on a mesh is the redistribution of surface area throughout the mesh triangulations. The exit conditions for relaxation is convergence of mesh centroids. Figure~\ref{lidar:scalespace2lloyd} demonstrates what a lloyd optimization does for the LiDAR collected point cloud after being reconstructed at a scale space of 2.
+
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloyd04.png}
 		\caption[Lloyd + Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2lloyd}
 \end{figure}
 
-begin{figure}[!ht]
+After running the Lloyd optimization on the reconstruction at scale 4, the differences in the meshes between scales becomes more apparent. The evenly distributed surface defines a rectangular prism, the horizontal section of the beam merges into it's vertical face. [[Second image on the left]] shows the phenomenon in detail, in Figure~\ref{lidar:scalespace4lloyd}.
+
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloyd04.png}
 		\caption[Lloyd + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4lloyd}
 \end{figure}
-
 \subsubsection{Optimized Delaunay Triangulation}
 
-begin{figure}[!ht]
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt04.png}
+		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt00.png}
+		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt01.png}
+		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt02.png}
+		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt03.png}
+		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt04.png}
 		\caption[Lloyd + ODT +Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2lloydodt}
 \end{figure}
 
-begin{figure}[!ht]
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodt03.png}
 		\caption[Lloyd + ODT + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + ODT + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4lloydodt}
 \end{figure}
@@ -1232,29 +1246,29 @@ begin{figure}[!ht]
 \subsubsection{Perturbation}
 
 
-begin{figure}[!ht]
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodtperturb04.png}
 		\caption[Lloyd + ODT + perturb +Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Perturb + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2lloydodtperturb}
 \end{figure}
 
-begin{figure}[!ht]
+\begin{figure}[!ht]
 	\centering
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb00.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb01.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb02.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb03.png}
-		\includegraphics[trim={5.5in 2in 1.5in 3in},clip,width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb04.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb02.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb03.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace4lloydodtperturb04.png}
 		\caption[Lloyd + ODT + perturb + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + ODT + perturb + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4lloydodtperturb}
 \end{figure}
 
-\subsubection{Exudation}
+\subsubsection{Exudation}
 
 
 
