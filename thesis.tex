@@ -245,6 +245,7 @@ An algorithm built under the pretext of Gaussian diffusion is then used to proje
 When scanning large objects, this method proves to be quite effective at removing sources of noise that are significantly smaller than the object being scanned. For buildings, bridges, and large-scale structures, this is a necessary first step in removing excess noise / unnecessary information from the cloud \cite{RN13}.
 
 \subsubsection{Informed Shape Estimation}
+\label{subsubsec:informedshape}
 Occlusion is the cause of two main problems. The first being the unnecessary information provided by objects blocking the instruments view to our desired target, which is dealt with via the diffusion of objects from the foreground into the background via the range segmentation method show in the previous section. The second --- far more relevant to the approach outlined in this thesis --- is the lack of complete information provided by the sensor. This can be most easily explained by making an analogy to photography. If one takes a picture of the front of a box, there is no possible way to say with certainty what the back of the box looks like. In 3D point processing, the problem is the same. Informed shape estimation attempts to tackle this problem by applying a shape with known parameters to the object point cloud and modifying the shape parameters to minimize the following cost function:
 
 \begin{equation}
@@ -509,7 +510,7 @@ One application --- and the target application for this thesis --- is finite ele
 \subsubsection{Definition of a Boundary Representation (B-REP)}
 Boundary Representations, often called the ''skin'' of a solid object, consist of two parts: topology and geometry. The topological portion is made from the faces and vertices created by a surface mesh. In the boundary representation of an object, the edges bounding a triangulation object -- or face -- is defined as a loop. The geometric portion consists of equations defining the edges and faces. There are a number of different ways in which the geometry of an object's surface area can be modeled, but the most common is the Non-Uniform Rational Basis Spline (NURBS).
 
-\begin{figure}
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=3in]{cadTypes/brep.jpg}
 	\caption[Components of a boundary representation.]{\centering An overview of the components involved in a boundary representation of a solid object \cite{Stroud2006}.}
@@ -780,7 +781,7 @@ Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud,
 
 Figure~\ref{technical:lidarcompare} shows a comparison between a single frame of simulated HDL-32E LiDAR data and a true scan with the device. The simulation proves to be quite similar in results to the true scans, which will prove to be useful for future endeavors beyond this one.
 
-\begin{figure}
+\begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{cloudCollection/lidar5frames.png}
 		\includegraphics[width=2in]{cloudCollection/lidarSimulatedCollection.JPG}
@@ -1087,7 +1088,6 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 \end{figure}
 
 
-
 \section{HDL-32E LiDAR Scan Data}
 To test the true robustness of the algorithm, a real scan of a real object of potential interest is necessary. The object for the following test is a 10 foot long beam, with a width and height of 5 inches, and a thickness of 0.25 inches.
 
@@ -1316,6 +1316,14 @@ Exudation represents the final step in the optimization process, and the complet
 	\label{lidar:scalespace4everything}
 \end{figure}
 
+
+\section{Informed Shape Estimation}
+
+While the simulated point clouds provide information for the entirety of the L-beam's shape, the true LiDAR collection data does not. This section walks through the results of the Informed Shape Estimation algorithm, defined in Section~\ref{subsubsec:informedshape}. For each dataset, we will show the original pointcloud of the isolated beam, the initial meshing method, the estimated point cloud, and the fully optimized mesh using the estimated cloud.
+
+\subsection{Zero Noise}
+\subsection{2cm Noise}
+\subsection{LiDAR Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter: 		Conclusion
 \chapter{Conclusion}
