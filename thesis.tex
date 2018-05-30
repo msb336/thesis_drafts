@@ -1287,7 +1287,11 @@ Exudation represents the final step in the optimization process, and the complet
 \begin{table}[!ht]
 	\centering
 		\caption[LiDAR exit surface mesh characteristics]{Exit characteristics of optimized surface mesh}
-	[[add mesh characteristics]]
+	\begin{tabular}[| c | c |]
+	\hline Minimum facet angle && 20 degrees \\
+	\hline Minimum facet area && 0.25 $in^{2}$ \\
+	\hline Minimum facet edge length && 0.05 $in$ \\
+	\hline
 	\label{table:lidarexitcharacteristics}
 \end{table}
 
@@ -1315,6 +1319,10 @@ Exudation represents the final step in the optimization process, and the complet
 		\caption[The full suite of optimization steps on the LiDAR reconstruction at $S$=4.]{\centering The full suite of optimization steps on the LiDAR reconstruction at $S$=4.}
 	\label{lidar:scalespace4everything}
 \end{figure}
+
+
+\section{Informed Shape Estimation}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter: 		Conclusion
