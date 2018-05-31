@@ -21,7 +21,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{listings}
-%\usepackage[section]{placeins}
+
 \graphicspath{{images/}}
 
 \title{Automated Conversion of 3D Point Clouds to FEA Compatible Meshes}
@@ -97,6 +97,8 @@ Surface reconstruction from a 3D point cloud is not a novel problem. In the past
 In 2009, José Lerma and his team of archaeologists began using Terrestrial laser scanning in tandem with close proximity photogrammetry to render high resolution 3D surface models of ancient caves in Spain. Lerma et. al. are general in their description of their meshing method, which is most likely due to their non-computer programming oriented backgrounds. However, their pipeline involves sensor fusion between their laser scanner, which returns a pure point cloud with an origin at the center of the instrument, and deduced point clouds from photogrammetry data. The result is an impressive, high resolution surface mesh that accurately captures the features relevant to an archaeologist, but provide no useful information in terms of structural health monitoring \cite{RN50}.
 
 In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
+
+
 %%
 \subsection{Building Informational Modeling}
 \label{subsec:BIM}
@@ -122,11 +124,52 @@ There are many ways of collecting point cloud data, ranging from implicit method
 
 \subsection{Implicit collection methods: Stereogrammetry and Structure from Motion}
 \label{subsec:implicit}
-[[fill in]]
+Stereogrammetry and Structure from Motion have become industry standard methods for extracting 3-dimensional point cloud data using images from cameras. These methods are popular due to the quality of results compared with the low cost of the sensing equipment (1-2 cameras). Both Methods are similar in operation, with the difference being whether or not they are precalibrated.
+
+[[add a little to these sections as well as some more references]]
+
+\subsubsection{Stereogrammetry}
+\subsubsection{Structure from Motion}
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{instruments/melvin1.jpg}
+		\includegraphics[width=2in]{instruments/melvin1.jpg}
+		% \includegraphics[width=2in]{instruments/melvindisp.png}
+		\includegraphics[width=3in]{instruments/melvinSfM.png}
+	\caption[Structure from Motion Demonstration]{\centering Demonstration of SfM algorithm conversion of two images to a 3-dimensional point cloud.}
+\end{figure}
 \cite{RN20}
+
+
 \subsection{Explicit Methods: LiDAR, Laser Scanning, and Ultrasonic Sensing}
 \label{subsec:explicit}
-[[fill in]]
+Explicit collection methods are those that directly return a distance value from a sensor. If the scanner itself is non-static, as is the case for laser-scanners and LiDAR devices, the sensor also returns some timestamped orientation parameters to provide a local reference frame.
+
+\subsubsection{LiDAR}
+LiDAR scanners vary greatly in accuracy, complexity, and resolution. At the lower end of the spectrum, devices contain one laser and return anywhere from 10-100 points per second along a horizontal plane. The outputs for these LiDAR sensors is timestamped returns of $z$-axis rotation angle $\theta$ and a distance magnitude.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics{instruments/crummy_lidar.jpg}
+	\caption[Single frame of low tier LiDAR sensor data collection]{\centering Data collected from a single rotation of the [[insert sensor name]] LiDAR device.}
+\end{figure}
+
+High end LiDAR devices, such as the HDL-32E used to collect the data in this thesis, have a series of lasers distributed through a range of angles. This allows the LiDAR to provide a much more comprehensive pointset of it's scanned environment. These sensors can provide anywhere between 100,000 and 1.5 million points per second. The typical return for high end sensors is a package of ordered data the return the timestamp of the data, the rotation angle of the sensor, and a vector containing the distance returns of each sensor. Knowing the offset angle of each laser, the dataset can be easily converted into spherical coordinates, and recast in cartesian coordinates. These sensors typically provide a distance uncertainty of $\pm 2 cm$ or lower.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=3in]{instruments/HDL-32Esingle.png}
+	\caption[Single frame of a high tier LiDAR sensor data collection]{\centering Data collected from a single rotation of the HDL-32E LiDAR device.}
+\end{figure}
+
+\subsubsection{Laser Scanning}
+[[add]]
+
+\subsubsection{Ultrasonic Sensing}
+[[add]]
+
+
+
 %%
 \section{Sensor Fusion}
 \label{sec:fusion}
@@ -991,10 +1034,10 @@ In Figure~\ref{zeronoise:advancedlloyd}, we see the relaxed mesh after 200 itera
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it00.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it02.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontLloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloyd00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontlloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloyd02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloyd03.png}
 		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:advancedlloyd}
 \end{figure}
@@ -1004,10 +1047,10 @@ Voronoi Relaxation has interesting effects of our scale space meshes. In Figure~
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it00.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it02.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloyd00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2lloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloyd02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloyd03.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace2lloyd}
 \end{figure}
@@ -1016,43 +1059,125 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it00.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it02.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4lloyd00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4lloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4lloyd02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4lloyd03.png}
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
 
 \subsubsection{Effects of Delaunay Optimization}
 
-[[Add all these figures]]
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt03.png}
+		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:advancedodt}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2odt00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2odt01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2odt02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2odt03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace2odt}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4odt00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4odt01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4odt02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4odt03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace4odt}
+\end{figure}
 
 \subsubsection{Effects of Mesh Perturbation}
 
 \begin{figure}[!ht]
 	\centering
-	%[[these figures are trash]]
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd02.png}
-		\caption[Comparison of mesh before and after perturbation]{\centering  Comparison of mesh before and after perturbation.}
-	\label{zeronoise:advancedlloydperturb}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb03.png}
+		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:advancedperturb}
 \end{figure}
+
+
+
+\begin{figure}[!ht]
+	
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2perturb00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2perturb01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2perturb02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2perturb03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace2perturb}
+\end{figure}
+
 
 
 \begin{figure}[!ht]
 	\centering
-		%[[these figures are trash]]
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb02.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation.}
-	\label{zeronoise:scalespace2lloydperturb}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4perturb00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4perturb01.png}
+		% \includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4perturb02.png}
+		% \includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4perturb03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace4perturb}
 \end{figure}
 
 \subsubsection{Exudation}
-[[add figures]]
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfronteverything00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfronteverything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfronteverything02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfronteverything03.png}
+		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:advancedeverything}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2everything00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2everything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2everything02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2everything03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace2everything}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{zeronoise:scalespace4odt}
+\end{figure}
 
 
 
@@ -1132,42 +1257,106 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \subsection{Optimization}
 \subsubsection{Effects of Voronoi Relaxation}
 
-Due to the unbounded nature of the surface mesh generated via the Advancing Front method, shown in Figure~\ref{2cmnoise:advancingfront}, the criteria for the relaxation algorithm to converge is not met. The vertex points expand into $n$-dimensional space indefinitely until the algorithm crashes. %%[[Add more detail]]
 
 \begin{figure}[!ht]
+	
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it02.png}
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2lloyd00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2lloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2lloyd02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2lloyd03.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{2cmnoise:scalespace2lloyd}
 \end{figure}
 
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4lloyd00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4lloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4lloyd02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4lloyd03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{2cmnoise:scalespace4lloyd}
+\end{figure}
+
+\subsubsection{Effects of Delaunay Optimization}
+
+
+\begin{figure}[!ht]
+	
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{2cmnoise:scalespace2odt}
+\end{figure}
 
 
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it02.png}
-		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4Lloyd30s200it03.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt03.png}
 		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
-	\label{2cmnoise:scalespace4lloyd}
+	\label{2cmnoise:scalespace4odt}
 \end{figure}
 
-\subsubsection{Optimized Delaunay Triangulation}
+\subsubsection{Effects of Mesh Perturbation}
 
-[[add figures]]
 
-\subsubsection{Perturbation}
+\begin{figure}[!ht]
+	
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{2cmnoise:scalespace2perturb}
+\end{figure}
 
-[[add figures]]
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{2cmnoise:scalespace4perturb}
+\end{figure}
 
 \subsubsection{Exudation}
 
-[[add figures]]
+
+
+\begin{figure}[!ht]
+	
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything03.png}
+		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+	\label{2cmnoise:scalespace2everything}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything03.png}
+		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+	\label{2cmnoise:scalespace4odt}
+\end{figure}
 
 \section{HDL-32E LiDAR Scan Data}
 \label{results:realscan}
