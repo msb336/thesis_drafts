@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{siunitx}
 \usepackage{placeins}
+\usepackage{textcomp}
 \let\Oldsection\section
 \renewcommand{\section}{\FloatBarrier\Oldsection}
 
@@ -414,7 +415,7 @@ Euclidean clustering occupies the lowest time complexity and memory space of it'
 
 \subsubsection{Comparison of Methods}
 
- \begin{table}[h!]
+ \begin{table}[!ht]
      \centering
            \caption[Comparison of Unsupervised clustering methods]{\centering Comparision of unsupervised clustering methods on various simulated point clouds}
      \begin{tabular}{ | c | c | c | c | c | }
@@ -481,7 +482,7 @@ Euclidean clustering occupies the lowest time complexity and memory space of it'
 
 Observing the 2-dimensional sample data, it is clear Euclidean clustering has a significant edge over the other clustering methods. We will see in Chapter~\ref{chap:results} how it fairs upon 3-dimensional clouds.
 
-\subsection{Converting a Discrete Point Cloud to a Bounded Area Surface Mesh}
+\section{Converting a Discrete Point Cloud to a Bounded Area Surface Mesh}
 \label{subsec:meshing}
 \subsubsection{Definition of a Surface Mesh}
 \label{subsubsec:surfdef}
@@ -641,9 +642,6 @@ Scale Space 10 & \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
 \end{tabular}
 \end{table}
 
-
- 
-
 \subsubsection{Hole Patching, Fairing, and Refinement}
 
 Surface meshes, defined in Section~\ref{subsubsec:surfdef}, contain vertices and faces. Inherently, they do not contain any methods to maintain a bounded volume. For this reason, it is necessary to detect discontinuities in the mesh, and develop a method to resolve them. We will define two types of mesh edges in this section: A full edge, and a half edge.
@@ -660,6 +658,7 @@ To remedy this, we run a delaunay triangulation search between half edges, and c
 [[REFINEMENT]]
 
 \subsection{Mesh Optimization}
+\label{subsec:meshoptimization}
 Now that the objects in the cloud are properly segmented, they must be meshed in a way that is both accurate to the real-world definition of the object and suitable to be converted from a surface mesh to a volumetric mesh.
 
 \subsubsection{Criteria for Mesh Quality and Failure Criteria for Volumetric Conversion}
@@ -696,9 +695,6 @@ It is easy to categorize meshes by quality via visual inspection, but in order t
 		\end{tabular}
 		\label{table:meshquality}
 \end{table}
-
-
-
 
 
 \subsubsection{Voronoi Relaxation / Lloyd's Algorithm}
@@ -758,25 +754,53 @@ To fully evaluate the effect of each step in the algorithm and test the robustne
 \subsection{General: Zero Noise}
 We explore the pipeline with a fabricated point cloud of varying resolutions. This point-cloud does not omit any features of the simulated room to mimic occlusion, and has zero simulated noise. In short, every point in the cloud is in it's true position in 3-dimensional space. These clouds shown below are optimal cases and are entirely unacquirable with any instruments in use today, or in the forseeable future. They do, however, serve as a proof of concept for the meshing pipeline as a form of optimal results. If the pipeline cannot work for the optimal case, it is pointless to attempt it's use on suboptimal clouds.
 
-[[add figures of each pointcloud set (also generate each pointcloud set)]]
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=3in]{simulated-lab-scan/full_noiseless_cloud.png}
+	\caption[Simulated high density lab point cloud ]{\centering Virtual lab point cloud with zero induced noise and occlusion. there are 114,808 points in the cloud.}
+	\label{sim:noiselessdense}
+\end{figure}
 
 \subsection{General: Estimated Noise and Occlusion}
 As the instruments within the scope of this thesis vary in expense, acquireability, and technical specifications, it is necessary to simulate their expected results. We can do this by modeling each instrument's acquisition technique, and applying that technique to the simulated room point cloud at a high density. The following figure set outline the collection methods of each technique, and their simulated accuracy.
 
-[[ Add all these figures ]]
-
-
+\begin{figure}[!ht]
+	\centering
+	% [[\includegraphics[width=3in]{2 percent noise cloud}]]
+	\caption[Simulated high density lab point cloud with 2cm noise induction]{\centering Simulated high density lab point cloud with 2 centimeter noise induction.}
+	\label{sim:2cmdense}
+\end{figure}
 
 
 \subsection{LiDAR: Velodyne HDL-32E}
 The Velodyne HDL-32E is a high end LiDAR device capable of collecting 700,000 points per second at a frame rate of 20 Hz (rotations per second). It is equipped with 32 lasers aligned from +\ang{10.67} to -\ang{30.67}
 
-Like all LiDAR devices, the HDL-32E does not return cartesian co-ordinate cloud, but instead a spherical co-ordinate cloud, where each point is defined by $\phi$, it's angle about the $z$-axis, $\theta$, it's angle about the $y$-axis, and $r$, the absolute distance from the sensor. The return can be classified as ordered data, and easily mimicked in simulation by creating a series of solid objects, simulating the output of the LiDAR, and simulating the LiDAR motion. This allows for fast simulation of point cloud collection with varying levels of noise, occlusion, and sample rate.
+As described in Section~\ref{subsec:explicit} of the introduction, LiDAR devices provide explicit distance feedback in spherical coordinates, where each point is defined by $\phi$, it's angle about the $z$-axis, $\theta$, it's angle about the $y$-axis, and $r$, the absolute distance from the sensor. The return can be classified as ordered data, and easily mimicked in simulation by creating a series of solid objects, simulating the output of the LiDAR, and simulating the LiDAR motion. This allows for fast simulation of point cloud collection with varying levels of noise, occlusion, and sample rate.
+
+To simulate noise in the LiDAR scans, it is a simple matter of adding the measured uncertainty to distance metrics collected by the simulated sensor. It should be noted that to reduce computation time, no continuous surfaces are created, and the simulation relies on nearest cross product distances of points in the cloud to determine the sensor data return. An unfortunate artifact of this method is the inability to guarantee correct occlusion effects, as simulated rays can be cast through a continuous object created by a discrete pointset of non-infinite density. Figure~\ref{lidarsim:100psample} shows the collection capabilities of the HDL-32E at 100\% sampling rate. There are 73,175 point inside the cloud.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=3in]{simulated-lab-scan/lidarSim/100psample.png}
+	\caption[Simulated LiDAR scan at 100\% sampling rate]{\centering Simulated LiDAR scan of the virtual lab point cloud at 100\% sampling rate. The red trail shows the collection path of the sensor.}
+	\label{lidarsim:100psample}
+\end{figure}
+
+In the test run in this thesis, only one in every five LiDAR scan frames are used in the post-processing steps. The true LiDAR scan data is therefor reduced to 20\% of the original sample set. This is mainly due to redundancy and unwieldy cloud sizes (700,000 points per second becomes unruly in a very short period of time). Figure~\ref{lidarsim:20psample} shows the result of the simulation at 20\% sampling rate. There are 18,973 points in the cloud shown below. It is likely the true scan data will contain many more points before being downsampled due to redundant point collection. The algorithm built here does not include the same target point more than once.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=3in]{simulated-lab-scan/lidarSim/20psample.png}
+	\caption[Simulated LiDAR scan at 20\% sampling rate]{\centering Simulated LiDAR scan of the virtual lab point cloud at 20\% sampling rate. The red trail shows the collection path of the sensor.}
+	\label{lidarsim:20psample}
+\end{figure}
+
+Because of the care required to operate a device as expensive as the HDL-32E is, the LiDAR is fixed to a mobile table of fixed height during the collection process. This means the amount of acquireable data on the beam's shape is severely limited. In Section~\ref{results:realscan}, the effects of this scanning technique can be seen in the lack of thickness data on the horizontal portion of the beam.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{cloudCollection/velodyneLiDAR.jpg}
-		\caption[Velodyne LiDAR Operation]{Visualization of how to the Velodyne HDL-32E operates.}
+		\caption[Velodyne LiDAR Operation]{\centering Visualization of how to the Velodyne HDL-32E operates.}
 \end{figure}
 
 Figure~\ref{technical:lidarcompare} shows a comparison between a single frame of simulated HDL-32E LiDAR data and a true scan with the device. The simulation proves to be quite similar in results to the true scans, which will prove to be useful for future endeavors beyond this one.
@@ -790,6 +814,14 @@ Figure~\ref{technical:lidarcompare} shows a comparison between a single frame of
 	\label{technical:lidarcompare}
 \end{figure}
 
+The individual scans are iteratively concatenated in the manner described in Figure~\ref{cloudconcatenationprocess}. At each iteration, a new frame is loaded, and the Intrinsic Shape Signature map for the cloud is generated. Using a RANSAC fitting algorithm, the transformation between the newest frame and the previous frame is calculated, and added to the global transformation matrix. The new frame is transformed and added to the global cloud. This technique allows for comparison of only two frames at a time, instead of having to calculation the Intrinsic Shape Signature map of the concatenated point cloud, which increases in size at each iteration.
+
+\begin{figure}[!ht]
+	\centering
+		%flow chart of cloud concatenation process
+	\caption[Flow chart of point cloud concatenation process.]{\centering Flow chart of point cloud concatenation process.}
+	\label{technical:lidarcompare}
+\end{figure}
 
 \subsection{Stereogrammetry and Photogrammetry}
 Stereogrammetry and Photogrammetry are both highly dependent on the camera quality, speed of motion, and feature density of the image. As these methods depend on matching descriptive features between images, the resulting cloud is typically far more sparse than what would be obtained with a LiDAR device.
@@ -797,15 +829,39 @@ Stereogrammetry and Photogrammetry are both highly dependent on the camera quali
 
 \subsection{Segmentation Method Exploration}
 
+We seek to explore and understand the most efficient and robust methods for segmentation of unordered point cloud into meaningful clusters in an entirely automated way. While the original goal was the pursuit of a convolutional neural network, this proved to be too time consuming of a task for the window available, as CNNs require exhaustive training sets for every class of object we aim to identify. Surprisingly, the public online point cloud repositories available to the public, such as Point Cloud Library (PCL), do not contain many datasets -- if any -- pertaining to the structural engineering world.
+
+As a result, the methods evaluated in this thesis are reserved purely to those which are classified as unsupervised. Selected based on potential success, popularity, and ease of implementation, the following segmentation methods are analyzed in Chapter~\ref{chap:results}:
+
+\begin{itemize}
+	\item K-Means Clustering
+	\item Fuzzy C-Means Clustering
+	\item Euclidean Distance Clustering
+	\item Agglomerative Hierarchical Clustering
+\end{itemize}
+
+Detailed descriptions of how these algorithms operate, as well as general use cases and a list of pros and cons, can be found in Section~\ref{sec:machinelearning}. Each method is applied to the simulated datasets, and their results are visualized. Based on observation, an optimal clustering method for our purposes is found and the resulting segments are run through the meshing and optimization phase of the algorithm.
 
 \subsection{Initial Mesh Exploration}
 
+There are two algorithms for the initial mesh construction intended for evaluation in this thesis: Scale Space Reconstruction and Avancing Front. Advancing front provides no robustness to noise or occlusion in the dataset, but guarantees no overlapping faces, so could be viable with the addition of hole patching and the optimization stage. Scale Space Reconstruction, on the other hand, is designed specifically for handling noisey, variable density datasets. It does not prevent overlapping elements, so removal of these elements must be added to the pipeline for this case. It should also be noted that because of Scale Space Reconstruction's casting steps (described in Section~\ref{subsec:meshing}), it is far more computationally expensive than the Advancing Front method.
+
+These methods are evaluated on their abilities to create comprehensive surface areas and their quality metrics after hole patching and refinement.
 
 \subsection{Optimization Steps}
+
+The goal of the optimization process is to remedy or remove any elements in the mesh that violate our criteria for volumetric conversion compatibility. These criteria are defined in Section~\ref{subsec:meshoptimization}. Each step in the optimization pipeline specializes in modifying specific characteristics of the mesh which can be defined as having low quality using the metrics in Section~\ref{subsec:meshoptimization}.
+
+The first step in the optimization process is Lloyd Optimization, or Voronoi Relaxation. LLoyd optimization seeks to resolve triangulations with low [[add quality metrics resolved by lloyd optimization]]. Lloyd Optimization comes with the caveat that it moves the location of the shape vertices, so this step comes at the cost of modifying the topology collected directly by the sensor. Depending on the accuracy of the collection instrument, this can be either a curse or a blessing.
+
+The next step is the Optimized Delaunay Triangulation method. ODT is another relaxation method capable of modifying the object's topology in order to increase the overall quality of the mesh. Between Lloyd Optimization and ODT, every quality metric should -- while not guaranteed to be so -- be within the tolerance set by the exit conditions applied, with the exception of slivers. To remedy these, perturbation and exudation are necessary.
+
+[[Perturbation and Exudation]]
 
 
 \subsection{Final Mesh Verification}
 
+The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has inbuilt functionality to convert surface meshes to boundary representations and bounded volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the true object.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1028,7 +1084,6 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 
 \begin{figure}[!ht] 
-	
 	\centering
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
@@ -1089,6 +1144,7 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 
 
 \section{HDL-32E LiDAR Scan Data}
+\label{results:realscan}
 To test the true robustness of the algorithm, a real scan of a real object of potential interest is necessary. The object for the following test is a 10 foot long beam, with a width and height of 5 inches, and a thickness of 0.25 inches.
 
 Before viewing the test results, note the thickness of the beam is smaller than the rated accuracy of the LiDAR device. This combined with sensor mobility limited to the xy plane at a height similar to that of the beam proved to cause a severely limited view of the entire beam.
@@ -1287,11 +1343,13 @@ Exudation represents the final step in the optimization process, and the complet
 \begin{table}[!ht]
 	\centering
 		\caption[LiDAR exit surface mesh characteristics]{Exit characteristics of optimized surface mesh}
-	\begin{tabular}[| c | c |]
-	\hline Minimum facet angle && 20 degrees \\
-	\hline Minimum facet area && 0.25 $in^{2}$ \\
-	\hline Minimum facet edge length && 0.05 $in$ \\
-	\hline
+		\begin{tabular}{ | c | c | }
+			\hline
+			\\ Minimum facet angle & 20\textdegree
+			\\ \hline Minimum facet area & 0.25 $in^{2}$
+			\\ \hline Minimum facet edge length & 0.05 $in$ 
+			\\ \hline
+	\end{tabular}
 	\label{table:lidarexitcharacteristics}
 \end{table}
 
