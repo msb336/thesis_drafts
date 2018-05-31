@@ -119,6 +119,7 @@ In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to pro
 \section{Collection of Point Cloud Data}
 \label{sec:PCcollection}
 There are many ways of collecting point cloud data, ranging from implicit methods where the collection tool does not return direct xyz point data, such as stereogrammetry and structure from motion, to explicit methods where the direct return is a 3-dimensional position output, such as LiDAR, laser scanning and ultrasonic sensing. Each collection technique has its own set of parameters, accuracy ratings, and speed of collection / calculation.
+
 \subsection{Implicit collection methods: Stereogrammetry and Structure from Motion}
 \label{subsec:implicit}
 [[fill in]]
@@ -129,13 +130,20 @@ There are many ways of collecting point cloud data, ranging from implicit method
 %%
 \section{Sensor Fusion}
 \label{sec:fusion}
-[[fill in]]
+[[alpha compensator]]
+[[particle filter]]
+[[kalman filter]]
+
 %%
 \section{Point Cloud Pre-processing Methods}
 \label{sec:preprocessing}
 \subsection{Registration}
 \subsubsection{Position Data}
-[[fill in]]
+UAVs contain a number of localization measures. Typically implemented are a GPS, an Inertial Measurement Unit, and some form of computer vision. When data from these elements are fused via one of the methods described in the previous section, all six parameters of the global position of the UAV can be accurately obtained (x, y, z, pitch, roll, and yaw).
+
+When onboard position data is collected, concatenating individual collection frames becomes a matter determining the transformation matrix between frames using the orientation and position of the UAV, and applying small corrections based on a combination of RANSAC and Intrinsic Shape Signatures (defined in the next section).
+
+
 \subsubsection{Intrinsic Shape Signatures}
 To stitch individual frames together, distinctive, repeatable features from each frame are found, and the most likely transformation between the frames is calculated via RANSAC estimation. There are numerous ways to classify distinctive features, but in this paper, we will focus on Intrinsic Shape Signatures due to its reliability and computational efficiency.
 An intrinsic shape signature consists of two things:
@@ -154,6 +162,7 @@ To calculate the orientation of the Intrinsic Reference Frame, we evaluate the r
 		\begin{equation}
 		w_{i}=  \frac{1}{||p_{j} \mid |p_{j}-p_{i}| < r_{density}||}
 		\end{equation}
+
 		This weight is used to compensate for uneven sampling of the 3D points, so that points at sparsely sampled regions contribute more than points at densely sampled regions. 
 
 	\item Compute a weighted scatter matrix $cov(p_{i})$ for $p_{i}$ using all points $p_{j}$ within distance $r_{frame}$:
@@ -188,7 +197,7 @@ To minimize the amount of noise in the resulting dataset, a statistical approach
 \end{figure}
 
 
-\subsection{Down-sampling}
+\subsection{Down-Sampling}
 Down-sampling is the process of fixing a point cloud’s mean density to a voxel of size n. This is done by iterating the voxel throughout the cloud’s entire volume and replacing all points occupying a voxel with a single point in the mean position of the voxel. For an $n$-dimensional feature-set, the downsampling equation can be defined by Equation~\ref{eq:nddownsample}
 
 \begin{equation}
@@ -974,7 +983,7 @@ Figure~\ref{zeronoise:scalespace15} shows the extremes of what the scale space r
 In the zero noise case, Advancing Front reconstruction proves to be the most accurate to our beam's dimensions. However, as we will see in future sections, this method is not robust to noise. Both of these statements are unsurprising, as this reconstruction method does not modify the topology defined by the pointset provided, and therefor directly represents the shape defined by the input cloud.
 
 \subsection{Optimization}
-\subsubsection{Effects Voronoi Relaxation}
+\subsubsection{Effects of Voronoi Relaxation}
 
 Voronoi relaxation, defined in Section~\ref{optimization:voronoirelaxation}, aims to regulate the tetrahedral areas in the mesh by iteratively shifting point vertices to their respective voronoi centroids. This method is effective in increasing the mesh quality ratios defined in Table~\ref{table:meshquality}, with the exception of volume ratio, which can be visualized as slivers in the mesh (Figure~\ref{fig:meshquality}).
 
@@ -1017,11 +1026,13 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 \subsubsection{Effects of Delaunay Optimization}
 
+[[Add all these figures]]
 
 \subsubsection{Effects of Mesh Perturbation}
 
 \begin{figure}[!ht]
 	\centering
+	%[[these figures are trash]]
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd00.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontperturbvslloyd02.png}
@@ -1032,12 +1043,16 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 
 \begin{figure}[!ht]
 	\centering
+		%[[these figures are trash]]
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb00.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2lloydvsperturb02.png}
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation and with perturbation.}
 	\label{zeronoise:scalespace2lloydperturb}
 \end{figure}
+
+\subsubsection{Exudation}
+[[add figures]]
 
 
 
@@ -1142,6 +1157,17 @@ Due to the unbounded nature of the surface mesh generated via the Advancing Fron
 	\label{2cmnoise:scalespace4lloyd}
 \end{figure}
 
+\subsubsection{Optimized Delaunay Triangulation}
+
+[[add figures]]
+
+\subsubsection{Perturbation}
+
+[[add figures]]
+
+\subsubsection{Exudation}
+
+[[add figures]]
 
 \section{HDL-32E LiDAR Scan Data}
 \label{results:realscan}
@@ -1287,6 +1313,7 @@ After running the Lloyd optimization on the reconstruction at scale 4, the diffe
 
 \begin{figure}[!ht]
 	\centering
+		%[[add figures]]
 		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt00.png}
 		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt01.png}
 		% \includegraphics[width=2in]{real-lab-scans/meshed/optimized/scalespace2lloydodt02.png}
@@ -1391,6 +1418,9 @@ While the simulated point clouds provide information for the entirety of the L-b
 %Chapter: 		Conclusion
 \chapter{Conclusion}
 \label{chap:conclusion}
+[[add boundary representation images,
+finite element mesh tests,
+Quality metric Analysis]]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
