@@ -833,6 +833,8 @@ The second hypothesis attempts to nail down an explicit definition of what it me
 
 Knowing these limits allows for collection of point cloud data for the sake of information extraction to be much more educated. Defining criteria for the amount of a surface that must be visible in the cloud, accuracy limits, and smoothing limits are critical for creating an automated approach to finite element analysis on real objects with reliable results. The following chapters quantify the effect of parameter modification at each step of the algorithm.
 
+While in no way are any definitive or exhaustive parameters for assured compatibility of a surface mesh for volumetric conversion made in this thesis, there is significant exploration into what parameters work and what cause a mesh to fail. Interestingly enough, a mesh that is aesthetically pleasing is likely a successfully convertible mesh.
+
 \section{Technical Approach}
 To fully evaluate the effect of each step in the algorithm and test the robustness of the proposed algorithm, we apply it to a series point clouds, but simulated and real, with varying levels of noise and occlusion. The goal is to accurately mimic the cloud resolution of the test device, and to proof the robustness of the algorithm at resolutions expected from other measurement devices. Simulated data has been crafted to model resolution, accuracy, and occlusion levels with the approaches that follow:
 
@@ -918,12 +920,12 @@ We seek to explore and understand the most efficient and robust methods for segm
 
 As a result, the methods evaluated in this thesis are reserved purely to those which are classified as unsupervised. Selected based on potential success, popularity, and ease of implementation, the following segmentation methods are analyzed in Chapter~\ref{chap:results}:
 
-\begin{itemize}
+\begin{enumerate}
 	\item K-Means Clustering
 	\item Fuzzy C-Means Clustering
 	\item Euclidean Distance Clustering
 	\item Agglomerative Hierarchical Clustering
-\end{itemize}
+\end{enumerate}
 
 Detailed descriptions of how these algorithms operate, as well as general use cases and a list of pros and cons, can be found in Section~\ref{sec:machinelearning}. Each method is applied to the simulated datasets, and their results are visualized. Based on observation, an optimal clustering method for our purposes is found and the resulting segments are run through the meshing and optimization phase of the algorithm.
 
@@ -941,12 +943,12 @@ The first step in the optimization process is Lloyd Optimization, or Voronoi Rel
 
 The next step is the Optimized Delaunay Triangulation method. ODT is another relaxation method capable of modifying the object's topology in order to increase the overall quality of the mesh. Between Lloyd Optimization and ODT, every quality metric should -- while not guaranteed to be so -- be within the tolerance set by the exit conditions applied, with the exception of slivers. To remedy these, perturbation and exudation are necessary.
 
-[[Perturbation and Exudation]]
-
+Perturbation and exudation are included in the pipeline of algorithm for two reasons. The first being that both Lloyd Optimization and ODT are quality improving algorithms for all of the parameters listed in Section~\ref{subsec:meshoptimization}, except for slivers. Perturbation and Exudation both specialize in the removal of these tetrahedra. The second reason is to relieve the effects ODT often has on the mesh. We will see in the results section that ODT can have a ``pock-marking'' effect upon the mesh, as it optimizes using delaunay radii as a cost function, and this often means vertices are shifted towards the interior of our surface mesh. 
+ 
 
 \subsection{Final Mesh Verification}
 
-The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has inbuilt functionality to convert surface meshes to boundary representations and bounded volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the true object.
+The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has in-built functionality to convert surface meshes to boundary representations and bounded volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the true object.
 
 
 
@@ -1021,7 +1023,7 @@ The filtering and segmentation parameters derived from this zero noise situation
 
 
 \subsection{Initial Meshing Methods}
-In a zero noise situation, the advancing front method returns a nearly perfect mesh, with the exception of a poor quality polygon linking the rear segment of the mesh. This is caused by the ''marching triangles'' attempting to close the final corners of the mesh. This meshing method provides high quality meshes while maintaining accurate features in zero noise situations, but we will see when we introduce noise that Advancing Front quickly fails to produce a reliable initial mesh for successful optimization.
+In a zero noise situation, the advancing front method returns a nearly perfect mesh, with the exception of a poor quality polygon linking the rear segment of the mesh. This is caused by the ``marching triangles'' attempting to close the final corners of the mesh. This meshing method provides high quality meshes while maintaining accurate features in zero noise situations, but we will see when we introduce noise that Advancing Front quickly fails to produce a reliable initial mesh for successful optimization.
 
 \begin{figure}[!ht]
 	
@@ -1204,7 +1206,7 @@ Exudation, like perturbation, aims to relieve any slivers remaining in the mesh,
 	\label{zeronoise:advancedeverything}
 \end{figure}
 
-
+The scale space reconstruction in the zero noise case is interesting. In future work, we will explore what thicknesses are suitable for zero-noise cases in this method. Figure~\ref{zeronoise:scalespace2everything} shows a poor looking mesh as the final product of the algorithm. Non-uniform areas can be seen distributed throughout the edges, and the mesh is filled with pockmarks, which damage the overall quality level of the mesh. 
 
 \begin{figure}[!ht]
 	\centering
@@ -1332,9 +1334,13 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 
 \subsection{Optimization}
 
+Before traversing into the individual optimization sections, it is important to note that the advancing front method has been removed from the analysis due to it's clear inability to create a singular, comprehensive surface area. It is a waste of processing power and space, to further analyze this meshing technique.
+
 \subsubsection{Effects of Voronoi Relaxation}
-\begin{figure}[!ht]
-	
+
+As before, we apply a voronoi relaxation algorithm to the mesh, with exit criteria of convergence, or a maximum of 200 iterations. Clearly visible in Figure~\ref{2cmnoise:scalespace2lloyd}, the reconstruction at scale space 2 is relatively smooth compared the the raw point cloud, and exists as a singular bounded surface area.
+
+\begin{figure}[!ht]	
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2lloyd00.png}
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2lloyd01.png}
@@ -1343,6 +1349,8 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{2cmnoise:scalespace2lloyd}
 \end{figure}
+
+Voronoi relaxation applied on the reconstruction at scale space 4 has done some work to remedy the highly visible issues with the initial mesh. On the top left corner, the section no longer has zero implied volume, as the mesh has ballooned out slightly. However, there are still a series of discontinuities and sharp edges existant in the mesh. We will see in the next sections how ODT, perturbation, and exudation affect these sharp edges.
 
 \begin{figure}[!ht]
 	\centering
@@ -1358,6 +1366,8 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 
 \subsubsection{Effects of Delaunay Optimization}
 
+Delaunay optimization has some more noticable effects on the noisy point cloud than on the clean point cloud -- unsurprising. These effects are most visible in Figure~\ref{2cmnoise:scalespace2odt} on the lefthand side of the mesh. The vertices of the mesh are pushed further in the normal direction of the surface area of the shape, creating a more even mesh, that is arguably more accurate to the true shape of the input cloud.
+
 \begin{figure}[!ht]
 	
 	\centering
@@ -1369,7 +1379,7 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 	\label{2cmnoise:scalespace2odt}
 \end{figure}
 
-
+The effects listed above are even more visible in scale space 4. Figure~\ref{2cmnoise:scalespace4odt} shows the extent ODT can go to to increase the quality in a mesh. The portion in the top left corner of the mesh -- initial a nearly 2-dimensional area -- is now defined as a shape with definite volume, and only slightly thinner than it's surrounding edges.
 
 \begin{figure}[!ht]
 	\centering
@@ -1381,9 +1391,11 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 	\label{2cmnoise:scalespace4odt}
 \end{figure}
 
-
+Because the reconstructions at scale 2 and 4 are already quite high in quality metrics, ODT did not shift many vertices noticably. For this reason, we do not see the same number of blemishes and pockmarks ODT created in the previous section (Figure~\ref{zeronoise:scalespace2odt} and Figure~\ref{zeronoise:scalespace4odt}). There are, most likely, a number of slivers still incorporated in the meshes.
 
 \subsubsection{Effects of Mesh Perturbation}
+
+The algorithm will now attempt to remove the remaining slivers using perturbation with a 30 second time limit if convergence is not met. Figure~\ref{2cmnoise:scalespace2perturb} shows the mesh at scale space 2 after perturbation. In this case, perturbation does not return any overtly visible changes. It is likely that none or very few of the tetrahedra in the mesh met the criteria defining a sliver. This being the case, changes in the mesh would be very difficult to detect by visual inspection.
 
 \begin{figure}[!ht]
 	
@@ -1396,7 +1408,7 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 	\label{2cmnoise:scalespace2perturb}
 \end{figure}
 
-
+Changes in scale space 4 reconstruction are subtle as well [[details]].
 
 \begin{figure}[!ht]
 	\centering
@@ -1413,6 +1425,8 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 
 \subsubsection{Exudation}
 
+Changes due to exudation are more visible than perturbation in this case. Looking again at the lefthand side of the beam, we can see a more uniform slope in the shape of the beam. while this modifies the topology of the mesh in a way that does not meet the true definition of the beam, it provides a smoother and more uniform mesh shape. Figure~\ref{2cmnoise:scalespace2everything} shows the final optimized mesh at a scale space of 2.
+
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything00.png}
@@ -1423,7 +1437,7 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 	\label{2cmnoise:scalespace2everything}
 \end{figure}
 
-
+Scale space 4 exaggerates the parabolic shape of the beam even more than scale space 2 -- again, unsurprisingly, as heavier interpolation is applied as the reconstruction is moved to higher scales. Viewing the final mesh in Figure~\ref{2cmnoise:scalespace4everything}, we see an evenly distributed set of tetrahedra defining the relatively smooth surface area of a beam with a parabolic cross-section.
 
 \begin{figure}[!ht]
 	\centering
@@ -1690,9 +1704,11 @@ Exudation represents the final step in the optimization process, and the complet
 
 While the simulated point clouds provide information for the entirety of the L-beam's shape, the true LiDAR collection data does not. This section walks through the results of the Informed Shape Estimation algorithm, defined in Section~\ref{subsubsec:informedshape}. For each dataset, we will show the original pointcloud of the isolated beam, the initial meshing method, the estimated point cloud, and the fully optimized mesh using the estimated cloud.
 
-\subsection{Zero Noise}
-\subsection{2cm Noise}
-\subsection{LiDAR Data}
+[[Still need to generate this data]]
+
+% \subsection{Zero Noise}
+% \subsection{2cm Noise}
+% \subsection{LiDAR Data}
 
 
 
