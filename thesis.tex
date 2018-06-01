@@ -80,6 +80,11 @@ Technology today is increasing at a such a rate that structurally obselete objec
 
 
 \setcounter{page}{0}
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER:                                                         INTRODUCTION
 \chapter{Introduction}
@@ -113,6 +118,24 @@ In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to pro
 \cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
 %
 %
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Chapter: 		Background
 \chapter{Background}
@@ -779,6 +802,16 @@ While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinem
 Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}. 
 
 
+
+
+
+
+
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Chapter: 		Hypothesis
 \chapter{Objective, Hypothesis, and Technical Approach}
@@ -914,6 +947,16 @@ The next step is the Optimized Delaunay Triangulation method. ODT is another rel
 \subsection{Final Mesh Verification}
 
 The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has inbuilt functionality to convert surface meshes to boundary representations and bounded volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the true object.
+
+
+
+
+
+
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1067,7 +1110,10 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
 
+
 \subsubsection{Effects of Delaunay Optimization}
+
+Delaunay optimization seeks to find the minimal triangulation conditions for the mesh by iteratively shifting the vertices of the mesh to positions that minimize the cost function defined in Section~\ref{subsec:meshoptimization}. For this reason, we begin to see ``pock-marks'' in the mesh, as these positions minimize the Delaunay radii apparent in the mesh. Correcting this phenomenon is a large portion of the reason we apply perturbation and exudation to our meshing pipeline.
 
 \begin{figure}[!ht]
 	\centering
@@ -1075,24 +1121,23 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodt03.png}
-		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+		\caption[Advancing Front mesh after ODT with a 30 second clock cap]{\centering  Result of Advancing Front mesh after ODT with a 30 second clock cap.}
 	\label{zeronoise:advancedodt}
 \end{figure}
 
-
+The negative effects of ODT are increasingly apparent at each greater scale of the scale space reconstruction. Any imperfections in the mesh are enunciated by a heavy, vacuum-like extrusion.
 
 \begin{figure}[!ht]
-	
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2odt00.png}
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2odt02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2odt03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap.}
 	\label{zeronoise:scalespace2odt}
 \end{figure}
 
-
+It is clear at this point that for low thickness objects in zero noise situations, $4^{th}$ scale space is too high, as it results in a zero volume surface mesh. There are no remedies for a mesh that fails to generate any surface hull at all.
 
 \begin{figure}[!ht]
 	\centering
@@ -1100,11 +1145,15 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4odt02.png}
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4odt03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap.}
 	\label{zeronoise:scalespace4odt}
 \end{figure}
 
 \subsubsection{Effects of Mesh Perturbation}
+
+Perturbation serves two purposes: To relax any remaining slivers in the mesh (slivers defined in Section~\ref{subsec:meshoptimization}) into higher quality tetrahedra, and to relieve inward deviations created by the ODT step.
+
+In Figure~\ref{zeronoise:advancedperturb}, we see the result of the Advancing Front mesh after being perturbed for 30 seconds. In this case, there were not many -- if any at all -- tetrahedra that met the criteria to be slivers. The only sliver correct visible is in the lower lefthand corner of the beam. In earlier steps of the algorithm, there is a slight dog-ear, which is now far less exaggerated.
 
 \begin{figure}[!ht]
 	\centering
@@ -1112,11 +1161,11 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfrontlloydodtperturb03.png}
-		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+		\caption[Advancing Front mesh after perturbation with a 30 second clock cap]{\centering  Result of Advancing Front mesh after perturbation with a 30 second clock cap.}
 	\label{zeronoise:advancedperturb}
 \end{figure}
 
-
+The next figure is the reconstruction at scale space $2$. Again we see a severely pock-marked mesh, but far less so than it's predecessor. Provided a higher clock limit, these pock-marks are slightly more relieved, but unfortunately perturbation does not converge at the "smoothest" mesh, but at the mesh that satisfies it's constraints for quality.
 
 \begin{figure}[!ht]
 	
@@ -1125,24 +1174,25 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2perturb02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2perturb03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap.}
 	\label{zeronoise:scalespace2perturb}
 \end{figure}
 
 
 
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4perturb00.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4perturb01.png}
-		% \includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4perturb02.png}
-		% \includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4perturb03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
-	\label{zeronoise:scalespace4perturb}
-\end{figure}
+% \begin{figure}[!ht]
+% 	\centering
+% 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4perturb00.png}
+% 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4perturb01.png}
+% 		% \includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4perturb02.png}
+% 		% \includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4perturb03.png}
+% 		\caption[Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
+% 	\label{zeronoise:scalespace4perturb}
+% \end{figure}
 
 \subsubsection{Exudation}
 
+Exudation, like perturbation, aims to relieve any slivers remaining in the mesh, as well as to re-smooth the pock-marks generated by the ODT portion of the pipeline. In Figure~\ref{zeronoise:advancedeverything}, we see many of these pock-marks artifacts have been smoothed to some extent, but still exist in the mesh. Interestingly, Exudation has increased the angle of attack of the lip in the bottom left corner of the L-beam. This can be attributed to [[ the way exudation operates, and why ]].
 
 \begin{figure}[!ht]
 	\centering
@@ -1150,46 +1200,62 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/advancedfronteverything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfronteverything02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/advancedfronteverything03.png}
-		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
+		\caption[Advancing Front mesh after exudation with a 30 second clock cap]{\centering  Result of Advancing Front mesh after exudation with a 30 second clock cap.}
 	\label{zeronoise:advancedeverything}
 \end{figure}
 
 
 
 \begin{figure}[!ht]
-	
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2everything00.png}
 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace2everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2everything02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace2everything03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after exudation with a 30 second clock cap.}
 	\label{zeronoise:scalespace2everything}
 \end{figure}
 
 
 
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything00.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything02.png}
-		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
-	\label{zeronoise:scalespace4odt}
-\end{figure}
+% \begin{figure}[!ht]
+% 	\centering
+% 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything00.png}
+% 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything01.png}
+% 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything02.png}
+% 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything03.png}
+% 		\caption[Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
+% 	\label{zeronoise:scalespace4everything}
+% \end{figure}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 \section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
+
+This section delves into the effect of noise introduced into the simulation data on the meshing and segmentation algorithms. Specifically, we aim to see how well each step of the process holds up to noise introduction, and make definitive decisions on the pipeline and parameters required at every step. 
+
 \begin{figure}[!ht] 
-	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/rawcloud.jpg}
-		\caption[Simulated point cloud with 2cm magnitude gaussian noise induced]{\centering  Simulated point cloud with 2cm magnitude gaussian noise induced.}
+		\caption[Simulated point cloud with 2cm magnitude gaussian noise induced]{\centering  Simulated point cloud with 2 $cm$ magnitude gaussian noise induced.}
 \label{2cmnoise:raw}
 \end{figure}
+
+The initial point cloud has been introduced to noise in the $x$, $y$, and $z$ axes of up to 2 centimeters in magnitude. Because all three axes are introduced to this uncertainty, the total noise in this simulation dataset is greater than expected in true LiDAR scans. However, the level of occlusion in this data set is zero. All shapes are completely accounted for at every viewing angle.
+
+The first step in this process is again to filter and sub-sample the point cloud. In Figure~\ref{2cmnoise:filtered}, we can see immediately that the resulting point cloud is significantly cleaner than it's untreated counterpart. Separating the cloud into clearly defined shapes is crucial for the unsupervised clustering algorithms to accurately and meaningfully segment the point cloud. 
 
 \begin{figure}[!ht]
 	
@@ -1199,65 +1265,74 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 \label{2cmnoise:filtered}
 \end{figure}
 
+
 \subsection{Segmentation Method Comparison}
 
+We again explore the same segmentation methods shown in the noiseless case. As true experimental datasets are never entirely noiseless, the analysis on the induced noise case provides much more significant insight on the true abilities of each segmentation method to meaningfully cluster the data.
+
 \begin{figure}[!ht]
-	
 	\centering
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/comparison.jpg}
 		\caption[Comparison of unsupervised segmentation techniques on simulated dataset with induced noise.]{\centering Resulting cloud cluster from a) k-means, 17 centroid b) Fuzzy c-means, 17 centroids c) Agglomerative clustering, 17 bins and d) Euclidean clustering with radius of 0.5 cm minimum cluster size of 3,000 and maximum cluster size of 50,000 points.}
 \label{2cmnoise:segcompare}
 \end{figure}
 
+Using the same parameters as the noiseless case, euclidean clustering once again proves it's vast superiority to retrieve our shape of interest accurately and cleanly. For the remaining sections in this chapter, we will only show results created from the euclidean clustering method.
+
 
 \subsection{Initial Mesh Methods}
 
+While Advancing Front touted itself as the superior method in the zero noise case, it has no measures to prevent corruption of the mesh in the case where noise is apparent in the dataset. Figure~\ref{2cmnoise:advancingfront} shows a completely disjointed mesh object, with many small bounded surface areas, and a large number of disconnected half edges. Because of these small bounded areas, the hole filling methods implemented in the algorithm are unable to remesh the object into a comprehensive surface area. It can be said with certainty that the Advancing Front method fails our search criteria for non-ideal pointclouds.
+
 \begin{figure}[!ht]
-	
 	\centering
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront01.png}
+		\includegraphics[width=1.5in]{simulated-lab-scan/2cmnoise/2cmmesh/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 		\label{2cmnoise:advancingfront}
 \end{figure}
 
+Where Advancing Front fails, the Scale Space reconstruction method excels in it's ability to compensate for noise. Figure~\ref{2cmnoise:scalepspace2} shows the initial meshing results using a scale space of 2. Note the uniformity in the mesh, and the singular surface area the mesh defines. This is unsurprising, as the scale space reconstruction method is built specifically for high noise and high variability cases.
 
 \begin{figure}[!ht] 
 	\centering
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace200.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace201.png}
+		\includegraphics[width=1.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 		\label{2cmnoise:scalepspace2}
 \end{figure}
 
+The scale space reconstruction, when the casting scale is increased to 4, once again shows a unified singular surface area, but suffers from the effects of the beam's lack of thickness seen in Figure~\ref{zeronoise:scalespace2} and Figure~\ref{zeronoise:scalespace4}. At this point, it is too early to make a definitive statement about whether scale space 4 is too drastic of a casting, but we will re-evaluate this initial method again at the end of the optimization process.
 
 \begin{figure}[!ht]
 	
 	\centering
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
+		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace400.png}
+		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace401.png}
+		\includegraphics[width=1.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 		\label{2cmnoise:scalespace4}
 \end{figure}
 
+% Scale Space 15 is w
 
-\begin{figure}[!ht]
+% \begin{figure}[!ht]
 	
-	\centering
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
-		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
-		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
-		\label{2cmnoise:scalespace15}
-\end{figure}
+% 	\centering
+% 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
+% 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
+% 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
+% 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
+% 		\label{2cmnoise:scalespace15}
+% \end{figure}
+
+
 
 \subsection{Optimization}
+
 \subsubsection{Effects of Voronoi Relaxation}
-
-
 \begin{figure}[!ht]
 	
 	\centering
@@ -1279,8 +1354,9 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 	\label{2cmnoise:scalespace4lloyd}
 \end{figure}
 
-\subsubsection{Effects of Delaunay Optimization}
 
+
+\subsubsection{Effects of Delaunay Optimization}
 
 \begin{figure}[!ht]
 	
@@ -1289,7 +1365,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2odt03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap.}
 	\label{2cmnoise:scalespace2odt}
 \end{figure}
 
@@ -1301,12 +1377,13 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt02.png}
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4odt03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap.}
 	\label{2cmnoise:scalespace4odt}
 \end{figure}
 
-\subsubsection{Effects of Mesh Perturbation}
 
+
+\subsubsection{Effects of Mesh Perturbation}
 
 \begin{figure}[!ht]
 	
@@ -1315,7 +1392,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2perturb03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace2perturb}
 \end{figure}
 
@@ -1327,22 +1404,22 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb02.png}
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4perturb03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace4perturb}
 \end{figure}
 
+
+
+
 \subsubsection{Exudation}
 
-
-
 \begin{figure}[!ht]
-	
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything00.png}
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything02.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace2everything03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale space reconstruction $S = 2$ after after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after exudation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace2everything}
 \end{figure}
 
@@ -1354,9 +1431,23 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything02.png}
 		\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/optimized/scalespace4everything03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
-	\label{2cmnoise:scalespace4odt}
+		\caption[Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
+	\label{2cmnoise:scalespace4everything}
 \end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{HDL-32E LiDAR Scan Data}
 \label{results:realscan}
@@ -1602,6 +1693,21 @@ While the simulated point clouds provide information for the entirety of the L-b
 \subsection{Zero Noise}
 \subsection{2cm Noise}
 \subsection{LiDAR Data}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter: 		Conclusion
