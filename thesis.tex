@@ -69,7 +69,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \addcontentsline{toc}{chapter}{Abstract}
 \begin{abstract}
-Technology today is increasing at a such a rate that structurally obselete objects are still in regular use throughout industry. While today's design and construction methods include CAD drawings, finite element models, and countless other digital analysis tools, many objects in the field do not have any support data available due to their age. In an attempt to solve this problem, this paper outlines a method utilizing machine learning in conjunction with advanced meshing techniques to autonomously segment raw point cloud data and reconstruct the resulting segments into simply connected meshes. We seek to quantify traits in unordered point clouds and surface meshes necessary for fully volumetric convertible surface meshes by evaluating readily available metrics and methods for determining mesh quality. This thesis proposes a method to convert real objects in the field into analyzable models with minimal user interface in the process.
+% Technology today is increasing at a such a rate that structurally obselete objects are still in regular use throughout industry. While today's design and construction methods include CAD drawings, finite element models, and countless other digital analysis tools, many objects in the field do not have any support data available due to their age. In an attempt to solve this problem, this paper outlines a method utilizing machine learning in conjunction with advanced meshing techniques to autonomously segment raw point cloud data and reconstruct the resulting segments into simply connected meshes. We seek to quantify traits in unordered point clouds and surface meshes necessary for fully volumetric convertible surface meshes by evaluating readily available metrics and methods for determining mesh quality. This thesis proposes a method to convert real objects in the field into analyzable models with minimal user interface in the process.
 
 \end{abstract}
 
@@ -93,29 +93,29 @@ Technology today is increasing at a such a rate that structurally obselete objec
 Surface reconstruction from a 3D point cloud is not a novel problem. In the past, groups have developed meshing algorithms for digital art replication, geographical topology analysis, and – more recently – structure health monitoring. All these processes, however, do not provide a general method to automate the entire pipeline between point-cloud collection and simple CAD geometry. We present a solution to this problem in the form of a robust and autonomous process for filtering, segmentation, and meshing of raw 3D point clouds.
 
 %Related Works
-\section{Related Work}
-\label{sec:related}
-[Introductory filler]
-%%
-\subsection{Geographical Topography Mapping}
-\label{subsec:topographymapping}
-In 2009, José Lerma and his team of archaeologists began using Terrestrial laser scanning in tandem with close proximity photogrammetry to render high resolution 3D surface models of ancient caves in Spain. Lerma et. al. are general in their description of their meshing method, which is most likely due to their non-computer programming oriented backgrounds. However, their pipeline involves sensor fusion between their laser scanner, which returns a pure point cloud with an origin at the center of the instrument, and deduced point clouds from photogrammetry data. The result is an impressive, high resolution surface mesh that accurately captures the features relevant to an archaeologist, but provide no useful information in terms of structural health monitoring \cite{RN50}.
+% \section{Related Work}
+% \label{sec:related}
+% [Introductory filler]
+% %%
+% \subsection{Geographical Topography Mapping}
+% \label{subsec:topographymapping}
+% In 2009, José Lerma and his team of archaeologists began using Terrestrial laser scanning in tandem with close proximity photogrammetry to render high resolution 3D surface models of ancient caves in Spain. Lerma et. al. are general in their description of their meshing method, which is most likely due to their non-computer programming oriented backgrounds. However, their pipeline involves sensor fusion between their laser scanner, which returns a pure point cloud with an origin at the center of the instrument, and deduced point clouds from photogrammetry data. The result is an impressive, high resolution surface mesh that accurately captures the features relevant to an archaeologist, but provide no useful information in terms of structural health monitoring \cite{RN50}.
 
-In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
+% In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
 
 
-%%
-\subsection{Building Informational Modeling}
-\label{subsec:BIM}
+% %%
+% \subsection{Building Informational Modeling}
+% \label{subsec:BIM}
 
-\cite{RN30}
-%%
-\subsection{Aerial Scanning for GPS Overlay}
-\label{subsec:UAVscanning}
-%%
-\subsection{Semi-Automated Point Cloud to FEA modeling}
-\label{subsec:SemiFEA}
-\cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
+% \cite{RN30}
+% %%
+% \subsection{Aerial Scanning for GPS Overlay}
+% \label{subsec:UAVscanning}
+% %%
+% \subsection{Semi-Automated Point Cloud to FEA modeling}
+% \label{subsec:SemiFEA}
+% \cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
 %
 %
 
@@ -155,13 +155,23 @@ Stereogrammetry and Structure from Motion have become industry standard methods 
 \subsubsection{Structure from Motion}
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{instruments/melvin1.jpg}
-		\includegraphics[width=2in]{instruments/melvin1.jpg}
-		% \includegraphics[width=2in]{instruments/melvindisp.png}
-		\includegraphics[width=3in]{instruments/melvinSfM.png}
-	\caption[Structure from Motion Demonstration]{\centering Demonstration of SfM algorithm conversion of two images to a 3-dimensional point cloud.}
+	\includegraphics[width=2in]{instruments/sfmimagecollection.png}
+	\caption[Structure from Motion collection method]{\centering Structure from Motion requires collecting a series of overlapping images to generate point clouds \cite{WESTOBY2012300}.}
 \end{figure}
-\cite{RN20}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=2in]{instruments/sfmpipeline.png}
+	\caption[Structure from Motion algorithm pipeline]{\centering A broad overview of the SfM pipeline \cite{WESTOBY2012300}.}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=4in]{instruments/sfmresults.png}
+	\caption[Structure from Motion results]{\centering Structure from Motion point cloud based on a series of panoramic images take from the ground. a) panorama of the scene b) sparse point cloud reconstruction c) image overlay \cite{WESTOBY2012300}.}
+\end{figure}
+
+\cite{RN20} \cite{WESTOBY2012300}.
 
 
 \subsection{Explicit Methods: LiDAR, Laser Scanning, and Ultrasonic Sensing}
@@ -181,8 +191,8 @@ High end LiDAR devices, such as the HDL-32E used to collect the data in this the
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=3in]{instruments/HDL-32Esingle.png}
-	\caption[Single frame of a high tier LiDAR sensor data collection]{\centering Data collected from a single rotation of the HDL-32E LiDAR device.}
+		\includegraphics[width=3in]{instruments/HDL-32eClean.png}
+	\caption[Example of a high tier LiDAR sensor data output]{\centering Data collected from an HDL-32E LiDAR device \cite{velodyne}. } %[[latex doesn't like this citation]]
 \end{figure}
 
 \subsubsection{Laser Scanning}
@@ -205,7 +215,7 @@ High end LiDAR devices, such as the HDL-32E used to collect the data in this the
 \label{sec:preprocessing}
 \subsection{Registration}
 \subsubsection{Position Data}
-UAVs contain a number of localization measures. Typically implemented are a GPS, an Inertial Measurement Unit, and some form of computer vision. When data from these elements are fused via one of the methods described in the previous section, all six parameters of the global position of the UAV can be accurately obtained (x, y, z, pitch, roll, and yaw).
+Point cloud collection devices are typically mobile, and often contain a number of localization measures. The standard localization methods and instruments used are a GPS, Inertial Measurement Units, and some form of computer vision. When data from these elements are fused via one of the methods described in the previous section, all six parameters of the global position of the collection device can be accurately obtained (x, y, z, pitch, roll, and yaw).
 
 When onboard position data is collected, concatenating individual collection frames becomes a matter determining the transformation matrix between frames using the orientation and position of the UAV, and applying small corrections based on a combination of RANSAC and Intrinsic Shape Signatures (defined in the next section).
 
@@ -320,47 +330,7 @@ An algorithm built under the pretext of Gaussian diffusion is then used to proje
 
 When scanning large objects, this method proves to be quite effective at removing sources of noise that are significantly smaller than the object being scanned. For buildings, bridges, and large-scale structures, this is a necessary first step in removing excess noise / unnecessary information from the cloud \cite{RN13}.
 
-\subsubsection{Informed Shape Estimation}
-\label{subsubsec:informedshape}
-Occlusion is the cause of two main problems. The first being the unnecessary information provided by objects blocking the instruments view to the desired target, which is dealt with via the diffusion of objects from the foreground into the background via the range segmentation method show in the previous section. The second --- far more relevant to the approach outlined in this thesis --- is the lack of complete information provided by the sensor. This can be most easily explained by making an analogy to photography. If one takes a picture of the front of a box, there is no possible way to say with certainty what the back of the box looks like. In 3D point processing, the problem is the same. Informed shape estimation attempts to tackle this problem by applying a shape with known parameters to the object point cloud and modifying the shape parameters to minimize the following cost function:
 
-\begin{equation}
-	C = \sum_{i=0}^{N}{p(i) - p_{proj}(i)}
-\end{equation}
-
-Where $N$ represents the number of points in the set, $p(i)$ represents the $i^{th}$ point in the set, and $p_{proj}(i)$ represents the closest point on the applied shape who's unit normal vector matches within some tolerance, $\tau$.
-
-\begin{equation}
-	p_{proj}(i) = arg_{min} \frac{p(i) \bullet l(j)}{||l(j)||} \in p_{normal}(i) \bullet l_{normal}(j) \geq \tau
-\end{equation}
-
-\begin{equation}
-	\label{eq:newtonraph}
-	x_{k+1} = x_{k} - \frac{C(x_{k})}{C'(x_{k})}
-\end{equation}
-
-Using a Newton Raphson interative regression, shown in equation \ref{eq:newtonraph} the cross section parameters are modified to minimize the cost required to projection points to the estimated surface. This technique is iterated throughout the long axis of the object, allowing for crucial information such as deformation to be retained. The power in this method is in it's ability to fill information in heavily occluded areas, at the cost of having a narrow scope. Informed shape estimation makes the following assumptions:
-
-\begin{enumerate}
-	\item Objection deformation is planar. Calculating the length plane removes the information involving multi-axial deformation.
-	\item Cross-section is undamaged thoughout the length of the object. Information regarding damage which alters the objects cross section will be lost when points are projected to the estimated cross section.
-	\item The target object can be defined via simple parameters such as length, height, width, and thickness.
-\end{enumerate}
-
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=5in]{cross-section-estimation/flowchart.png}
-	\caption[Flow chart of informed shape estimation algorithm]{\centering A flowchart of the informed shape estimation algorithm.}
-\end{figure}
-
-In many object scanning situations, it is not unreasonable to assume the cross-section of the object is known. Forcing the point cloud to conform to a uniform shape allows for avoidance of heavy amounts of noise.
-
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=2in]{cross-section-estimation/noiselessbeam(10x10x5).JPG}
-		\includegraphics[width=2in]{cross-section-estimation/newtonraphsonconvergence(10x10x5).JPG}
-	\caption[Demonstration of the Informed Shape Estimation algorithm on a simulated point cloud.]{\centering Demonstration of the Shape Estimation algorithm on a simulated beam of known dimensions 10x10x5" (left). The iterator converges to dimensions 10.67x10.55x4.87".}
-\end{figure}
 
 
 
@@ -487,72 +457,7 @@ Perhaps the simplest of the algorithms listed above, Euclidean distance clusteri
 
 Euclidean clustering occupies the lowest time complexity and memory space of it's unsupervised brethren, and does not require an expected bin-size.
 
-\subsubsection{Comparison of Methods}
 
- \begin{table}[!ht]
-     \centering
-           \caption[Comparison of Unsupervised clustering methods]{\centering Comparision of unsupervised clustering methods on various simulated point clouds}
-     \begin{tabular}{ | c | c | c | c | c | }
-     \hline
-      K-means & Fuzzy C-means & Agglomerative & Divisive & Euclidean \\ 
-      \hline
-      		\includegraphics[width=2cm]{2d-cluster-tests/k-means/concentric.jpg}
-      & 
-      		\includegraphics[trim={0 1cm 0 1cm},clip, width=2cm]{2d-cluster-tests/fcm/concentric.jpg}
-      & 
-      		\includegraphics[width=2cm]{2d-cluster-tests/agglomerative/concentric.jpg}
-      &
-
-      &
-      		\includegraphics[width=2cm]{2d-cluster-tests/euclidean-distance/concentric.jpg}
-      \\ \hline
-      
-            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/lines.jpg}
-      & 
-             \includegraphics[trim={0 1cm 0 0.5cm},clip,width=1.9cm]{2d-cluster-tests/fcm/lines.jpg}    
-      & 
-             \includegraphics[trim={0 1cm 0 0cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/lines.jpg}    
-      &
-
-      &
-             \includegraphics[trim={0 1cm 0 1cm},clip, width=1.5cm]{2d-cluster-tests/euclidean-distance/lines.jpg}    
-      \\ \hline
-      
-           \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/k-means/blob.jpg}
-      & 
-           \includegraphics[trim={0 0cm 0 0cm},clip,width=1.5cm]{2d-cluster-tests/fcm/blob.jpg} 
-      & 
-           \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/blob.jpg} 
-      &
-
-      &
-           \includegraphics[trim={0 0.5cm 0 0.25cm},clip,width=1.5cm]{2d-cluster-tests/euclidean-distance/blob.jpg} 
-      \\ \hline
-      
-            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/solid_circles.jpg}
-      & 
-            \includegraphics[width=1.5cm]{2d-cluster-tests/fcm/circles.jpg}
-      & 
-            \includegraphics[width=1.5cm]{2d-cluster-tests/agglomerative/solid_circles.jpg}
-      &
-
-      &
-            \includegraphics[width=1.5cm]{2d-cluster-tests/euclidean-distance/solid_circles.jpg}
-      \\ \hline
-      
-            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/plane.jpg}
-      & 
-            \includegraphics[trim={0 0cm 0 0.25cm},clip,width=1.75cm]{2d-cluster-tests/fcm/plane.jpg}
-      & 
-            \includegraphics[width=1.5cm]{2d-cluster-tests/agglomerative/plane.jpg}
-      &
-      
-      &
-            \includegraphics[width=1.5cm]{2d-cluster-tests/euclidean-distance/plane.jpg}
-      \\ \hline
-      
-      \end{tabular}
-      \end{table}
 
 
 \section{Converting a Discrete Point Cloud to a Bounded Area Surface Mesh}
@@ -621,6 +526,13 @@ Using these weighted concatenations, smooth surfaces are generated from a series
 		\includegraphics[width=2in]{cadTypes/nurbs.png}
 	\caption[Example of a 2-dimensional nurbs spline.]{\centering A 2-dimensional example of a nurbs spline. Green points represent the control points, $P$, black lines represent their connectivity, and the blue line represents one possible nurbs spline.}
 \end{figure}
+
+
+\subsection{CAD to Finite Element Conversion Compatibility}
+Most commercial CAD software subscribes to the boundary representation model to represent solid modeling objects. Converting a boundary representation -- a list of surface features and piece-wise shape functions --  to a solid volume of finite elements that accurately describe the connectivity of the object requires a series of user input parameters. Element type, linear material parameters (typically ASTM material standards), local mesh density, and load and boundary conditions.
+
+The crucial compatibility factor for B-REP solids is the absence of critical regions which cause stress singularities during the analysis. These regions can take the shape of sharp corners, spires, or point loads. They will not cause the mesh to fail, but return disproportionately massive stresses when compared with the stresses in the surrounding mesh. 
+
 
 
 \subsubsection{Delaunay Triangulation}
@@ -692,29 +604,6 @@ Using the Ball Pivoting Algorithm \cite{ballpivot}, a reconstruction is implemen
 
 At this point, the vertices of the smoothed mesh are recast to zero-scale ( their initial points in the point cloud). The result is a mesh built based on a smoothed input, with minimual noise reduction in the process \cite{RN67}.
 
-\begin{table}[h]
-\centering
-\caption[Effect of increasing scale in a scale space reconstruction]{Effect of increasing scale in a scale space reconstruction}
-\begin{tabular}{ | c | c | c | }
-\hline
-& \includegraphics[width=3cm]{l_block_pt_cloud.jpg}
-	Clean Point Cloud
-& \includegraphics[width=3cm]{l_block_pt_cloud10pnoise.jpg}
-	10\% Induced Noise
-\\
-\hline
-Scale Space 3 & \includegraphics[width=3cm]{scalespace/clean/scalespace3.png} & \includegraphics[width=3cm]{scalespace/10pnoise/scale3.png}
-\\
-\hline
-Scale Space 5 & \includegraphics[width=3cm]{scalespace/clean/scalespace5.png} & \includegraphics[width=3cm]{scalespace/10pnoise/scale5.png}
-\\
-\hline
-Scale Space 10 & \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} & \includegraphics[width=3cm]{scalespace/10pnoise/scale10.png}
-\\
-\hline
-\end{tabular}
-\end{table}
-
 \subsubsection{Hole Patching, Fairing, and Refinement}
 
 Surface meshes, defined in Section~\ref{subsubsec:surfdef}, contain vertices and faces. Inherently, they do not contain any methods to maintain a bounded volume. For this reason, it is necessary to detect discontinuities in the mesh, and develop a method to resolve them. Two types of mesh edges are defined in this section: A full edge, and a half edge.
@@ -749,7 +638,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 		\label{fig:meshquality}
 \end{figure}
 
-It is easy to categorize meshes by quality via visual inspection, but in order to resolve low quality areas autonomously, what it means to be "low quality" must be explicitly defined mathematically. Table~\ref{table:meshquality} lists some of the ratios to define a mesh's quality level. Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:meshquality}.
+In order to resolve low quality areas autonomously, what it means to be "low quality" must be explicitly defined mathematically. Table~\ref{table:meshquality} lists some of the ratios to define a mesh's quality level. Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:meshquality}.
 
 \begin{table}[!ht]
 	\centering
@@ -796,7 +685,10 @@ To define an optimal triangulation, given a continuous convex function $f$ on $\
 While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN63}. 
 
 \subsubsection{Mesh Exudation}
-Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}. 
+Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}.
+
+
+
 
 
 
@@ -815,7 +707,7 @@ Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  s
 \label{chap:purposestatement}
 
 \section{Research Objective}
-The objective of this thesis is to develop and validate a software pipeline capable of segmenting point cloud data of some expected density $\rho$ and within some accuracy tolerance $\sigma$ into clusters of meaningful shapes, and convert the resulting clusters into surface meshes valid for conversion to simply connected volumes. The research described in this thesis is inarguably very wide in application and scope, but is geared specifically towards Structural Health Monitoring and Non-Destructive Test and Analysis. The results of this Master's thesis are a proving ground for rapid scanning, meshing, and analysis of real-world objects.
+The objective of this thesis is to develop and validate a software pipeline capable of segmenting point cloud data of some expected density $\rho$ and within some accuracy tolerance $\sigma$ into clusters of meaningful shapes, and convert the resulting clusters into surface meshes valid for conversion to simply connected volumes capable of being inputs to Finite Element simulations.
 
 \section{Hypothesis Statement}
 The claims made in this thesis are the following:
@@ -860,24 +752,6 @@ The Velodyne HDL-32E is a high end LiDAR device capable of collecting 700,000 po
 
 As described in Section~\ref{subsec:explicit} of the introduction, LiDAR devices provide explicit distance feedback in spherical coordinates, where each point is defined by $\phi$, its angle about the $z$-axis, $\theta$, its angle about the $y$-axis, and $r$, the absolute distance from the sensor. The return can be classified as ordered data, and easily mimicked in simulation by creating a series of solid objects, simulating the output of the LiDAR, and simulating the LiDAR motion. This allows for fast simulation of point cloud collection with varying levels of noise, occlusion, and sample rate.
 
-To simulate noise in the LiDAR scans, it is a simple matter of adding the measured uncertainty to distance metrics collected by the simulated sensor. It should be noted that to reduce computation time, no continuous surfaces are created, and the simulation relies on nearest cross product distances of points in the cloud to determine the sensor data return. An unfortunate artifact of this method is the inability to guarantee correct occlusion effects, as simulated rays can be cast through a continuous object created by a discrete pointset of non-infinite density. Figure~\ref{lidarsim:100psample} shows the collection capabilities of the HDL-32E at 100\% sampling rate. There are 73,175 point inside the cloud.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=3in]{simulated-lab-scan/lidarSim/100psample.png}
-	\caption[Simulated LiDAR scan at 100\% sampling rate]{\centering Simulated LiDAR scan of the virtual lab point cloud at 100\% sampling rate. The red trail shows the collection path of the sensor.}
-	\label{lidarsim:100psample}
-\end{figure}
-
-In the test run in this thesis, only one in every five LiDAR scan frames are used in the post-processing steps. The true LiDAR scan data is therefor reduced to 20\% of the original sample set. This is mainly due to redundancy and unwieldy cloud sizes (700,000 points per second becomes unruly in a very short period of time). Figure~\ref{lidarsim:20psample} shows the result of the simulation at 20\% sampling rate. There are 18,973 points in the cloud shown below. It is likely the true scan data will contain many more points before being downsampled due to redundant point collection. The algorithm built here does not include the same target point more than once.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=3in]{simulated-lab-scan/lidarSim/20psample.png}
-	\caption[Simulated LiDAR scan at 20\% sampling rate]{\centering Simulated LiDAR scan of the virtual lab point cloud at 20\% sampling rate. The red trail shows the collection path of the sensor.}
-	\label{lidarsim:20psample}
-\end{figure}
-
 The LiDAR is fixed to a mobile table of fixed height during the collection process. This means the amount of acquireable data on the beam's shape is severely limited. In Section~\ref{results:realscan}, the effects of this scanning technique can be seen in the lack of thickness data on the horizontal portion of the beam.
 
 \begin{figure}[!ht]
@@ -886,24 +760,12 @@ The LiDAR is fixed to a mobile table of fixed height during the collection proce
 		\caption[Velodyne LiDAR Operation]{\centering Visualization of how to the Velodyne HDL-32E operates.}
 \end{figure}
 
-Figure~\ref{technical:lidarcompare} shows a comparison between a single frame of simulated HDL-32E LiDAR data and a true scan with the device. The simulation proves to be quite similar in results to the true scans, which will prove to be useful for future endeavors beyond this one.
+Individual scans are iteratively concatenated in the manner described in Figure~\ref{technical:lidarcompare}. At each iteration, a new frame is loaded, and the Intrinsic Shape Signature map for the cloud is generated. Using a RANSAC fitting algorithm, the transformation between the newest frame and the previous frame is calculated, and added to the global transformation matrix. The new frame is transformed and added to the global cloud. This technique allows for comparison of only two frames at a time, instead of having to calculation the Intrinsic Shape Signature map of the concatenated point cloud, which increases in size at each iteration.
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{cloudCollection/lidar5frames.png}
-		% \includegraphics[width=2in]{cloudCollection/lidarSimulatedCollection.JPG}
-		%[[add a decent simulated collection figure]]
-
-	\caption[Comparison of simulated and real HDL-32E scan data]{\centering Comparison of simulated and real HDL-32E scan data.}
-	\label{technical:lidarcompare}
-\end{figure}
-
-The individual scans are iteratively concatenated in the manner described in Figure~\ref{technical:lidarcompare}. At each iteration, a new frame is loaded, and the Intrinsic Shape Signature map for the cloud is generated. Using a RANSAC fitting algorithm, the transformation between the newest frame and the previous frame is calculated, and added to the global transformation matrix. The new frame is transformed and added to the global cloud. This technique allows for comparison of only two frames at a time, instead of having to calculation the Intrinsic Shape Signature map of the concatenated point cloud, which increases in size at each iteration.
-
-\begin{figure}[!ht]
-	\centering
-		%flow chart of cloud concatenation process
-	\caption[Flow chart of point cloud concatenation process.]{\centering Flow chart of point cloud concatenation process.}
+		\includegraphics[width=6in]{cloudCollection/cloud_concatenation.png}
+		\caption[Flow chart of point cloud concatenation process.]{\centering Flow chart of point cloud concatenation process.}
 	\label{technical:lidarcompare}
 \end{figure}
 
@@ -916,34 +778,170 @@ Stereogrammetry and Photogrammetry are both highly dependent on the camera quali
 To mesh a point cloud object properly, the object must be isolated robustly from the point cloud. This section deals with the discovery of the most effective and robust methods for segmentation of unordered point cloud into meaningful clusters in an entirely automated way.
 
 As a result, the methods evaluated in this thesis are reserved purely to those which are classified as unsupervised. Selected based on potential success, popularity, and ease of implementation, the following segmentation methods are analyzed in Chapter~\ref{chap:results}: K-Means Clustering, Fuzzy C-Means Clustering, Euclidean Distance Clustering, and Agglomerative Hierarchical Clustering.
-\end{enumerate}
+
 
 Detailed descriptions of how these algorithms operate, as well as general use cases and a list of pros and cons, can be found in Section~\ref{sec:machinelearning}. Each method is applied to the simulated datasets, and their results are visualized. Based on observation, an optimal clustering method is found and the resulting segments are run through the meshing and optimization phase of the algorithm.
 
+\subsubsection{Comparison of Methods}
+
+ Table~\ref{table:segcomparison} shows a brief comparison of how each of the methods described above act on a series of 2-dimensional control point clouds with various shape characterisics.
+
+ \begin{table}[!ht]
+     \centering
+           \caption[Comparison of Unsupervised clustering methods]{\centering Comparision of unsupervised clustering methods on various simulated point clouds}
+     \begin{tabular}{ | c | c | c | c | }
+     \hline
+      K-means & Fuzzy C-means & Agglomerative & Euclidean \\ 
+      \hline
+      		\includegraphics[width=2cm]{2d-cluster-tests/k-means/concentric.jpg}
+      & 
+      		\includegraphics[trim={0 1cm 0 1cm},clip, width=2cm]{2d-cluster-tests/fcm/concentric.jpg}
+      & 
+      		\includegraphics[width=2cm]{2d-cluster-tests/agglomerative/concentric.jpg}
+      &
+
+
+      		\includegraphics[width=2cm]{2d-cluster-tests/euclidean-distance/concentric.jpg}
+      \\ \hline
+      
+            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/lines.jpg}
+      & 
+             \includegraphics[trim={0 1cm 0 0.5cm},clip,width=1.9cm]{2d-cluster-tests/fcm/lines.jpg}    
+      & 
+             \includegraphics[trim={0 1cm 0 0cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/lines.jpg}    
+
+
+      &
+             \includegraphics[trim={0 1cm 0 1cm},clip, width=1.5cm]{2d-cluster-tests/euclidean-distance/lines.jpg}    
+      \\ \hline
+      
+           \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/k-means/blob.jpg}
+      & 
+           \includegraphics[trim={0 0cm 0 0cm},clip,width=1.5cm]{2d-cluster-tests/fcm/blob.jpg} 
+      & 
+           \includegraphics[trim={0 1cm 0 1cm},clip,width=1.5cm]{2d-cluster-tests/agglomerative/blob.jpg} 
+
+
+      &
+           \includegraphics[trim={0 0.5cm 0 0.25cm},clip,width=1.5cm]{2d-cluster-tests/euclidean-distance/blob.jpg} 
+      \\ \hline
+      
+            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/solid_circles.jpg}
+      & 
+            \includegraphics[width=1.5cm]{2d-cluster-tests/fcm/circles.jpg}
+      & 
+            \includegraphics[width=1.5cm]{2d-cluster-tests/agglomerative/solid_circles.jpg}
+
+
+      &
+            \includegraphics[width=1.5cm]{2d-cluster-tests/euclidean-distance/solid_circles.jpg}
+      \\ \hline
+      
+            \includegraphics[width=1.5cm]{2d-cluster-tests/k-means/plane.jpg}
+      & 
+            \includegraphics[trim={0 0cm 0 0.25cm},clip,width=1.75cm]{2d-cluster-tests/fcm/plane.jpg}
+      & 
+            \includegraphics[width=1.5cm]{2d-cluster-tests/agglomerative/plane.jpg}
+    
+      &
+            \includegraphics[width=1.5cm]{2d-cluster-tests/euclidean-distance/plane.jpg}
+      \\ \hline
+      
+	  \end{tabular}
+	  \label{table:segcomparison}
+      \end{table}
+
 \subsection{Initial Mesh Exploration}
 
-There are two algorithms for the initial mesh construction intended for evaluation in this thesis: Scale Space Reconstruction and Avancing Front. Advancing front provides no robustness to noise or occlusion in the dataset, but guarantees no overlapping faces, so could be viable with the addition of hole patching and the optimization stage. Scale Space Reconstruction, on the other hand, is designed specifically for handling noisey, variable density datasets. It does not prevent overlapping elements, so removal of these elements must be added to the pipeline for this case. It should also be noted that because of Scale Space Reconstruction's casting steps (described in Section~\ref{subsec:meshing}), it is far more computationally expensive than the Advancing Front method.
+There are two algorithms for the initial mesh construction intended for evaluation in this thesis: Scale Space Reconstruction and Avancing Front. Advancing front provides no robustness to noise or occlusion in the dataset, but guarantees no overlapping faces, so could be viable with the addition of hole patching and the optimization stage. Scale Space Reconstruction, on the other hand, is designed specifically for handling noisey, variable density datasets. It does not prevent overlapping elements, so removal of these elements must be added to the pipeline for this case. It should also be noted that because of Scale Space Reconstruction's casting steps (described in Section~\ref{subsec:meshing}), it is far more computationally expensive than the Advancing Front method. Table~\ref{table:intialmeshcompare} provides some visiualization of the effect of casting a mesh to varying scales.
 
-These methods are evaluated on their abilities to create comprehensive surface areas and their quality metrics after hole patching and refinement.
+\begin{table}[!ht]
+	\centering
+	\caption[Effect of increasing scale in a scale space reconstruction]{Effect of increasing scale in a scale space reconstruction}
+	\begin{tabular}{ | c | c | c | }
+	\hline
+	Input Clouds 	& \includegraphics[width=3cm]{l_block_pt_cloud.jpg}
+					& \includegraphics[width=3cm]{l_block_pt_cloud10pnoise.jpg}
+	\\
+	\hline
+	Scale Space 3 	& \includegraphics[width=3cm]{scalespace/clean/scalespace3.png} 
+					& \includegraphics[width=3cm]{scalespace/10pnoise/scale3.png}
+	\\
+	\hline
+	Scale Space 5 	& \includegraphics[width=3cm]{scalespace/clean/scalespace5.png} 
+					& \includegraphics[width=3cm]{scalespace/10pnoise/scale5.png}
+	\\
+	\hline
+	Scale Space 10 	& \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
+					& \includegraphics[width=3cm]{scalespace/10pnoise/scale10.png}
+	\\
+	\hline
+	\end{tabular}
+	\label{table:intialmeshcompare}
+	\end{table}
+	
+
+Each of these methods are evaluated by their abilities to create comprehensive surface areas and their quality metrics after hole patching and refinement.
 
 \subsection{Optimization Steps}
 
 The goal of the optimization process is to remedy or remove any elements in the mesh that violate the criteria for volumetric conversion compatibility. These criteria are defined in Section~\ref{subsec:meshoptimization}. Each step in the optimization pipeline specializes in modifying specific characteristics of the mesh which can be defined as having low quality using the metrics in Section~\ref{subsec:meshoptimization}.
 
-The first step in the optimization process is Lloyd Optimization, or Voronoi Relaxation. LLoyd optimization seeks to resolve triangulations with low [[add quality metrics resolved by lloyd optimization]]. Lloyd Optimization comes with the caveat that it moves the location of the shape vertices, so this step comes at the cost of modifying the topology collected directly by the sensor. Depending on the accuracy of the collection instrument, this can be either a curse or a blessing.
+The first step in the optimization process is voronoi relaxation. voronoi relaxation seeks to resolve triangulations with low [[add quality metrics resolved by voronoi relaxation]]. voronoi relaxation comes with the caveat that it moves the location of the shape vertices, so this step comes at the cost of modifying the topology collected directly by the sensor. Depending on the accuracy of the collection instrument, this can be either a curse or a blessing.
 
-The next step is the Optimized Delaunay Triangulation method. ODT is another relaxation method capable of modifying the object's topology in order to increase the overall quality of the mesh. Between Lloyd Optimization and ODT, every quality metric should -- while not guaranteed to be so -- be within the tolerance set by the exit conditions applied, with the exception of slivers. To remedy these, perturbation and exudation are necessary.
+The next step is the Optimized Delaunay Triangulation method. ODT is another relaxation method capable of modifying the object's topology in order to increase the overall quality of the mesh. Between voronoi relaxation and ODT, every quality metric should -- while not guaranteed to be so -- be within the tolerance set by the exit conditions applied, with the exception of slivers. To remedy these, perturbation and exudation are necessary.
 
-Perturbation and exudation are included in the pipeline of algorithm for two reasons. The first being that both Lloyd Optimization and ODT are quality improving algorithms for all of the parameters listed in Section~\ref{subsec:meshoptimization}, except for slivers. Perturbation and Exudation both specialize in the removal of these tetrahedra. The second reason is to relieve the effects ODT often has on the mesh. ODT can have a ``pock-marking'' effect upon the mesh, as it optimizes using delaunay radii as a cost function, and this often means vertices are shifted towards the interior of the surface mesh. 
+Perturbation and exudation are included in the pipeline of algorithm for two reasons. The first being that both voronoi relaxation and ODT are quality improving algorithms for all of the parameters listed in Section~\ref{subsec:meshoptimization}, except for slivers. Perturbation and Exudation both specialize in the removal of these tetrahedra. The second reason is to relieve the effects ODT often has on the mesh. ODT can have a ``pock-marking'' effect upon the mesh, as it optimizes using delaunay radii as a cost function, and this often means vertices are shifted towards the interior of the surface mesh. 
  
 
 \subsection{Final Mesh Verification}
 
-The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has in-built functionality to convert surface meshes to boundary representations and bounded volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the true object.
+The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has in-built functionality to convert surface meshes to boundary representations and subsequently finite element volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the object.
 
 
 
 
+\subsection{Occlusion Correction}
+\label{subsubsec:informedshape}
+Occlusion is the cause of two main problems. The first being the unnecessary information provided by objects blocking the instruments view to the desired target, which is dealt with via the diffusion of objects from the foreground into the background via the range segmentation method show in the previous section. The second --- far more relevant to the approach outlined in this thesis --- is the lack of complete information provided by the sensor. This can be most easily explained by making an analogy to photography. If one takes a picture of the front of a box, there is no possible way to say with certainty what the back of the box looks like. In 3D point processing, the problem is the same. Informed shape estimation attempts to tackle this problem by applying a shape with known parameters to the object point cloud and modifying the shape parameters to minimize the following cost function:
+
+\begin{equation}
+	C = \sum_{i=0}^{N}{p(i) - p_{proj}(i)}
+\end{equation}
+
+Where $N$ represents the number of points in the set, $p(i)$ represents the $i^{th}$ point in the set, and $p_{proj}(i)$ represents the closest point on the applied shape who's unit normal vector matches within some tolerance, $\tau$.
+
+\begin{equation}
+	p_{proj}(i) = arg_{min} \frac{p(i) \bullet l(j)}{||l(j)||} \in p_{normal}(i) \bullet l_{normal}(j) \geq \tau
+\end{equation}
+
+\begin{equation}
+	\label{eq:newtonraph}
+	x_{k+1} = x_{k} - \frac{C(x_{k})}{C'(x_{k})}
+\end{equation}
+
+Using a Newton Raphson interative regression, shown in equation \ref{eq:newtonraph} the cross section parameters are modified to minimize the cost required to projection points to the estimated surface. This technique is iterated throughout the long axis of the object, allowing for crucial information such as deformation to be retained. The power in this method is in it's ability to fill information in heavily occluded areas, at the cost of having a narrow scope. Informed shape estimation makes the following assumptions:
+
+\begin{enumerate}
+	\item Objection deformation is planar. Calculating the length plane removes the information involving multi-axial deformation.
+	\item Cross-section is undamaged thoughout the length of the object. Information regarding damage which alters the objects cross section will be lost when points are projected to the estimated cross section.
+	\item The target object can be defined via simple parameters such as length, height, width, and thickness.
+\end{enumerate}
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=5in]{cross-section-estimation/flowchart.png}
+	\caption[Flow chart of informed shape estimation algorithm]{\centering A flow chart of the informed shape estimation algorithm.}
+\end{figure}
+
+In many object scanning situations, it is not unreasonable to assume the cross-section of the object is known. Forcing the point cloud to conform to a uniform shape allows for avoidance of heavy amounts of noise.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{cross-section-estimation/noiselessbeam(10x10x5).JPG}
+		\includegraphics[width=2in]{cross-section-estimation/newtonraphsonconvergence(10x10x5).JPG}
+	\caption[Demonstration of the Informed Shape Estimation algorithm on a simulated point cloud.]{\centering Demonstration of the Shape Estimation algorithm on a simulated beam of known dimensions 10x10x5" (left). The iterator converges to dimensions 10.67x10.55x4.87".}
+\end{figure}
 
 
 
@@ -956,6 +954,7 @@ The final verification of the meshes output by the algorith occurs in two stages
 %Chapter			Results
 \chapter{Results}
 \label{chap:results}
+
 \section{Simulated Data: Zero Noise}
 The first instance of the algorithm is the control set, and first step in the ground-up development of the pipeline. There is no noise induced in the system, and all objects are significantly separated in 3-dimensional space. Figure~\ref{zeronoise:raw} shows the point cloud. The total number of points in the cloud is [[insert number of points]], average point to point distance is [[insert point to point distance]], and beam point-to-point distance is [[insert beam point to point distance]]. Beam dimensions are 3.048m (10ft) with a cross-section of the following specifications:
 
@@ -1060,6 +1059,23 @@ Figure~\ref{zeronoise:scalespace15} shows the extremes of what the scale space r
 \end{figure}
 
 In the zero noise case, Advancing Front reconstruction proves to be the most accurate to the beam's dimensions. However, as seen in future sections, this method is not robust to noise. Both of these statements are unsurprising, as this reconstruction method does not modify the topology defined by the pointset provided, and therefor directly represents the shape defined by the input cloud.
+
+\begin{table}[!ht]
+	\centering
+		\caption[Zero noise initial mesh quality]{Initial quality analysis of simulated zero noise surface mesh.}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Advacing Front & 0.0548 & 0.2916 & 0.0270 & 0.0274 & 1 & Yes
+			\\ \hline Scale Space 2  & 0.0577 & 0.0665 & 0.0082 & 0.0587 & 1 & No
+			\\ \hline Scale Space 4  & 0.0038 & 0.0185 & 0.0005 & 0.0035 & 1 & No
+			\\ \hline Scale Space 15 & 0.0022 & 0.0186 & 0.0002 & 0.0015 & 1 & No
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:zeronoiseInit}
+\end{table}
 
 \subsection{Optimization}
 \subsubsection{Effects of Voronoi Relaxation}
@@ -1211,17 +1227,36 @@ The scale space reconstruction in the zero noise case is interesting. In future 
 
 
 
-% \begin{figure}[!ht]
-% 	\centering
-% 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything00.png}
-% 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything01.png}
-% 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything02.png}
-% 		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything03.png}
-% 		\caption[Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
-% 	\label{zeronoise:scalespace4everything}
-% \end{figure}
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything00.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimized/scalespace4everything02.png}
+		\includegraphics[width=3in]{simulated-lab-scan/0noise/optimized/scalespace4everything03.png}
+		\caption[Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
+	\label{zeronoise:scalespace4everything}
+\end{figure}
 
+\subsection{Quality Analysis}
 
+\begin{table}[!ht]
+	\centering
+		\caption[Zero noise mesh exit quality]{Exit quality analysis of simulated zero noise surface mesh}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Initial Advacing Front & 0.0548 & 0.2916 & 0.0270 & 0.0274 & 1 & Yes
+			\\ \hline Optimized Advancing Front & 0.3096 & 0.1910 & 1.333  & 0.1548 & 1 & Yes
+			\\ \hline Initial Scale Space 2  & 0.0577 & 0.0665 & 0.0082 & 0.0587 & 1 & No
+			\\ \hline Optimized Scale Space 2   & 0.0072 & 0.1085 & 0.0035 & 0.0037 & 1 & No
+			\\ \hline Initial Scale Space 4  & 0.0038 & 0.0185 & 0.0005 & 0.0035 & 1 & No
+			\\ \hline Optimized Scale Space 4   & 0.0031 & 0.0786 & 0.0016 & 0.0016 & 1 & No
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:0noisequality}
+\end{table}
 
 
 
@@ -1237,7 +1272,27 @@ The scale space reconstruction in the zero noise case is interesting. In future 
 
 \section{Simulated Data: Applied Gaussian noise $\pm 2 cm$}
 
-This section delves into the effect of noise introduced into the simulation data on the meshing and segmentation algorithms. Specifically, the aim is to determine how well each step of the process holds up to noise introduction, and make definitive decisions on the pipeline and parameters required at every step. 
+This section delves into the effect of noise introduced into the simulation data on the meshing and segmentation algorithms. Specifically, the aim is to determine how well each step of the process holds up to noise introduction, and make definitive decisions on the pipeline and parameters required at every step.
+
+To simulate noise in the LiDAR scans, it is a simple matter of adding the measured uncertainty to distance metrics collected by the simulated sensor. It should be noted that to reduce computation time, no continuous surfaces are created, and the simulation relies on nearest cross product distances of points in the cloud to determine the sensor data return. An unfortunate artifact of this method is the inability to guarantee correct occlusion effects, as simulated rays can be cast through a continuous object created by a discrete pointset of non-infinite density. Figure~\ref{lidarsim:100psample} shows the collection capabilities of the HDL-32E at 100\% sampling rate. There are 73,175 point inside the cloud.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=3in]{simulated-lab-scan/lidarSim/100psample.png}
+	\caption[Simulated LiDAR scan at 100\% sampling rate]{\centering Simulated LiDAR scan of the virtual lab point cloud at 100\% sampling rate. The red trail shows the collection path of the sensor.}
+	\label{lidarsim:100psample}
+\end{figure}
+
+In the experimental test run in this thesis, only one in every five LiDAR scan frames are used in the post-processing steps. The true LiDAR scan data is therefor reduced to 20\% of the original sample set. This is mainly due to redundancy and unwieldy cloud sizes (700,000 points per second becomes unruly in a very short period of time). Figure~\ref{lidarsim:20psample} shows the result of the simulation at 20\% sampling rate. There are 18,973 points in the cloud shown below. It is likely the true scan data will contain many more points before being downsampled due to redundant point collection. The algorithm built here does not include the same target point more than once.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=3in]{simulated-lab-scan/lidarSim/20psample.png}
+	\caption[Simulated LiDAR scan at 20\% sampling rate]{\centering Simulated LiDAR scan of the virtual lab point cloud at 20\% sampling rate. The red trail shows the collection path of the sensor.}
+	\label{lidarsim:20psample}
+\end{figure}
+
+
 
 \begin{figure}[!ht] 
 	\centering
@@ -1309,17 +1364,21 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 		\label{2cmnoise:scalespace4}
 \end{figure}
 
-% Scale Space 15 is w
-
-% \begin{figure}[!ht]
-	
-% 	\centering
-% 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1500.png}
-% 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1501.png}
-% 		\includegraphics[width=2.5in]{simulated-lab-scan/2cmnoise/2cmmesh/scalespace1502.png}
-% 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
-% 		\label{2cmnoise:scalespace15}
-% \end{figure}
+\begin{table}[!ht]
+	\centering
+		\caption[Two centimeter noise induced initial mesh quality]{Initial quality analysis of simulated 2 centimeter noise surface mesh.}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Advacing Front & 0.1518 & 0.0877 & 0.0133 & 0.0924 & 314	& No
+			\\ \hline Scale Space 2  & 0.0402 & 0.0594 & 0.0088 & 0.0259 & 1	& Yes
+			\\ \hline Scale Space 4  & 0.0080 & 0.0592 & 0.0035 & 0.0043 & 1	& No
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:2cmnoiseInit}
+\end{table}
 
 
 
@@ -1440,7 +1499,24 @@ Scale space 4 exaggerates the parabolic shape of the beam even more than scale s
 	\label{2cmnoise:scalespace4everything}
 \end{figure}
 
+\subsection{Quality Analysis}
 
+\begin{table}[!ht]
+	\centering
+		\caption[Induced noise mesh exit quality]{Exit quality analysis of simulated 2 centimeter noise surface mesh.}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Initial Scale Space 2  	& 0.0402 & 0.0594 & 0.0088 & 0.0259 & 1	& Yes
+			\\ \hline Optimized Scale Space 2 	& 0.1367 & 0.1077 & 0.0147 & 0.0955 & 1 & Yes
+			\\ \hline Initial Scale Space 4  	& 0.0080 & 0.0592 & 0.0035 & 0.0043 & 1	& No
+			\\ \hline Optimized Scale Space 4 	& 0.1166 & 0.1444 & 0.0552 & 0.0595 & 1 & Yes
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:2cmnoisequality}
+\end{table}
 
 
 
@@ -1480,7 +1556,7 @@ Concatenating the frames recorded over the entire 30 second test would result in
 	\label{lidarresults:concatenated}
 \end{figure}
 
-The same filtering method as the previous sections is applied to the concatenated point cloud, resulting in the much cleaner looking point cloud shown in Figure~\ref{lidarresults:filtered}. The result of the concatenation and filtering is sufficient to move on to the segmentation step. It is hard to see in the full concatenation, but the effects of concatenating multiple frames without using instrument location/pose data becomes apparent when isolating the beam.
+The same filtering method as the previous sections is applied to the concatenated point cloud, resulting in the much cleaner looking point cloud shown in Figure~\ref{lidarresults:filtered}. The result of the concatenation and filtering is sufficient to move on to the segmentation step. The full concatenation images do not sufficiently show the accrued uncertainty in the point cloud, but the effects of concatenating multiple frames without using instrument location/pose data becomes apparent when the beam is isolated.
 
 \begin{figure}[!ht]
 	\centering
@@ -1547,14 +1623,30 @@ Reducing the input point cloud to scale space 4 provides similar results to scal
 	\label{lidar:scalespace4}
 \end{figure}
 
+\begin{table}[!ht]
+	\centering
+		\caption[HDL-32E LiDAR scan initial mesh quality]{Quality analysis of initial meshing methods.}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Advacing Front & 0.1446 & 0.1072 & 0.0419 & 0.0849 & 28	& No
+			\\ \hline Scale Space 2  & 0.0175 & 0.0524 & 0.0066 & 0.0093 & 2	& No
+			\\ \hline Scale Space 4  & 0.0117 & 0.0562 & 0.0057 & 0.0059 & 2	& No
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:realInit}
+\end{table}
+
 
 \subsection{Optimization}
 
 Unlike the simulated cases, none of the initial methods for the LiDAR collection dataset produce fully compatible meshes on a first pass. This is undoubtedly due to the incorporation of occlusion in the dataset. The steps involved in the optimization process smooth the input meshes which meet the baseline criteria of having a single surface area to volumetric conversion compatible surface meshes, but the topology of the resulting mesh is not indicative of the true beam shape. To maintain the true shape, more informative point cloud data is necessary, or informed shape estimation must be used to rebuild the mesh to be more indicative of it's true to life properties.
 
-\subsubsection{Effects of LLoyd Optimization}
+\subsubsection{Effects of Voronoi Relaxation}
 
-As in previous sections, the first step in the optimization process is Lloyd optimization -- otherwise known as voronoi relaxation. This is the last step incorporating the advancing front mesh, as it is clear this method is not optimal for non-ideal point clouds. Figure~\ref{lidar:advancefrontlloyd} shows the results of lloyd optimization on the advancing front mesh.
+As in previous sections, the first step in the optimization process is voronoi relaxation -- otherwise known as voronoi relaxation. This is the last step incorporating the advancing front mesh, as it is clear this method is not optimal for non-ideal point clouds. Figure~\ref{lidar:advancefrontlloyd} shows the results of voronoi relaxation on the advancing front mesh.
 
 \begin{figure}[!ht]
 	\centering
@@ -1567,7 +1659,7 @@ As in previous sections, the first step in the optimization process is Lloyd opt
 	\label{lidar:advancefrontlloyd}
 \end{figure}
 
-The effect of Lloyd optimization on a mesh is the redistribution of surface area throughout the mesh triangulations. The exit conditions for relaxation is convergence of mesh centroids. Figure~\ref{lidar:scalespace2lloyd} demonstrates what a lloyd optimization does for the LiDAR collected point cloud after being reconstructed at a scale space of 2.
+The effect of voronoi relaxation on a mesh is the redistribution of surface area throughout the mesh triangulations. The exit conditions for relaxation is convergence of mesh centroids. Figure~\ref{lidar:scalespace2lloyd} demonstrates what a voronoi relaxation does for the LiDAR collected point cloud after being reconstructed at a scale space of 2.
 
 \begin{figure}[!ht]
 	\centering
@@ -1580,7 +1672,7 @@ The effect of Lloyd optimization on a mesh is the redistribution of surface area
 	\label{lidar:scalespace2lloyd}
 \end{figure}
 
-After running the Lloyd optimization on the reconstruction at scale 4, the differences in the meshes between scales becomes more apparent. The evenly distributed surface defines a rectangular prism, the horizontal section of the beam merges into it's vertical face. [[Second image on the left]] shows the phenomenon in detail, in Figure~\ref{lidar:scalespace4lloyd}.
+After running the voronoi relaxation on the reconstruction at scale 4, the differences in the meshes between scales becomes more apparent. The evenly distributed surface defines a rectangular prism, the horizontal section of the beam merges into it's vertical face. [[Second image on the left]] shows the phenomenon in detail, in Figure~\ref{lidar:scalespace4lloyd}.
 
 \begin{figure}[!ht]
 	\centering
@@ -1608,7 +1700,7 @@ After running the Lloyd optimization on the reconstruction at scale 4, the diffe
 	\label{lidar:scalespace2lloydodt}
 \end{figure}
 
-It is hard to spot the differences in the mesh before and after ODT is applied, but the changes are visible. In Figure~\ref{lidar:scalespace4lloydodt} the mesh can be seen after the ODT optimization step. The main differences here are in the [[define the main differences in terms of what ODT does]]
+The differences in the mesh before and after ODT is applied are subtle, but the changes are visible. In Figure~\ref{lidar:scalespace4lloydodt} the mesh can be seen after the ODT optimization step. The main differences here are in the [[define the main differences in terms of what ODT does]]
 
 \begin{figure}[!ht]
 	\centering
@@ -1650,20 +1742,7 @@ The reconstruction at scale space 4 again shows similar results to the scale spa
 
 \subsubsection{Exudation}
 
-Exudation represents the final step in the optimization process, and the complete surface mesh to be exported to a volumetric conversion software. Analyzing the final results, it is clear -- unsurprisingly -- that the quality and completeness of the input point cloud is crucial in developing a mesh topology that is both volumetrically compatibility and accurately defining of the shapes true parameters. After the exudation step, the meshes shown in Figures~\ref{lidar:scalespace2everything} and \ref{lidar:scalespace4everything} have the characteristics described in Table~\ref{table:lidarexitcharacteristics} below.
-
-\begin{table}[!ht]
-	\centering
-		\caption[LiDAR exit surface mesh characteristics]{Exit characteristics of optimized surface mesh}
-		\begin{tabular}{ | c | c | }
-			\hline
-			\\ Minimum facet angle & 20\textdegree
-			\\ \hline Minimum facet area & 0.25 $in^{2}$
-			\\ \hline Minimum facet edge length & 0.05 $in$ 
-			\\ \hline
-	\end{tabular}
-	\label{table:lidarexitcharacteristics}
-\end{table}
+Exudation represents the final step in the optimization process, and the complete surface mesh to be exported to a volumetric conversion software. Analyzing the final results, it is clear -- unsurprisingly -- that the quality and completeness of the input point cloud is crucial in developing a mesh topology that is both volumetrically compatibility and accurately defining of the shapes true parameters. After the exudation step, the meshes shown in Figures~\ref{lidar:scalespace2everything} and \ref{lidar:scalespace4everything} have the quality and failure metrics shown in Table~\ref{table:realquality}.
 
 
 
@@ -1689,6 +1768,65 @@ Exudation represents the final step in the optimization process, and the complet
 		\caption[The full suite of optimization steps on the LiDAR reconstruction at $S$=4.]{\centering The full suite of optimization steps on the LiDAR reconstruction at $S$=4.}
 	\label{lidar:scalespace4everything}
 \end{figure}
+
+\subsection{Quality Analysis}
+
+\begin{table}[!ht]
+	\centering
+		\caption[Experimental scan exit characteristics]{Exit quality analysis of experimental beam scan.}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Initial Scale Space 2 	& 0.0175 	& 0.0524 & 0.0066 & 0.0093 	& 2	& No
+			\\ \hline Optimized Scale Space 2 	& 0.2629  	& 0.1941 & 0.1099 & 0.1418 	& 2	& No
+
+			\\ \hline Initial Scale Space 4  	& 0.0117	& 0.0562 & 0.0057 & 0.0059 	& 2	& No
+			\\ \hline Optimized Scale Space 4 	& 0.2143	& 0.1229 & 0.0558 & 0.1087 	& 2 & No
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:realquality}
+\end{table}
+
+The end result of the algorithm on the experimental data, when fully automated, is failure. However, this is not due to overlapping tetrahedra or an unbounded area, but instead because of the single point linkage between the two bounded surfaces both optimized meshes produce. By removing the small surface located at the bottom of the far right end of the beam, the resulting quality metrics are shown in Table~\ref{table:realmodified} below.
+
+\begin{table}[!ht]
+	\centering
+	
+		\caption[Experimental scan exit characteristics after manual modification]{Exit quality analysis of experimental beam scan after manual modification.}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+			\hline
+			 Initial Mesh type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & Successful Conversion
+			\\ \hline Optimized Scale Space 2 	& 0.2629  	& 0.1941 & 0.1099 & 0.1418 	& 1	& No
+			\\ \hline Optimized Scale Space 4 	& 0.2143	& 0.1229 & 0.0558 & 0.1087 	& 1 & Yes
+			\\ \hline
+	\end{tabular}}
+	Quality values shown represent the absolute minima in each category.
+	\label{table:realquality}
+\end{table}
+
+The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}.
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace2Modified00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace2Modified01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace2Modified02.png}
+	\caption[Modified optimized surface mesh at scale space 2.]{\centering Manually corrected optimized scale space 2 reconstruction. [[Compare with Figure~\ref{lidar:scalespace2everything}.]]}
+	\label{real:modified2}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace4Modified00.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace4Modified01.png}
+		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace4Modified02.png}
+	\caption[Modified optimized surface mesh at scale space 4.]{\centering Manually corrected optimized scale space 4 reconstruction. [[Compare with Figure~\ref{lidar:scalespace4everything}.]]}
+	\label{real:modified4}
+\end{figure}
+
 
 
 \section{Informed Shape Estimation}
@@ -1720,9 +1858,8 @@ While the simulated point clouds provide information for the entirety of the L-b
 %Chapter: 		Conclusion
 \chapter{Conclusion}
 \label{chap:conclusion}
-[[add boundary representation images,
-finite element mesh tests,
-Quality metric Analysis]]
+[[add boundary representation images and
+finite element mesh comparisons]]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
