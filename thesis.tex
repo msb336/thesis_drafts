@@ -24,7 +24,7 @@
 
 \graphicspath{{images/}}
 
-\title{Automated Conversion of 3D Point Clouds to Finite Element Analysis Compatible Geometrical Models}
+\title{Automated Conversion of 3D Point Clouds to Solid Geometrical Models}
 \author{Matthew S.~Brown}
 \advisor{Antonios~Kontsos, Ph.~D.~}
 
@@ -146,6 +146,11 @@ In 2014, Sebastian Siebert implemented LiDAR devices mounted to UAVs to provide 
 
 \section{Thesis Outline}
 
+[[ I know there's supposed to be an outline of the structure, but this feels like a clunkier version of the table of contents]]
+
+The structure of the thesis is the following:
+
+First, all of the underlying methods used in the proposed algorithm are described in detail in the background section. After this, the hypothesis statement and research objectives are described. A detailed description of the technical approach used to make informed decisions on the validity of the hypothesis is enunciated directly after this. Finally, the results of the proposed algorithm operating within the space defined by the technical approach are shown. In the conclusion, a detailed analysis of these results is made.
 
 
 
@@ -178,25 +183,37 @@ Stereogrammetry and Structure from Motion have become industry standard methods 
 
 \subsubsection{Stereogrammetry}
 \subsubsection{Structure from Motion}
+
+Structure from Motion is a method of extracting 3-dimensional data from a series of images by determining the relative translation between distinctive feature points in images. The underlying foundation of this method is the disparity image. Objects in the foreground of a viewpoint move much more drastically than objects in the background. This can be envisioned by imaging a passenger in a car driving by a mountain. After some timestep, the tree 10 feet away from the car has changed drastically in view location, but the mountain that is much farther away looks almost exactly the same \cite{RN20}.
+
+Using the disparity between feature points in an image, Structure from Motion provides a relative distance relationship, scaled to pixel size. This of course requires many overlapping images of the same object at different views, so distinctive features are repeated in the views. Figure~\ref{sfm:imageoverlap} shows a demonstration of the amount of overlap expected in an input image set.
+
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=2in]{instruments/sfmimagecollection.png}
 	\caption[Structure from Motion collection method]{\centering Structure from Motion requires collecting a series of overlapping images to generate point clouds \cite{WESTOBY2012300}.}
+	\label{sfm:imageoverlap}
 \end{figure}
+
+Structure from Motion has a number of steps in the pipeline, which can be seen in Figure~\ref{sfm:pipeline}. At a high level, the pipeline consists of first collecting the image data, detecting key features, matching key features between images and determining their relative locations (bundle adjustment), and transforming point clouds of disparity pairs to the global reference frame. The last step requires establishing a global reference frame -- typically the results of the first disparity set become the global frame. Subsequent pointsets are scaled to match the global set by forcing the scale of the current pointset to match the scale of the previous pointset using similar feature points between sets \cite{WESTOBY2012300}.
 
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=2in]{instruments/sfmpipeline.png}
 	\caption[Structure from Motion algorithm pipeline]{\centering A broad overview of the SfM pipeline \cite{WESTOBY2012300}.}
+	\label{sfm:pipeline}
 \end{figure}
+
+After the calculation of the sparse point cloud, the algorithm in Figure~\ref{sfm:pipeline} fits the original images to the cloud by creating a crude surface mesh with the sparse pointset and superimposing the images to the surface. This is outside the scope of what the envisioned return of Structure from Motion data collected for this thesis is.
+
+Figure~\ref{sfm:wholedeal} shows the entire Structure from Motion process from start to finish.
 
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=4in]{instruments/sfmresults.png}
 	\caption[Structure from Motion results]{\centering Structure from Motion point cloud based on a series of panoramic images take from the ground. a) panorama of the scene b) sparse point cloud reconstruction c) image overlay \cite{WESTOBY2012300}.}
+	\label{sfm:wholedeal}
 \end{figure}
-
-\cite{RN20} \cite{WESTOBY2012300}.
 
 
 \subsection{Explicit Methods: LiDAR, Laser Scanning, and Ultrasonic Sensing}
@@ -567,9 +584,10 @@ For a given set of points in space, $\{P_{k}\}$ --- $k$ = 1, \ldots, $K$, the re
 If every point pair sharing a Voronoi boundary are connected, the result is a triangulation object encasing the pointset. This object is referred to as a Delaunay triangulation \cite{RN65}.
 
 \begin{figure}[!ht]
-\centering
-\includegraphics{delaunay.png}
-\caption[2D delaunay triangulation]{\centering Visual represention of a 2-dimensional delaunay triangulation process}
+	\centering
+		\includegraphics[width=2in]{delaunayTriangulation/voronoi.jpg}
+		\includegraphics[width=2in]{delaunayTriangulation/delaunay.jpg}
+	\caption[2D delaunay triangulation]{\centering Visual represention of a 2-dimensional delaunay triangulation process. The figure on the left shows the voronoi diagram of the vertex set, and the image on the right shows the triangulation result \cite{RN65}.}
 \end{figure}
 
 \subsubsection{Advancing Front / Marching Triangles}
@@ -641,12 +659,12 @@ Mesh refinement can be broadly described as the artificial increase in mesh reso
 
 Specifically, refinement of newly created surface areas inside of the hole filling algorithm occurs by first estimating the density of the triangulations around the new area and subsequently matching that density by inserting vertices into the new area.
 
-[[specifics go here]]
+[[specifics]]
 
 \cite{meshrefinement}.
 
 \paragraph{Fairing}
-The fairing algorithm smooths the newly refined surface into a continous shape based on a minimization of a linear bi-Laplacian system with boundary constraints \cite{meshfairing}. %[[what does this mean beyond being a wave interpolation function / be more specific]]
+The fairing algorithm smooths the newly refined surface into a continous shape based on a minimization of a linear bi-Laplacian system with boundary constraints \cite{meshfairing}. [[specifics]]
 
 
 \begin{figure}[!ht]
@@ -674,7 +692,7 @@ The other criteria are more abstract in nature and are more difficult to detect 
 		\label{fig:meshquality}
 \end{figure}
 
-In order to resolve low quality areas autonomously, what it means to be "low quality" must be explicitly defined mathematically. Table~\ref{table:meshquality} lists some of the ratios to define a mesh's quality level. Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:meshquality}.
+In order to resolve low quality areas autonomously, what it means to be ``low quality'' must be explicitly defined mathematically. Table~\ref{table:meshquality} lists some of the ratios to define a mesh's quality level. Low  quality  values  in  mesh  return  problematic  polyhedrons  for  volumetric  conversion,  typically  looking  like  those  shown  in  figure \ref{fig:meshquality}.
 
 \begin{table}[!ht]
 	\centering
@@ -715,13 +733,13 @@ To define an optimal triangulation, given a continuous convex function $f$ on $\
 	Q ( \tau^{\ast}  , f, p) = \substack{inf \\ _{\tau \in P_{N}} } (\tau , f, p)
 \end{equation}
 
-[[ what does this mean / what does it mean to be optimal ]]
+[[ specifics ]]
 
 \subsubsection{Mesh Perturbation}
 While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN63}. 
 
 \subsubsection{Mesh Exudation}
-Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}.
+Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}. [[specifics]]
 
 
 
@@ -772,19 +790,17 @@ The pipeline is first explored with a fabricated point cloud of varying resoluti
 	\label{sim:noiselessdense}
 \end{figure}
 
-% \subsection{General: Estimated Noise and Occlusion}
-% As the instruments within the scope of this thesis vary in expense, acquireability, and technical specifications, it is necessary to simulate their expected results. This can be done by modeling each instrument's acquisition technique, and applying that technique to the simulated room point cloud at a high density. The following figure set outline the collection methods of each technique, and their simulated accuracy.
+
 \subsection{General: Induced Noise}
 
-It is crucial to view the effects of noise on the control dataset, as 
+It is crucial to view the effects of noise on the control dataset, as no method or instrument yet created can provide a fully noiseless discrete dataset. To model the extreme noise cases, gaussian noise of some value, $\sigma$, is applied to the mesh. This $\sigma$ value is determined based on the likely characteristics of the instruments, or based on test cases with some desired accuracy parameter. Figure~\ref{technical:2cmdense} shows the results of induced noise on a simulated LiDAR scan with $\sigma = 2 cm$.
 
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=3in]{simulated-lab-scan/2cmnoise/rawcloud.JPG}
 	\caption[Simulated high density lab point cloud with 2cm noise induction]{\centering Simulated high density lab point cloud with 2 centimeter noise induction.}
-	\label{sim:2cmdense}
+	\label{technical:2cmdense}
 \end{figure}
-
 
 \subsection{LiDAR: Velodyne HDL-32E}
 The Velodyne HDL-32E is a high end LiDAR device capable of collecting 700,000 points per second at a frame rate of 20 Hz (rotations per second). It is equipped with 32 lasers aligned from +\ang{10.67} to -\ang{30.67}
@@ -944,7 +960,7 @@ Perturbation and exudation are included in the pipeline of algorithm for two rea
 
 \subsection{Final Mesh Verification}
 
-The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter to assure the mesh meets the criteria set in this paper. The second is an exportation of the mesh to AutoDesk Fusion, which has in-built functionality to convert surface meshes to boundary representations and subsequently finite element volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the object.
+The final verification of the meshes output by the algorith occurs in two stages. The first being a measure of each desired quality parameter set in this paper. As there is no explicit definition of what parameters -- or what values those parameters must take -- define a mesh qualified for volumetric conversion, an analysis of the resulting minimum quality values occuring in the mesh and their relationship to the mesh's convertibility is made. The second is an exportation of the mesh to AutoDesk Fusion, which has in-built functionality to convert surface meshes to boundary representations and subsequently finite element volumes. If both of these verifications are successful, the resulting mesh is placed under typical loading conditions to compare it's response to the expected response of the object.
 
 
 
@@ -988,7 +1004,7 @@ In many object scanning situations, it is not unreasonable to assume the cross-s
 	\centering
 		\includegraphics[width=2in]{cross-section-estimation/noiselessbeam(10x10x5).JPG}
 		\includegraphics[width=2in]{cross-section-estimation/newtonraphsonconvergence(10x10x5).JPG}
-	\caption[Demonstration of the Informed Shape Estimation algorithm on a simulated point cloud.]{\centering Demonstration of the Shape Estimation algorithm on a simulated beam of known dimensions 10x10x5" (left). The iterator converges to dimensions 10.67x10.55x4.87".}
+	\caption[Demonstration of the Informed Shape Estimation algorithm on a simulated point cloud.]{\centering Demonstration of the Shape Estimation algorithm on a simulated beam of known dimensions 10x10x5" (left). The iterator converges to dimensions 10.67x10.67x4.87".}
 \end{figure}
 
 
@@ -1004,13 +1020,13 @@ In many object scanning situations, it is not unreasonable to assume the cross-s
 \label{chap:results}
 
 \section{Simulated Data: Zero Noise}
-The first instance of the algorithm is the control set, and first step in the ground-up development of the pipeline. There is no noise induced in the system, and all objects are significantly separated in 3-dimensional space. Figure~\ref{zeronoise:raw} shows the point cloud. The total number of points in the cloud is [[insert number of points]], average point to point distance is [[insert point to point distance]], and beam point-to-point distance is [[insert beam point to point distance]]. Beam dimensions are 3.048m (10ft) with a cross-section of the following specifications:
+The first instance of the algorithm is the control set, and first step in the ground-up development of the pipeline. There is no noise induced in the system, and all objects are significantly separated in 3-dimensional space. Figure~\ref{zeronoise:raw} shows the point cloud. The total number of points in the cloud is 114,808 and beam point-to-point distance is 0.03 in. Beam dimensions are 10ft in length, with a cross-section of the following specifications:
 
 
 \begin{centering}
-Width: 12.7cm (5in)
-\\Height: 12.7cm (5in)
-\\Thickness: 0.635cm (0.25in) \\
+Width: 5in (12.7cm)
+\\Height: 5in (12.7cm)
+\\Thickness: 0.25 in (0.635cm) \\
 \end{centering}
 
 Figure~\ref{zeronoise:raw} shows the unmodified pointcloud at high resolution. The dataset in this section has zero noise and zero occlusion, and provides insight into what each step of the mesh optimization process accomplishes. Including the ground plane, there are 17 distinct objects in this point cloud.
@@ -1068,7 +1084,7 @@ In a zero noise situation, the advancing front method returns a nearly perfect m
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/advancingfront02.png}
+		\includegraphics[width=1in]{simulated-lab-scan/0noise/clean/advancingfront02.png}
 		\caption[Initial meshing using a raw advancing front approach]{\centering  Result of initial meshing using the advancing front method.}
 		\label{zeronoise:advancingfront}
 \end{figure}
@@ -1079,7 +1095,7 @@ Figure~\ref{zeronoise:scalespace2} shows the effects of Scale Space reconstructi
 	\centering
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scale200.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace201.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace202.png}
+		\includegraphics[width=1in]{simulated-lab-scan/0noise/clean/scalespace202.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
 	\label{zeronoise:scalespace2}
 \end{figure}
@@ -1088,9 +1104,9 @@ As the beam is cast into higher and higher scale-spaces, the thickness of the be
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace400.png}
+		\includegraphics[width=1in]{simulated-lab-scan/0noise/clean/scalespace400.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace401.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace402.png}
+		\includegraphics[width=1in]{simulated-lab-scan/0noise/clean/scalespace402.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 		\label{zeronoise:scalespace4}
 \end{figure}
@@ -1099,9 +1115,9 @@ Figure~\ref{zeronoise:scalespace15} shows the extremes of what the scale space r
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
+		\includegraphics[width=1in]{simulated-lab-scan/0noise/clean/scalespace1500.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1501.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/clean/scalespace1502.png}
+		\includegraphics[width=1in]{simulated-lab-scan/0noise/clean/scalespace1502.png}
 		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
 		\label{zeronoise:scalespace15}
 \end{figure}
@@ -1124,6 +1140,8 @@ In the zero noise case, Advancing Front reconstruction proves to be the most acc
 	Quality values shown represent the absolute minima in each category.
 	\label{table:zeronoiseInit}
 \end{table}
+
+The advancing front case is the only case to be volumetrically compatible at first pass. This is due to the input set being completely noiseless. None of the Scale Space reconstructions pass the conversion test, as they all contain regions that are nearly or entirely two dimensional. These methods are revisited after the optimization steps are complete.
 
 \subsection{Optimization}
 \subsubsection{Effects of Voronoi Relaxation}
@@ -1287,6 +1305,8 @@ The scale space reconstruction in the zero noise case is interesting. In future 
 
 \subsection{Quality Analysis}
 
+After applying the optimization steps, the meshes -- with the exception of the Advancing Front method -- do not increase in quality. In fact, they actually decrease. This phenomenon cannot be attributed to the thickness of the test beam with 100\% certainty, but this is the probable cause of failure, as the Scale Space reconstructions cast both sides of the beam to the same surface.
+
 \begin{table}[!ht]
 	\centering
 		\caption[Zero noise mesh exit quality]{Exit quality analysis of simulated zero noise surface mesh}
@@ -1306,7 +1326,7 @@ The scale space reconstruction in the zero noise case is interesting. In future 
 	\label{table:0noisequality}
 \end{table}
 
-
+Due to this casting issue, none of the reconstructions except for the Advancing Front method pass the conversion test.
 
 
 
@@ -1404,6 +1424,8 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
 		\label{2cmnoise:scalespace4}
 \end{figure}
+
+The Advancing Front reconstruction is once again ranked the highest in every quality metric used, but is visibly not suitable for volumetric conversion. Quality metrics are good for determining the level of information each triangulation provides to the mesh, but do not directly coincide with suitability for conversion. The metric which makes clear the incompatibility of conversion is the number of individual bounded surfaces in the mesh. Any number above 1 means there are volumes connected at a single point. Unfortunately, these are difficult to remedy without complete removal of shapes, as the surfaces individually do not contain any half-edges, which are fixed during the hole-filling section of the algorithm.
 
 \begin{table}[!ht]
 	\centering
@@ -1542,6 +1564,8 @@ Scale space 4 exaggerates the parabolic shape of the beam even more than scale s
 
 \subsection{Quality Analysis}
 
+At the end of the optimization phase, both Scale Space reconstructions are compatible with volumetric conversion. In both methods there is also an uptrend in all quality metrics of an entire order of magnitude. At this point, the ability to quantitatively say whether or not a mesh will meet criteria is not available, but the range of values this can happen is beginning to narrow.
+
 \begin{table}[!ht]
 	\centering
 		\caption[Induced noise mesh exit quality]{Exit quality analysis of simulated 2 centimeter noise surface mesh.}
@@ -1663,6 +1687,8 @@ Reducing the input point cloud to scale space 4 provides similar results to scal
 		\caption[Scale space reconstruction at scale $S$=4 of segmented LiDAR data]{\centering Scale space reconstruction at scale $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4}
 \end{figure}
+
+None of the initial meshing methods create an instantaneously convertible surface mesh in this case. There are a number of reasons for this that include artifacts from the cloud concatenation process, noise in the collection data, and a lack of depth data provided for the beam.
 
 \begin{table}[!ht]
 	\centering
@@ -1812,6 +1838,8 @@ Exudation represents the final step in the optimization process, and the complet
 
 \subsection{Quality Analysis}
 
+The quality of each Scale Space reconstruction is improved vastly after optimization. However, the meshes are not singular volumes, and contain two individual shapes each, connected at a single point. None of the meshes convert successfully to volumetric models as they are presented at this point.
+
 \begin{table}[!ht]
 	\centering
 		\caption[Experimental scan exit characteristics]{Exit quality analysis of experimental beam scan.}
@@ -1847,6 +1875,8 @@ The end result of the algorithm on the experimental data, when fully automated, 
 	\label{table:realmodified}
 \end{table}
 
+Why the mesh at Scale Space 2 fails at this point is still unclear. It is possible that there are unobservable sections of low or zero volume, or that there are overlapping sections inherent in the mesh. Interestingly, All of the quality metrics for Scale Space 2 are higher than those at Scale Space 4, so all expected parameters are met. Scale Space 2 serves as proof that although the metrics used to evaluate mesh quality in this thesis are valuable in estimating a meshes volumetric compatibility, they are not the only metrics that determine a meshes compatibility.
+
 The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}.
 
 \begin{figure}[!ht]
@@ -1869,15 +1899,7 @@ The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{r
 
 
 
-\section{Informed Shape Estimation}
 
-While the simulated point clouds provide information for the entirety of the L-beam's shape, the true LiDAR collection data does not. This section walks through the results of the Informed Shape Estimation algorithm, defined in Section~\ref{subsubsec:informedshape}. For each dataset, the original pointcloud of the isolated beam, the initial meshing method, the estimated point cloud, and the fully optimized mesh using the estimated cloud are shown.
-
-[[Still need to generate this data]]
-
-% \subsection{Zero Noise}
-% \subsection{2cm Noise}
-% \subsection{LiDAR Data}
 
 
 
@@ -1944,13 +1966,34 @@ Evaluating these metrics based on successful conversion, the trends in the data 
 	\label{table:qualityanalysis}
 \end{table}
 
+As seen in the experimental meshing section, these parameters are not the be-all end-all of volumetric mesh compatibility, but they are definitely related to a mesh's ability to be converted to a solid volume.
+
+\section{Finite Element Models of Meshes}
+
+\begin{figure}
+	\centering
+		\includegraphics[width=2in]{conclusion/advancedfrontloading.png}
+		\caption[FEA loading results on the zero noise beam]{\centering The zero noise beam, using the advancing front reconstruction, is subjected to a static cantilever type load of [[load]].}
+	\label{conc:zeronoiseload}
+\end{figure} 
+
+\section{Tools Built}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter: 		Future Work
 \chapter{Future Work}
 \label{chap:future}
 
+\section{Informed Shape Estimation}
 
+While the simulated point clouds provide information for the entirety of the L-beam's shape, the true LiDAR collection data does not. This section walks through the results of the Informed Shape Estimation algorithm, defined in Section~\ref{subsubsec:informedshape}. For each dataset, the original pointcloud of the isolated beam, the initial meshing method, the estimated point cloud, and the fully optimized mesh using the estimated cloud are shown.
+
+[[Still need to generate this data]]
+
+% \subsection{Zero Noise}
+% \subsection{2cm Noise}
+% \subsection{LiDAR Data}
 
 
 
