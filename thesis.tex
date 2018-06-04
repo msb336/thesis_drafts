@@ -89,36 +89,62 @@
 % CHAPTER:                                                         INTRODUCTION
 \chapter{Introduction}
 \label{chap:introduction}
+\section{Motivation}
+Currently, methods to collect and convert point cloud data into usable models (CAD, finite element, etc.) are few and far in between. This is because the market for unmanned vehicles and automated systems has not become mainstream -- until now. Until the recent past, instruments capable of acquiring dense and accurate point cloud datasets were rare, expensive, or non-versatile. The recent boom in automated vehicles has caused the sensing and localization field to grow exponentially, allowing a host of highly effective instruments and methods to become easily obtainable.
 
-Surface reconstruction from a 3D point cloud is not a novel problem. In the past, groups have developed meshing algorithms for digital art replication, geographical topology analysis, and – more recently – structure health monitoring. All these processes, however, do not provide a general method to automate the entire pipeline between point-cloud collection and simple CAD geometry. We present a solution to this problem in the form of a robust and autonomous process for filtering, segmentation, and meshing of raw 3D point clouds.
+The common usages for this equipment is for automated awareness and unmanned navigation, but there is much more that can be done with the data collected. Setting a precident for a way to convert point clouds collected by UAVs to solid models would be enormously helpful.
 
-%Related Works
-% \section{Related Work}
-% \label{sec:related}
-% [Introductory filler]
+\begin{figure}
+	\centering
+		\includegraphics[width=4in]{motivation/uav-hype-cycle.jpg}
+		\caption[Current status of UAVs according to the Gartner hype cycle]{ According a Gartner hype cycle analysis from 2016, UAVs have not reached the peak of expections \cite{gartner}.}
+\end{figure}
+
+\section{Problem Statement and Approach}
+Currently, there are no methods available to take discrete point scans of an object from variable collection devices -- all with varying accuracy and resolution -- and convert the result into usable CAD models. The process involves five main steps: Data collection, data pre-processing, point cloud segmentation, initial meshing, and mesh optimization.
+
+The data collection phase encompasses the actual scanning of the object of interest, wether that be via laser scanning or camera imagery, or any method capable of returning a point cloud. The pre-processing step involves converting any datatype that is not already explicitly in cartesian coordinates to cartesian format, concatenating all of the relevant data collected, and filtering the result to remove overtly noisy information.
+
+The segmentation step is a more advanced filtering step, to isolate the target object from its surrounding environment so multiple objects in the point cloud are not meshed together in the next step. The initial meshing step deals with determining how the points in the target cloud are related to one another on the surface of the object. The final step, optimization, handles remedying any non-ideal artifacts created by the initial meshing algorithm.
+
+This thesis is an analysis of, for each step, what methods work, what methods do not, and what descriptors of the datasets can be used as parameters to measure the success of the methods. The proposed steps in the algorithm are applied to three sets of point cloud data with different properties. 
+
+The first dataset is a true control set of simulated data designed to meet the resolution of the LiDAR device used for the true experimental portion. The simulated dataset has no induced noise or occlusion, and is the ideal case for the meshing algorithm.
+
+The second dataset is identical to the control set in resolution, with the except of a significant amount of noise induced into the dataset. This dataset provides a benchmark to test the proposed algorithms robustness to noise.
+
+The third and final dataset is true experimental data, collected with a LiDAR device. This data acts as the sub-ideal case for occlusion, and acts as a benchmark for the algorithms ability to fill information gaps due to occlusion.
+
+All three tests have an identical target object: An L-beam with dimensions 5x5x1/4". 
+
+%Related Work
+\section{Related Work}
+\label{sec:related}
+Surface reconstruction from a 3D point cloud is not a novel problem. In the past, groups have developed meshing algorithms for digital art replication, geographical topology analysis, and –- more recently -– structure health monitoring. None of these processes, however, provide a general method to automate the entire pipeline between point-cloud collection and CAD geometry.
+
 % %%
-% \subsection{Geographical Topography Mapping}
-% \label{subsec:topographymapping}
-% In 2009, José Lerma and his team of archaeologists began using Terrestrial laser scanning in tandem with close proximity photogrammetry to render high resolution 3D surface models of ancient caves in Spain. Lerma et. al. are general in their description of their meshing method, which is most likely due to their non-computer programming oriented backgrounds. However, their pipeline involves sensor fusion between their laser scanner, which returns a pure point cloud with an origin at the center of the instrument, and deduced point clouds from photogrammetry data. The result is an impressive, high resolution surface mesh that accurately captures the features relevant to an archaeologist, but provide no useful information in terms of structural health monitoring \cite{RN50}.
+\subsection{Geographical Topography Mapping}
+\label{subsec:topographymapping}
 
-% In 2014, Sebastian Siebert implemented similar technology mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
+In 2014, Sebastian Siebert implemented LiDAR devices mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
 
 
-% %%
-% \subsection{Building Informational Modeling}
-% \label{subsec:BIM}
+%%
+\subsection{Building Informational Modeling}
+\label{subsec:BIM}
 
-% \cite{RN30}
-% %%
-% \subsection{Aerial Scanning for GPS Overlay}
-% \label{subsec:UAVscanning}
-% %%
-% \subsection{Semi-Automated Point Cloud to FEA modeling}
-% \label{subsec:SemiFEA}
-% \cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
-%
-%
+\cite{RN30}
+%%
+\subsection{Aerial Scanning for GPS Overlay}
+\label{subsec:UAVscanning}
+%%
+\subsection{Semi-Automated Point Cloud to FEA modeling}
+\label{subsec:SemiFEA}
+\cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
 
+
+
+\section{Thesis Outline}
 
 
 
@@ -149,7 +175,6 @@ There are many ways of collecting point cloud data, ranging from implicit method
 \label{subsec:implicit}
 Stereogrammetry and Structure from Motion have become industry standard methods for extracting 3-dimensional point cloud data using images from cameras. These methods are popular due to the quality of results compared with the low cost of the sensing equipment (1-2 cameras). Both Methods are similar in operation, with the difference being whether or not they are precalibrated.
 
-[[add a little to these sections as well as some more references]]
 
 \subsubsection{Stereogrammetry}
 \subsubsection{Structure from Motion}
@@ -203,19 +228,13 @@ High end LiDAR devices, such as the HDL-32E used to collect the data in this the
 
 
 
-%%
-\section{Sensor Fusion}
-\label{sec:fusion}
-[[alpha compensator]]
-[[particle filter]]
-[[kalman filter]]
 
 %%
 \section{Point Cloud Pre-processing Methods}
 \label{sec:preprocessing}
 \subsection{Registration}
 \subsubsection{Position Data}
-Point cloud collection devices are typically mobile, and often contain a number of localization measures. The standard localization methods and instruments used are a GPS, Inertial Measurement Units, and some form of computer vision. When data from these elements are fused via one of the methods described in the previous section, all six parameters of the global position of the collection device can be accurately obtained (x, y, z, pitch, roll, and yaw).
+Point cloud collection devices are typically mobile, and often contain a number of localization measures. The standard localization methods and instruments used are a GPS, Inertial Measurement Units, and some form of computer vision. When data from these elements are fused via either a Kalman Filter \cite{kalmanfilter}, particle filter \cite{particlefilter}, or any other sensor fusion method, all six parameters of the global position of the collection device can be accurately obtained (x, y, z, pitch, roll, and yaw).
 
 When onboard position data is collected, concatenating individual collection frames becomes a matter determining the transformation matrix between frames using the orientation and position of the UAV, and applying small corrections based on a combination of RANSAC and Intrinsic Shape Signatures (defined in the next section).
 
@@ -328,7 +347,7 @@ An algorithm built under the pretext of Gaussian diffusion is then used to proje
 		\end{cases}
 \end{equation}
 
-When scanning large objects, this method proves to be quite effective at removing sources of noise that are significantly smaller than the object being scanned. For buildings, bridges, and large-scale structures, this is a necessary first step in removing excess noise / unnecessary information from the cloud \cite{RN13}.
+When scanning large objects, this method proves to be quite effective at removing sources of noise that are significantly smaller than the object being scanned. For buildings, bridges, and large-scale structures, this is a viable first step in removing excess noise / unnecessary information from the cloud \cite{RN13}.
 
 
 
@@ -438,7 +457,7 @@ Each point is provided a weight vector w [0, 1] for its likelihood of belonging 
 
 Fuzzy clustering is differentiated from k-means in that points are not isolated to a singular cluster until the final thresholding step after FCM has reached it's exit criteria. This allows for all points in the dataset to continually effect the location of every cluster centroid. FCM finds it's worth in $n$-dimensional datasets that are not clearly segregated by their cost functions, but do have a series of denser clouds. FCM is even more computationally intensive than it's counterpart, k-means, because it must iteratively calculate the location of every point in relationship to every centroid, and then also calculate the weights of each point in reference to each centroid.
 
-\subsubsection{Aggomerative and Dvisive Hierarchical Clustering}
+\subsubsection{Aggomerative and Divisive Hierarchical Clustering}
 In Agglomerative clustering, each point is initially considered its own cluster. Iteratively, the points are grouped together based on a user-defined cost function – in this case, Euclidean distance. The exit conditions for this method are either convergence upon a set of clusters, or a predefined number of clusters.
 Divisive clustering approaches the clustering problem in an exactly opposite fashion. The algorithm initializes the dataset as a single cluster and iteratively splits the remaining clusters until reaching the same exit conditions as the Agglomerative method.
 
@@ -604,20 +623,37 @@ Using the Ball Pivoting Algorithm \cite{ballpivot}, a reconstruction is implemen
 
 At this point, the vertices of the smoothed mesh are recast to zero-scale ( their initial points in the point cloud). The result is a mesh built based on a smoothed input, with minimual noise reduction in the process \cite{RN67}.
 
-\subsubsection{Hole Patching, Fairing, and Refinement}
-
+\subsubsection{Hole Filling, Refinement, and Fairing}
+\paragraph{Hole Filling}
 Surface meshes, defined in Section~\ref{subsubsec:surfdef}, contain vertices and faces. Inherently, they do not contain any methods to maintain a bounded volume. For this reason, it is necessary to detect discontinuities in the mesh, and develop a method to resolve them. Two types of mesh edges are defined in this section: A full edge, and a half edge.
 A full edge occurs when an edge is referenced by more than one polyhedral object. What this means in physical terms is that the edge is not on the boundary of the shape. Half edges, on the other hand, are only referenced by a single polyhedral object. Half edges are indicators of holes in the mesh, as they are unreferenced anywhere else in the surface area.
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=3in]{edgevshalfedge.png}
+		\includegraphics[width=2in]{edgevshalfedge.png}
 		\caption[Example of an edge vs. a half edge]{\centering A visualization of the difference between an edge and a half edge. Half edges are outlined in blue.}
 \end{figure}
 
 To remedy this, a delaunay triangulation search is run between half edges, and create the least costly triangulations. While this seals the mesh, the result is a non-uniform surface mesh, where the new sections have a far larger surface area than the surrounding mesh. For this reason, refinement is necessary to return the mesh to an isotropic state.
 
-[[REFINEMENT]]
+\paragraph{Refinement}
+Mesh refinement can be broadly described as the artificial increase in mesh resolution by the introduction of new vertices and triangulation objects inside of pre-described edges. This allows for precise creation of uniform resolution throughout the features of the mesh.
+
+Specifically, refinement of newly created surface areas inside of the hole filling algorithm occurs by first estimating the density of the triangulations around the new area and subsequently matching that density by inserting vertices into the new area.
+
+[[specifics go here]]
+
+\cite{meshrefinement}.
+
+\paragraph{Fairing}
+The fairing algorithm smooths the newly refined surface into a continous shape based on a minimization of a linear bi-Laplacian system with boundary constraints \cite{meshfairing}. %[[what does this mean beyond being a wave interpolation function / be more specific]]
+
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=4in]{hole_fill.jpg}
+	\caption[visualization of hole filling, refinement, and fairing]{Results of the main steps of the algorithm. From left to right: (a) the hole, (b) the hole after its triangulation, (c) after triangulation and refinement, (d) after triangulation, refinement and fairing \cite{meshprocessing}.}
+\end{figure}
 
 \subsection{Mesh Optimization}
 \label{subsec:meshoptimization}
@@ -1804,7 +1840,7 @@ The end result of the algorithm on the experimental data, when fully automated, 
 			\\ \hline
 	\end{tabular}}
 	Quality values shown represent the absolute minima in each category.
-	\label{table:realquality}
+	\label{table:realmodified}
 \end{table}
 
 The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}.
