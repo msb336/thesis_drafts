@@ -1,0 +1,45 @@
+
+\ExecuteOptions{letterpaper,oneside,12pt,onecolumn,final,openany}
+\documentclass[12pt]{drexelthesis}
+\usepackage[numbers]{natbib}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{placeins}
+\usepackage{textcomp}
+\let\Oldsection\section
+\renewcommand{\section}{\FloatBarrier\Oldsection}
+
+\let\Oldsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\Oldsubsection}
+
+\let\Oldsubsubsection\subsubsection
+\renewcommand{\subsubsection}{\FloatBarrier\Oldsubsubsection}
+
+
+
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\graphicspath{{images/}}
+
+\title{Automated Conversion of 3D Point Clouds to Solid Geometrical Computer Models}
+\author{Matthew S.~Brown}
+\advisor{Antonios~Kontsos, Ph.~D.~}
+
+
+\begin{document}
+ % Purposely left blank
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{Abstract}
+\begin{seminar}
+
+
+ While current engineering design and construction methods include computer aided design drawings in addition to simulation, analysis, and several visualization tools, there is still the need to create computer models of the vast number of structures found in the built environment. With the slew of point cloud collection tools now readily available, it is not difficult to create point cloud representations of real objects. However, it is a rare occurrance that raw clouds are isolated enough and clean enough to be directly converted to bounded, non-zero volume computer aided design models. In this context, this thesis proposes a method and an associated toolbox to utilize machine learning in conjunction with meshing techniques to autonomously segment raw point cloud data and reconstruct the resulting segments into computer aided design compatible surface meshes by applying a series of meshing and optimization algorithms to the point cloud. The result is a highly adjustable, generalized algorithm to convert raw point clouds of variable resolution, accuracy, and occlusion level to create uniform meshes that are computer aided design compatible.
+
+\end{seminar}                                                                    
+\end{document}

@@ -170,6 +170,25 @@
  \begingroup
 }{\newpage\endgroup}
 
+\newenvironment{seminar}%
+{
+\drexelborders
+ \clearemptydoublepage 
+ \begin{spacing}{1.0}
+ \begin{center}
+  \includegraphics{branding/branding.png} \\
+  % \vspace*{-.2in}
+   {Master of Science Thesis Seminar} \\
+  { \textbf{\@title } }\\
+  { \@author }\\
+  { \textbf{Thesis Advisor:} \@advisor }\\
+  { \textbf{Academic Building, RM. 107} }\\
+  { \textbf{June $8^{th}$, 2018, 11:30 AM}}
+ \end{center}
+ \end{spacing}
+ \begingroup
+}{\newpage\endgroup}
+
 \newenvironment{acknowledgements}%
 {
  \drexelborders
