@@ -1062,8 +1062,6 @@ The final verification of the meshes output by the algorith occurs in two stages
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Chapter			Results
 
-[[set finite views for each image]]
-
 \chapter{Results}
 \label{chap:results}
 
@@ -1125,6 +1123,9 @@ Hence it is concluded that the filtering and segmentation parameters derived fro
 
 
 \subsection{Initial Meshing Methods}
+
+[[ changed all advanced fronts to ones without holes!]]
+
 In a zero noise situation, the advancing front method returns a nearly perfect mesh, with the exception of a poor quality polygon linking the rear segment of the mesh. This is caused by the ``marching triangles'' attempting to close the final corners of the mesh. This meshing method provides high quality meshes while maintaining accurate features in zero noise situations, but with the introduction of noise the Advancing Front method quickly fails to produce a reliable initial mesh for successful optimization.
 
 \begin{figure}[!ht]
@@ -1193,7 +1194,7 @@ In the zero noise case, Advancing Front reconstruction proves to be the most acc
 The advancing front case is the only case to be CAD compatible at first pass. This is due to the input set being completely noiseless. None of the Scale Space reconstructions pass the conversion test, as they all contain regions that are nearly or entirely two dimensional. These methods are revisited after the optimization steps are complete.
 
 \subsection{Optimization}
-[%[use the better advancing front mesh!]]
+%[[crop them images boy]]
 \subsubsection{Effects of Voronoi Relaxation}
 
 Voronoi relaxation, defined in Section~\ref{optimization:voronoirelaxation}, aims to regulate the tetrahedral areas in the mesh by iteratively shifting point vertices to their respective voronoi centroids. This method is effective in increasing the mesh quality ratios defined in Table~\ref{table:meshquality}, with the exception of volume ratio, which can be visualized as slivers in the mesh (Figure~\ref{fig:meshquality}).
@@ -1202,10 +1203,10 @@ The relaxed mesh after 200 iterations of voronoi relaxation is shown in Figure~\
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontlloyd00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontlloyd01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontlloyd02.png}
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontlloyd03.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontlloyd00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontlloyd01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontlloyd02.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontlloyd03.png}
 		\caption[Advancing Front mesh after 200 iterations of voronoi relaxation]{\centering  Result of Advancing Front mesh after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:advancedlloyd}
 \end{figure}
@@ -1242,10 +1243,10 @@ Delaunay optimization seeks to find the minimal triangulation conditions for the
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontodt00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontodt01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontodt02.png}
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontodt03.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontodt00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontodt01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontodt02.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontodt03.png}
 		\caption[Advancing Front mesh after ODT with a 30 second clock cap]{\centering  Result of Advancing Front mesh after ODT with a 30 second clock cap.}
 	\label{zeronoise:advancedodt}
 \end{figure}
@@ -1282,10 +1283,10 @@ In Figure~\ref{zeronoise:advancedperturb}, the result of the Advancing Front mes
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontperturb00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontperturb01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontperturb02.png}
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfrontperturb03.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontperturb00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontperturb01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontperturb02.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfrontperturb03.png}
 		\caption[Advancing Front mesh after perturbation with a 30 second clock cap]{\centering  Result of Advancing Front mesh after perturbation with a 30 second clock cap.}
 	\label{zeronoise:advancedperturb}
 \end{figure}
@@ -1310,6 +1311,7 @@ The next figure is the reconstruction at scale space $2$. Again the mesh is seve
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb00.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb02.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb03.png}
 		\caption[Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
 	\label{zeronoise:scalespace4perturb}
 \end{figure}
@@ -1320,9 +1322,9 @@ Exudation, similar to perturbation, aims to relieve any slivers remaining in the
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancedfronteverything00.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfronteverything01.png}
-		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancedfronteverything02.png}
+		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/advancingfronteverything00.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfronteverything01.png}
+		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/advancingfronteverything02.png}
 		\caption[Advancing Front mesh after exudation with a 30 second clock cap]{\centering  Result of Advancing Front mesh after exudation with a 30 second clock cap.}
 	\label{zeronoise:advancedeverything}
 \end{figure}
@@ -1909,18 +1911,18 @@ The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{r
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace2Modified00.png}
-		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace2Modified01.png}
-		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace2Modified02.png}
+		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace2Modified00.png}
+		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace2Modified01.png}
+		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace2Modified02.png}
 	\caption[Modified optimized surface mesh at scale space 2.]{\centering Manually corrected optimized scale space 2 reconstruction. [[Compare with Figure~\ref{lidar:scalespace2everything}.]]}
 	\label{real:modified2}
 \end{figure}
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace4Modified00.png}
-		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace4Modified01.png}
-		\includegraphics[width=2in]{real-lab-scans/meshed/optimized/scaleSpace4Modified02.png}
+		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace4Modified00.png}
+		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace4Modified01.png}
+		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace4Modified02.png}
 	\caption[Modified optimized surface mesh at scale space 4.]{\centering Manually corrected optimized scale space 4 reconstruction. [[Compare with Figure~\ref{lidar:scalespace4everything}.]]}
 	\label{real:modified4}
 \end{figure}
