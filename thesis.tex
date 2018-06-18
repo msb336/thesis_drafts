@@ -163,17 +163,11 @@ First, all of the underlying methods used in the proposed algorithm are describe
 \label{sec:PCcollection}
 There are many ways of collecting point cloud data, ranging from passive methods where the collection tool retrieves information about the environment without probing it, such as stereogrammetry and structure from motion, to active methods where the instrument is applying energy to probe its environment directly. LiDAR devices, laser scanners and ultrasonic sensors fill this category. Each collection technique has its own set of parameters, accuracy ratings, and speed of collection / calculation.
 
-\subsection{Passive collection methods: Stereogrammetry and Structure from Motion}
+\subsection{Passive collection methods: Photogrammetry}
 \label{subsec:passive}
-Stereogrammetry and Structure from Motion have become industry standard methods for extracting 3-dimensional point cloud data using images from cameras. These methods are popular due to the quality of results compared with the low cost of the sensing equipment (1-2 cameras). Both methods are similar in operation, with the difference being whether or not they are precalibrated.
+Photogrammetry has become the industry standard method for extracting 3-dimensional point cloud data using images from cameras. This method is popular due to the quality of results boosted with the low cost of the sensing equipment (often consumer grade cameras). Both methods are similar in operation, with the difference being whether or not they are precalibrated. Photogrammetry techniques extract 3-dimensional data from a series of images by determining the relative translation between distinctive feature points in images. The underlying foundation of this method is the disparity image. Objects in the foreground of a viewpoint move much more drastically than objects in the background. This can be envisioned by imaging a passenger in a car driving by a mountain. After some timestep, the tree 10 feet away from the car has changed drastically in view location, but the mountain that is much farther away looks almost exactly the same \cite{RN20}.
 
-
-\subsubsection{Stereogrammetry}
-\subsubsection{Structure from Motion}
-
-Structure from Motion is a method of extracting 3-dimensional data from a series of images by determining the relative translation between distinctive feature points in images. The underlying foundation of this method is the disparity image. Objects in the foreground of a viewpoint move much more drastically than objects in the background. This can be envisioned by imaging a passenger in a car driving by a mountain. After some timestep, the tree 10 feet away from the car has changed drastically in view location, but the mountain that is much farther away looks almost exactly the same \cite{RN20}.
-
-Using the disparity between feature points in an image, Structure from Motion provides a relative distance relationship, scaled to pixel size. This of course requires many overlapping images of the same object at different views, so distinctive features are repeated in the views. Figure~\ref{sfm:imageoverlap} shows a demonstration of the amount of overlap expected in an input image set.
+Using the disparity between feature points in an image, Photogrammetry provides a relative distance relationship, scaled to pixel size. This of course requires many overlapping images of the same object at different views, so distinctive features are repeated in the views. Figure~\ref{sfm:imageoverlap} shows a demonstration of the amount of overlap expected in an input image set. The most common version of the photogrammetry method is called, ``Structure from Motion.''
 
 \begin{figure}[!ht]
 	\centering
@@ -414,10 +408,8 @@ When scanning large objects, this method proves to be quite effective at removin
 
 
 %%
-\section{Machine Learning for Object Recognition and Segmentation}
+\section{Unsupervised Machine Learning for Object Recognition and Segmentation}
 \label{sec:machinelearning}
-
-\subsection{Unsupervised Methods}
 
 \subsubsection{K-means Clustering}
 K-means clustering is an iterative method that groups $n$-dimensional datasets into $k$ clusters based on a minimization of the Euclidean distance cost function $|x-c|^{2}$. Initially, $k$ centroids are placed randomly inside the dataset, and all data points are placed in bins $S$ depending on which centroid minimizes their cost function. At each iteration, the cluster centroids $c_{i}$ are re-calculated. Criteria for convergence is a maximum Euclidean distance change $\sigma$ between centroid position $c_{n}$ and $c_{n+1}$.
@@ -464,76 +456,6 @@ Euclidean clustering occupies the lowest time complexity and memory space of its
 
 
 
-\subsection{Supervised Method --- Convolutional Neural Network}
-\subparagraph{Definitions}
-To detect distinctive features in a dataset – from a machine’s perspective – the dataset needs to be modified to enunciate those features. Key features in machine vision include edges, corners, and areas with distinctive geometry. Convolutions are the key to bringing these features to the forefront of the image.
-A convolution kernel is a weighted square matrix of dimensions m, and depth equal to the rank of the feature space of the dataset. The kernel acts as a filter for the image as it strides from supervoxel to supervoxel. At each step, the dot product of the kernel with data values inside the current super-voxel provide a convolved image of the dataset while retaining characteristic features. The equation below illustrates the math behind a convolution kernel. $C$ represents the convolved image, and $x_{i}$ and $w(i)$ are the $i^{th}$ point and weight of $N$ points located inside the voxel.
-
-\begin{equation}
-	C_{new} = \sum_{i}^{N}  w(i) x_{i}
-\end{equation}
-
-Another type of convolution is called pooling, or subsampling. This convolution steps through the dataset with a stride value greater than one, resulting in a smaller image of the original set. In pooling, the kernel will pull either the largest intensity from each super-voxel, or the average intensity of the data points inside the super-voxel. This allows for the machine to decrease the size of the dataset while maintaining distinctive features.
-
-\begin{equation}
-	C_{new} = \frac{\sum_{i}^{N}  x_{i}}{N}
-\end{equation}
-
-\subparagraph{Convolutional Neural Networks}
-Convolutional Neural Networks (CNNs) are modeled after the visual cortex in the brain. They consist of layers of convolutional networks. Each network contains “neurons” with simple feature reception fields. Through layers upon layers of these networks, objects can be classified. The biases and weights on these networks can be adjusted based on learning algorithms REF 1 in proposal. CNNs have become the standard in feature classification for image processing, but the accuracy that they provide comes at the price of processing time. 
-Every CNN can be broken down into the following steps: Convolution, max/mean pooling, activation function, fully connected layer, repeat. The diagram below illustrates the overarching structure of a basic Convolutional Neural Network:
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=6in]{cnn.png}
-	\caption[High level flow chart of a convolutional neural network]{\centering Map of a convolutional neural network with two hidden layers [ref]}
-\end{figure}
-
-In the case of point cloud processing, the input is a raw xyz set of some size n x 3. The first step in the network is a series of convolutions of the dataset. Each kernel in the layer contains m x m x 3 trainable weights, which are iteratively modified using a steepest descent numerical solver during the training phase of the system. The convolved images are stacked in a block, called a feature map, or convolutional layer. From there, the convolved images are pooled (or subsampled) to condense the size of the image stack. 
-At this point, there is a large stack of feature maps draw from the original input dataset. In a simple linear system, these features are combined into a single weighted summation function, where the input is each individual feature value, and the output is a vector representing the probability of the image belonging to a certain class.
-
-\begin{equation}
-\begin{bmatrix}
-C_{1} \\
-\vdots \\
-C_{n}
-\end{bmatrix}  =  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix}
-\end{equation}
-
-The equation above represents the transformation from feature space to the “fully connected layer.” $C_{i}$ represents the probability of the input image belonging to class $i$, and $f_{i}$ represents the value of the ith feature in the feature map. 
-Linear classification methods limit the versatility of the CNN, as many object distinctions do not follow a linear pattern in $n$-dimensional space. To account for this, most CNNs – including the ones utilized in this paper – incorporate a de-linearizing element dubbed the “activation function.” The activation function applies a nonlinear operation to the values in the convolution layer, which allows for the CNN to become a very powerful nonlinear fit function. Typical activation functions include the hyperbolic tangent function, the sigmoid function, and – most popularly – the rectifier function. Each of these functions are show in the figure below:
-
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=5in]{cnnReLu.png}
-\caption[Common CNN non-linear activation functions]{\centering Visualization of commonly used non-linear activation functions}
-\end{figure}
-
-From input to output, all CNNs have the same skeleton structure, with a varying number of layers between the raw input and the fully connected layer:
-
-\begin{figure}[!ht]
-	\centering
-		\includegraphics[width=6in]{cnn_flow.png} 
-	\caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
-\end{figure}
-
-For the system to be accurate, the weights for each convolution and connection must be trained. This training is done through a process called backpropagation. An image-set of known classifications is fed to the untrained system, and the error between the system’s classification and the true classification of each image is used to update the weights iteratively until the machine’s class prediction closely resembles ground truth. Most algorithms use numerical solving methods to sharply diminish the number of iterations required for convergence. The “gradient descent” method is commonly used in the machine learning world due to its rapid convergence properties and low computational complexity. The method is shown below:
-
-\begin{equation}
-	x_{k+1} = x_{k} - \gamma \nabla F(x_{k})
-\end{equation}
-
-$F(x)$ is described as the residual function. It is the diference between the result of the cost function $C(x)$, and the current $x$ variable values. $\gamma$ represents a scalar input parameter determining the scale of the effect of $F(x_{k}$ on $x_{k+1}$.
-
-\begin{equation}
- F(x) =
-\begin{bmatrix}
-C_{1} \\
-\vdots \\
-C_{n}
-\end{bmatrix}  -  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix} 
-\end{equation}
-
-The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset \cite{RN7}. Because CNNs -- and all supervised learning methods -- require a large amount of training data, they do not fit within the scope of the proof of concept inside of this paper. However, supervised learning has proven to be one of the most effective forms of classification, and will be addressed in the future work section of this thesis.
 
 
 
@@ -574,7 +496,7 @@ Boundary Representations, often called the ''skin'' of a solid object, consist o
 	\caption[Components of a boundary representation.]{\centering An overview of the components involved in a boundary representation of a solid object \cite{Stroud2006}.}
 \end{figure}
 
-Boundary representations can be definitions for both solid volumes and hollow shells. If the surface of the B-REP is not completely bounded, CAD analysis software is forced to interperet the object as a shell. %[[ more detail ]]
+Boundary representations can be definitions for both solid volumes and hollow shells. If the surface of the B-REP is not completely bounded, CAD analysis software is forced to interperet the object as a shell.
 
 \subsubsection{Non-Uniform Rational Basis Spline (NURBS)}
 NURBS curves are a method of interpolating a discrete set of vertex points into a continous function. Each vertex point is considered a ``control point,'' and a series of smooth polynomials are concatenated locally over individual sets of control points. An $n$-dimensional NURBS curve $f(u)$ can be defined ast the following:
@@ -599,7 +521,7 @@ NURBS curves are a method of interpolating a discrete set of vertex points into 
  	f(u) = \sum_{i=0}^{K-1} R_{i,d}(u) P_{i}
 \end{equation}
 
-Using these weighted concatenations, smooth surfaces are generated from a series of sharp geometric edges.
+Using these weighted concatenations, smooth surfaces are generated from a series of sharp geometric edges \cite{nurbs}.
 
 
 \begin{figure}[!ht]
@@ -608,14 +530,6 @@ Using these weighted concatenations, smooth surfaces are generated from a series
 	\caption[Example of a 2-dimensional nurbs spline.]{\centering A 2-dimensional example of a nurbs spline. Green points represent the control points, $P$, black lines represent their connectivity, and the blue line represents one possible nurbs spline.}
 \end{figure}
 
-
-% \subsection{CAD to Finite Element Conversion Compatibility}
-
-% [[rephrase?]]
-
-% Most commercial CAD software subscribes to the boundary representation model to represent solid modeling objects. Converting a boundary representation -- a list of surface features and piece-wise shape functions --  to a solid volume of finite elements that accurately describe the connectivity of the object requires a series of user input parameters. Element type, linear material parameters (typically ASTM material standards), local mesh density, and load and boundary conditions.
-
-% The crucial compatibility factor for B-REP solids is the absence of critical regions which cause stress singularities during the analysis. These regions can take the shape of sharp corners, spires, or point loads. They will not cause the mesh to fail, but return disproportionately massive stresses when compared with the stresses in the surrounding mesh. 
 
 
 
@@ -709,9 +623,7 @@ To remedy this, a delaunay triangulation search is run between half edges, and c
 \paragraph{Refinement}
 Mesh refinement can be broadly described as the artificial increase in mesh resolution by the introduction of new vertices and triangulation objects inside of pre-described edges. This allows for precise creation of uniform resolution throughout the features of the mesh.
 
-Specifically, refinement of newly created surface areas inside of the hole filling algorithm occurs by first estimating the density of the triangulations around the new area and subsequently matching that density by inserting vertices into the new area.
-
-\cite{meshrefinement}.
+Specifically, refinement of newly created surface areas inside of the hole filling algorithm occurs by first estimating the density of the triangulations around the new area and subsequently matching that density by inserting vertices into the new area \cite{meshrefinement}.
 
 \paragraph{Fairing}
 The fairing algorithm smooths the newly refined surface into a continous shape based on a minimization of a linear Laplacian system with boundary constraints at the previous half edge points \cite{meshfairing}. Laplacian smoothing is an iterative scheme which shifts vertex locations to satisfy the discrete partial differential equation shown below:
@@ -833,7 +745,7 @@ Optimized Delaunay Triangulation is known for maximinizing the minimum angle bet
 While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN63}. 
 
 \subsubsection{Mesh Exudation}
-Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}. %[[specifics]]
+Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}.
 
 
 
@@ -1040,7 +952,7 @@ Each of these methods are evaluated by their abilities to create comprehensive s
 
 The goal of the optimization process is to remedy or remove any elements in the mesh that violate the criteria for B-REP and subsequent finite element conversion compatibility. These criteria are defined in Section~\ref{subsec:meshoptimization}. Each step in the optimization pipeline specializes in modifying specific characteristics of the mesh which can be defined as having low quality using the metrics in Section~\ref{subsec:meshoptimization}.
 
-The first step in the optimization process is voronoi relaxation. voronoi relaxation seeks to resolve triangulations with low [[add quality metrics resolved by voronoi relaxation]]. voronoi relaxation comes with the caveat that it moves the location of the shape vertices, so this step comes at the cost of modifying the topology collected directly by the sensor. Depending on the accuracy of the collection instrument, this can be either a curse or a blessing.
+The first step in the optimization process is voronoi relaxation. voronoi relaxation seeks to resolve triangulations with low aspect ratio and edge ratio quality metrics (Table~\ref{table:qualitymetrics}). voronoi relaxation comes with the caveat that it moves the location of the shape vertices, so this step comes at the cost of modifying the topology collected directly by the sensor. Depending on the accuracy of the collection instrument, this can be either a curse or a blessing.
 
 The next step is the Optimized Delaunay Triangulation method. ODT is another relaxation method capable of modifying the object's topology in order to increase the overall quality of the mesh. Between voronoi relaxation and ODT, every quality metric should -- while not guaranteed to be so -- be within the tolerance set by the exit conditions applied, with the exception of slivers. To remedy these, perturbation and exudation are necessary.
 
@@ -1095,8 +1007,6 @@ While not necessary in the zero noise case, filtering and downsampling prove to 
 		\caption[Zero noise simulated data after being filtered with voxel size of 0.1 $in^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance]{\centering Zero noise simulated data after being filtered with voxel size of $0.1 in^{3}$, 15 minimum point neighbors at a distance of 1 standard deviation from the mean point to point distance.}
 	\label{zeronoise:filtered}
 \end{figure}
-
-The resulting cloud size is [[insert cloud size]], with an average point-to-point distance of 0.1 inches. Being able to actively control the point cloud density is crucial to have control over proper meshing parameters and fail conditions.
 
 \subsection{Segmentation Method Comparison}
 
@@ -1315,7 +1225,7 @@ The next figure is the reconstruction at scale space $2$. Again the mesh is seve
 
 \subsubsection{Exudation}
 
-Exudation, similar to perturbation, aims to relieve any slivers remaining in the mesh, as well as to re-smooth the pock-marks generated by the ODT portion of the pipeline. In Figure~\ref{zeronoise:advancedeverything}, many of these pock-mark artifacts are visibly smoother to some extent, but still exist in the mesh. Interestingly, Exudation has increased the angle of attack of the lip in the bottom left corner of the L-beam. %This can be attributed to [[ the way exudation operates, and why ]].
+Exudation, similar to perturbation, aims to relieve any slivers remaining in the mesh, as well as to re-smooth the pock-marks generated by the ODT portion of the pipeline. In Figure~\ref{zeronoise:advancedeverything}, many of these pock-mark artifacts are visibly smoother to some extent, but still exist in the mesh.
 
 \begin{figure}[!ht]
 	\centering
@@ -1400,7 +1310,7 @@ In the experimental test run in this thesis, only one in every five LiDAR scan f
 	\label{lidarsim:20psample}
 \end{figure}
 
-Because the simulated scans do not capture occlusion effects, and are visibly low in noise, it is not suitable for testing of the algorithms robustness to noise. Instead, 2 $cm$ gaussian noise is applied individually to the $x$, $y$, and $z$ coordinates of each point in the cloud. The result of this induction is shown in Figure~\ref{2cm:raw}.
+Because the simulated scans do not capture occlusion effects, and are visibly low in noise, it is not suitable for testing of the algorithms robustness to noise. Instead, 2 $cm$ gaussian noise is applied individually to the $x$, $y$, and $z$ coordinates of each point in the cloud. The result of this induction is shown in Figure~\ref{2cmnoise:raw}.
 
 \begin{figure}[!ht] 
 	\centering
@@ -1681,6 +1591,8 @@ The same filtering method as the previous sections is applied to the concatenate
 
 \subsection{Segmentation Method Comparison}
 
+After applying euclidean distance segmentation at a maximum radius of 0.5 cm, with valid cluster sizes ranging from 3,000-50,000, Figure~\ref{lidarresults:euclidean} shows the resulting clusters. The segmentation criteria determined to be optimal for the simulated cases is shown to be valid in this case as well, all though not entirely optimal. The algorithm returns a number of objects, instead of fully isolating the beam, which appears as a red color. This is not optimal, and where a supervised segmentation method may have a competitive edge over euclidean clustering.
+
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{images/real-lab-scans/euclidean0.png}
@@ -1689,6 +1601,8 @@ The same filtering method as the previous sections is applied to the concatenate
 		\caption[Euclidean clustering results on HDL-32E LiDAR scans]{\centering Results after euclidean clustering.}
 	\label{lidarresults:euclidean}
 \end{figure}
+
+
 
 \subsection{Initial Meshing Methods}
 
@@ -1707,7 +1621,7 @@ Figure~\ref{lidar:advancefront} shows the results of a raw advancing front meshi
 	\label{lidar:advancefront}
 \end{figure}
 
-Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset using the scale space reconstruction method, at a scale of 2. While the mesh does not represent the beam accurately, and does not meet all of the criteria for a B-REP conversion compatibility, the topology represents one continuous surface, and is far smoother than the original input data. This mesh can be seen to fail by visual inspection. In the [[bottom right image (label these images individually)]], two spires can be seen at the bottom of the beam. Beyond this, the horizontal section of the beam is still represented as a volumeless surface. This is not compatible with CAD conversion.
+Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset using the scale space reconstruction method, at a scale of 2. While the mesh does not represent the beam accurately, and does not meet all of the criteria for a B-REP conversion compatibility, the topology represents one continuous surface, and is far smoother than the original input data. This mesh can be seen to fail by visual inspection. The horizontal section of the beam is represented as a volumeless surface. This is not compatible with CAD conversion.
 
 \begin{figure}[!ht]
 	\centering
@@ -1719,7 +1633,7 @@ Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset 
 	\label{lidar:scalespace2}
 \end{figure}
 
-Reducing the input point cloud to scale space 4 provides similar results to scale space 2, the difference being in the smoothing level. This extra smoothing is most visible in the [[first image on the left]]. There are far less ridges in the vertical face than in scale space 2. While moving to higher scale spaces almost always guarantees a smoother reconstruction, it comes at the price of moving farther away from the true collected topology of the object.
+Reducing the input point cloud to scale space 4 provides similar results to scale space 2, the difference being in the smoothing level. This extra smoothing is most visible in the top left image. There are far less ridges in the vertical face than in scale space 2. While moving to higher scale spaces almost always guarantees a smoother reconstruction, it comes at the price of moving farther away from the true collected topology of the object.
 
 \begin{figure}[!ht]
 	\centering
@@ -1768,7 +1682,7 @@ As in previous sections, the first step in the optimization process is voronoi r
 	\label{lidar:scalespace2lloyd}
 \end{figure}
 
-After running the voronoi relaxation on the reconstruction at scale 4, the differences in the meshes between scales becomes more apparent. The evenly distributed surface defines a rectangular prism, the horizontal section of the beam merges into its vertical face. [[Second image on the left]] shows the phenomenon in detail, in Figure~\ref{lidar:scalespace4lloyd}.
+After running the voronoi relaxation on the reconstruction at scale 4, the differences in the meshes between scales becomes more apparent. The evenly distributed surface defines a rectangular prism, the horizontal section of the beam merges into its vertical face. The image on the bottom left shows the phenomenon in detail, in Figure~\ref{lidar:scalespace4lloyd}.
 
 \begin{figure}[!ht]
 	\centering
@@ -1776,7 +1690,6 @@ After running the voronoi relaxation on the reconstruction at scale 4, the diffe
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4lloyd01.png}
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4lloyd02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace4lloyd03.png}
-		% \includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4lloyd04.png}
 		\caption[Lloyd + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4lloyd}
 \end{figure}
@@ -1794,7 +1707,7 @@ After running the voronoi relaxation on the reconstruction at scale 4, the diffe
 	\label{lidar:scalespace2odt}
 \end{figure}
 
-The differences in the mesh before and after ODT is applied are subtle, but the changes are visible. In Figure~\ref{lidar:scalespace4odt} the mesh can be seen after the ODT optimization step. %The main differences here are in the [[define the main differences in terms of what ODT does]]
+The differences in the mesh before and after ODT is applied are subtle, but the changes are visible. In Figure~\ref{lidar:scalespace4odt} the mesh can be seen after the ODT optimization step.
 
 \begin{figure}[!ht]
 	\centering
@@ -1821,7 +1734,7 @@ The final steps in the optimization process, perturbation and exudation, aim to 
 	\label{lidar:scalespace2perturb}
 \end{figure}
 
-The reconstruction at scale space 4 again shows similar results to the scale space 2 reconstruction, with the except of the lower forward edge of the beam shown in [[the upper lefthand corner image]] of Figure~\ref{lidar:scalespace4perturb}. An artifact of the casting space, this corner does not extrude from the beam's surface as far as the case of scale space 2.
+The reconstruction at scale space 4 again shows similar results to the scale space 2 reconstruction, with the except of the lower forward edge of the beam shown in the upper lefthand graphic of Figure~\ref{lidar:scalespace4perturb}. An artifact of the casting space, this corner does not extrude from the beam's surface as far as the case of scale space 2.
 
 \begin{figure}[!ht]
 	\centering
@@ -1904,7 +1817,7 @@ The end result of the algorithm on the experimental data, when fully automated, 
 
 Why the mesh at Scale Space 2 fails the finite element conversion at this point is still unclear. It is possible that there are unobservable sections of low or zero volume, or that there are overlapping sections inherent in the mesh. Interestingly, All of the quality metrics for Scale Space 2 are higher than those at Scale Space 4, so all expected parameters are met. Scale Space 2 serves as proof that although the metrics used to evaluate mesh quality in this thesis are valuable in estimating a mesh's surface-to-solid compatibility, they are not the only metrics that determine the ability to do so.
 
-The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}.
+The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}. Comparing these figures with their unmodified counterparts (Figure~\ref{lidar:scalespace2everything} and Figure~\ref{lidar:scalespace4everything}), the only change is the removal of the bounded shape occupying the lower right section of the beam, which was connected to the rest of the beam object via single vertex point.
 
 \begin{figure}[!ht]
 	\centering
@@ -1964,7 +1877,7 @@ The rest of the quality metrics are shown in Table~\ref{table:qualitymetrics}.
 			\\ \hline Zero noise SS4	& 0.0031	& 0.0486	& 0.0016	& 0.0016	& 1					& No				& No
 			\\ \hline 2cm noise SS2		& 0.1367	& 0.1077	& 0.0147	& 0.0955	& 1					& Yes				& Yes
 			\\ \hline 2cm noise SS4		& 0.1166	& 0.1444	& 0.0553	& 0.0595	& 1					& Yes				& Yes
-			\\ \hline Experimental SS2	& 0.2629	& 0.1941	& 0.1099	& 0.1418	& 2					& Yes				& No
+			\\ \hline Experimental SS2	& 0.2629	& 0.1941	& 0.1099	& 0.1418	& 2					& Yes				& Yes
 			\\ \hline Experimental SS4	& 0.2143	& 0.1229	& 0.0558	& 0.1087	& 2					& Yes				& No
 			\\ \hline
 	\end{tabular}}
@@ -1999,9 +1912,33 @@ As seen in the experimental meshing section, these parameters are not the be-all
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{conclusion/advancedfrontloading.png}
-		\caption[FEA loading results on the zero noise beam]{\centering The zero noise beam, using the advancing front reconstruction, is subjected to a static cantilever type load of [[load]].}
+		\caption[FEA loading results on the zero noise beam]{\centering The zero noise beam, using the advancing front reconstruction, is subjected to an arbitrary load to certify FEA compatibility.}
 	\label{conc:zeronoiseload}
 \end{figure} 
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=4in]{conclusion/noiseSS2Bounded.jpg}
+		\caption[Optimized gaussian noise reconstruction as a solid volume]{\centering Scale-Space 2 simulated gaussian noise reconstruction as a solid volume.}
+	\label{conc:gnoisesolid}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=2in]{conclusion/noiseSS2BoundedProblem.jpg}
+		\caption[Failure section of noise induced solid volume]{\centering Section of simulated solid which failed during refinement phase of finite element simulation.}
+	\label{conc:gnoiseproblem}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=4in]{conclusion/realSS2FEresult.jpg}
+		\includegraphics[width=4in]{conclusion/realSS2FEresult01.jpg}
+		\caption[Finite element simulation of LiDAR collected point cloud data]{\centering Finite element simulation results of LiDAR collected point cloud data optimized after reconstruction at Scale-Space 2.}
+\end{figure}
+
+
 
 \section{ Algorithm Programmability }
 
@@ -2041,6 +1978,78 @@ The algorithm built is highly customizable. At each step in the pipeline, the de
 %Chapter: 		Future Work
 \chapter{Future Work}
 \label{chap:future}
+
+
+\section{Supervised Object Recognition and Segmentation --- Convolutional Neural Networks}
+\subparagraph{Definitions}
+To detect distinctive features in a dataset – from a machine’s perspective – the dataset needs to be modified to enunciate those features. Key features in machine vision include edges, corners, and areas with distinctive geometry. Convolutions are the key to bringing these features to the forefront of the image.
+A convolution kernel is a weighted square matrix of dimensions m, and depth equal to the rank of the feature space of the dataset. The kernel acts as a filter for the image as it strides from supervoxel to supervoxel. At each step, the dot product of the kernel with data values inside the current super-voxel provide a convolved image of the dataset while retaining characteristic features. The equation below illustrates the math behind a convolution kernel. $C$ represents the convolved image, and $x_{i}$ and $w(i)$ are the $i^{th}$ point and weight of $N$ points located inside the voxel.
+
+\begin{equation}
+	C_{new} = \sum_{i}^{N}  w(i) x_{i}
+\end{equation}
+
+Another type of convolution is called pooling, or subsampling. This convolution steps through the dataset with a stride value greater than one, resulting in a smaller image of the original set. In pooling, the kernel will pull either the largest intensity from each super-voxel, or the average intensity of the data points inside the super-voxel. This allows for the machine to decrease the size of the dataset while maintaining distinctive features.
+
+\begin{equation}
+	C_{new} = \frac{\sum_{i}^{N}  x_{i}}{N}
+\end{equation}
+
+\subparagraph{Convolutional Neural Networks}
+Convolutional Neural Networks (CNNs) are modeled after the visual cortex in the brain. They consist of layers of convolutional networks. Each network contains “neurons” with simple feature reception fields. Through layers upon layers of these networks, objects can be classified. The biases and weights on these networks can be adjusted based on learning algorithms REF 1 in proposal. CNNs have become the standard in feature classification for image processing, but the accuracy that they provide comes at the price of processing time. 
+Every CNN can be broken down into the following steps: Convolution, max/mean pooling, activation function, fully connected layer, repeat. The diagram below illustrates the overarching structure of a basic Convolutional Neural Network:
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=6in]{cnn.png}
+	\caption[High level flow chart of a convolutional neural network]{\centering Map of a convolutional neural network with two hidden layers [ref]}
+\end{figure}
+
+In the case of point cloud processing, the input is a raw xyz set of some size n x 3. The first step in the network is a series of convolutions of the dataset. Each kernel in the layer contains m x m x 3 trainable weights, which are iteratively modified using a steepest descent numerical solver during the training phase of the system. The convolved images are stacked in a block, called a feature map, or convolutional layer. From there, the convolved images are pooled (or subsampled) to condense the size of the image stack. 
+At this point, there is a large stack of feature maps draw from the original input dataset. In a simple linear system, these features are combined into a single weighted summation function, where the input is each individual feature value, and the output is a vector representing the probability of the image belonging to a certain class.
+
+\begin{equation}
+\begin{bmatrix}
+C_{1} \\
+\vdots \\
+C_{n}
+\end{bmatrix}  =  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix}
+\end{equation}
+
+The equation above represents the transformation from feature space to the “fully connected layer.” $C_{i}$ represents the probability of the input image belonging to class $i$, and $f_{i}$ represents the value of the ith feature in the feature map. 
+Linear classification methods limit the versatility of the CNN, as many object distinctions do not follow a linear pattern in $n$-dimensional space. To account for this, most CNNs – including the ones utilized in this paper – incorporate a de-linearizing element dubbed the “activation function.” The activation function applies a nonlinear operation to the values in the convolution layer, which allows for the CNN to become a very powerful nonlinear fit function. Typical activation functions include the hyperbolic tangent function, the sigmoid function, and – most popularly – the rectifier function. Each of these functions are show in the figure below:
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=5in]{cnnReLu.png}
+\caption[Common CNN non-linear activation functions]{\centering Visualization of commonly used non-linear activation functions}
+\end{figure}
+
+From input to output, all CNNs have the same skeleton structure, with a varying number of layers between the raw input and the fully connected layer:
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=6in]{cnn_flow.png} 
+	\caption[Block diagram of CNN flow]{\centering Block diagram of a CNN$'$s skeleton structure}
+\end{figure}
+
+For the system to be accurate, the weights for each convolution and connection must be trained. This training is done through a process called backpropagation. An image-set of known classifications is fed to the untrained system, and the error between the system’s classification and the true classification of each image is used to update the weights iteratively until the machine’s class prediction closely resembles ground truth. Most algorithms use numerical solving methods to sharply diminish the number of iterations required for convergence. The “gradient descent” method is commonly used in the machine learning world due to its rapid convergence properties and low computational complexity. The method is shown below:
+
+\begin{equation}
+	x_{k+1} = x_{k} - \gamma \nabla F(x_{k})
+\end{equation}
+
+$F(x)$ is described as the residual function. It is the diference between the result of the cost function $C(x)$, and the current $x$ variable values. $\gamma$ represents a scalar input parameter determining the scale of the effect of $F(x_{k}$ on $x_{k+1}$.
+
+\begin{equation}
+ F(x) =
+\begin{bmatrix}
+C_{1} \\
+\vdots \\
+C_{n}
+\end{bmatrix}  -  \begin{bmatrix} w_{1,1} & \hdots & w_{1,m+1} \\ \vdots & \ddots & \hdots \\ w_{n,1} & \hdots & w_{n, m+1} \end{bmatrix}  \begin{bmatrix} f_{1} \\ \vdots \\ f_{n} \\ 1 \end{bmatrix} 
+\end{equation}
+
+The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset \cite{RN7}. Because CNNs -- and all supervised learning methods -- require a large amount of training data, they do not fit within the scope of the proof of concept inside of this paper. However, supervised learning has proven to be one of the most effective forms of classification, and is a promising tool for implemention to further the effectiveness of the algorithm proposed in this thesis.
 
 \section{Guaranteed FEA compatibility}
 [[]]
