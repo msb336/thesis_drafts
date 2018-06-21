@@ -22,14 +22,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem[Siebert and Teizer(2014)]{RN48}
-\BIBentryALTinterwordspacing
-S.~Siebert and J.~Teizer, ``Mobile 3d mapping for surveying earthwork projects
-  using an unmanned aerial vehicle (uav) system,'' \emph{Automation in
-  Construction}, vol.~41, pp. 1--14, 2014. [Online]. Available:
-  \url{http://www.sciencedirect.com/science/article/pii/S0926580514000193}
-\BIBentrySTDinterwordspacing
-
 \bibitem[Barazzetti et~al.(2015)Barazzetti, Banfi, Brumana, Gusmeroli, Oreni,
   Previtali, Roncoroni, and Schiantarelli]{RN30}
 L.~Barazzetti, F.~Banfi, R.~Brumana, G.~Gusmeroli, D.~Oreni, M.~Previtali,
@@ -49,11 +41,6 @@ U.~Clarenz, M.~Rumpf, and A.~Telea, ``Finite elements on point based
   surfaces,'' in \emph{Eurographics Symposium on Point-Based Graphics},
   Conference Paper.
 
-\bibitem[Hu et~al.()Hu, Hu, Fernandez-Steeger, Dong, and Azzam]{RN38}
-H.~Hu, H.~Hu, T.~M. Fernandez-Steeger, M.~Dong, and R.~Azzam, ``Numerical
-  modeling of lidar-based geological model for landslide analysis,''
-  \emph{Automation in construction}, vol.~24, pp. 184--193.
-
 \bibitem[Dan and Lancheng(2006)]{RN54}
 \BIBentryALTinterwordspacing
 J.~Dan and W.~Lancheng, ``Direct generation of die surfaces from measured data
@@ -61,6 +48,11 @@ J.~Dan and W.~Lancheng, ``Direct generation of die surfaces from measured data
   Advanced Manufacturing Technology}, vol.~31, no.~5, pp. 574--579, 2006.
   [Online]. Available: \url{https://doi.org/10.1007/s00170-005-0225-4}
 \BIBentrySTDinterwordspacing
+
+\bibitem[Hu et~al.(2012)Hu, Hu, Fernandez-Steeger, Dong, and Azzam]{RN38}
+H.~Hu, H.~Hu, T.~M. Fernandez-Steeger, M.~Dong, and R.~Azzam, ``Numerical
+  modeling of lidar-based geological model for landslide analysis,''
+  \emph{Automation in construction}, vol.~24, pp. 184--193, 2012.
 
 \bibitem[Smith et~al.(2015)Smith, Carrivick, and Quincey]{RN20}
 M.~Smith, J.~Carrivick, and D.~Quincey, ``Structure from motion photogrammetry
@@ -124,14 +116,12 @@ P.~Biasuttia, J.-F. Aujola, M.~Bredif, and A.~Bugeaub, ``Disocclusion of 3d
   lidar point clouds using range images,'' \emph{ISPRS Annals of the
   Photogrammetry}, vol. e IV-1/W1, no.~75, 2017.
 
-\bibitem[Choudhury et~al.(2011)Choudhury, Parhi*, and Sasanka]{RN7}
-Choudhury, D.~R. Parhi*, and Sasanka, ``Analysis of smart crack detection
-  methodologies in various structures,'' \emph{Journal of Engineering and
-  Technology Research}, vol.~3, no.~5, pp. 139--147, 2011.
-
 \bibitem[Str(2006)]{Stroud2006}
 \emph{Modelling Background}.\hskip 1em plus 0.5em minus 0.4em\relax London:
   Springer London, 2006, pp. 11--27.
+
+\bibitem[Foley(1990)]{nurbs}
+J.~Foley, ``Section 11.2,'' 1990.
 
 \bibitem[Weatherill and Hassan(1994)]{RN65}
 \BIBentryALTinterwordspacing
@@ -207,5 +197,10 @@ J.~Tournois, R.~Srinivasan, and P.~Alliez, ``Perturbing slivers in 3d delaunay
 \bibitem[CHENG et~al.(2000)CHENG, DEY, EDELSBRUNNER, FACELLO, and TENG]{RN64}
 S.-W. CHENG, T.~K. DEY, H.~EDELSBRUNNER, M.~A. FACELLO, and S.-H. TENG,
   ``Sliver exudation,'' \emph{Journal of the ACM}, vol.~47, no.~5, p.~21, 2000.
+
+\bibitem[Choudhury et~al.(2011)Choudhury, Parhi*, and Sasanka]{RN7}
+Choudhury, D.~R. Parhi*, and Sasanka, ``Analysis of smart crack detection
+  methodologies in various structures,'' \emph{Journal of Engineering and
+  Technology Research}, vol.~3, no.~5, pp. 139--147, 2011.
 
 \end{thebibliography}

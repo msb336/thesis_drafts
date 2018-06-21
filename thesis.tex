@@ -112,24 +112,38 @@ All three tests have an identical target object. Analysis of the effectiveness o
 Surface reconstruction from a 3D point cloud is not a novel problem. In the past, groups have developed meshing algorithms for digital art replication, geographical topology analysis, and –- more recently -– structure health monitoring. None of these processes, however, provide a general method to automate the entire pipeline between point-cloud collection and CAD geometry.
 
 % %%
-\subsection{Geographical Topography Mapping}
-\label{subsec:topographymapping}
+% \subsection{Geographical Topography Mapping}
+% \label{subsec:topographymapping}
 
-In 2014, Sebastian Siebert implemented LiDAR devices mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
+% In 2014, Sebastian Siebert implemented LiDAR devices mounted to UAVs to provide 3D mapping of earthwork projects for surveyors \cite{RN48}.
 
 
 %%
 \subsection{Building Informational Modeling}
 \label{subsec:BIM}
+Building informational modeling is industry standard for civil engineering groups. It is the process of building a 3D representation via CAD modeling and overlaying information in to the structure such as deformation information, incorporated materials, energy efficiency analyses, etc.. There are attempts to automate as much of the reconstruction process as possible, but the most reliable reconstruction method is the act of collecting a dense, highly accurate point cloud of the object in question, and reconstructing the point cloud as a CAD model manually \cite{RN30}.
 
-\cite{RN30}
-%%
-\subsection{Aerial Scanning for GPS Overlay}
-\label{subsec:UAVscanning}
-%%
+\begin{figure}
+	\centering
+	\includegraphics[width=5in]{introduction/bimworkflow.png}
+	\caption[Building informational model workflow]{\centering Workflow of point cloud assisted building informational modeling. a) The point cloud is collected b) a CAD model is manually fitted to the point cloud c) internal information about the building architecture is applied d) results of a stress analysis of the building \cite{RN30}.}
+\end{figure}
+
 \subsection{Semi-Automated Point Cloud to FEA modeling}
 \label{subsec:SemiFEA}
-\cite{RN29} \cite{RN31} \cite{RN38} \cite{RN54}
+There are many options in literature which tackle conversion of point clouds to Finite Element models, but all readily available methods require some form of manual user input along the pipeline of their algorithms.  
+In 2015, Castellazzi et. al. designed an algorithm specifically built for high quality laser scanner cloud inputs. After the cloud is collected, the user doctors the cloud to remove all non-desired inputs manually, and the resulting cloud is meshed using the concave hull method, which bounds the pointset inside the smallest possible volume \cite{RN29}. Figure~\ref{fig:cloud2femworkflow} shows the workflow of the algorithm. This semi-automated workflow is common, due to its guaranteed results and ease of setup \cite{RN31,RN54}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=5in]{introduction/cloud2femworkflow.png}
+	\caption[Workflow of a semi-automated cloud conversion algorithm]{\centering Workflow of a semi-automated cloud conversion algorithm. Fully automated procedures are colored green and manual procedures are colored orange \cite{RN29}.}
+	\label{fig:cloud2femworkflow}
+\end{figure}
+
+
+
+A common application for LiDAR data collection -- especially with the use of unmanned aerial vehicles -- is data collection for land-surveying purposes. Point cloud data is at a point where accurate volume measurements can be made for subsequent cost and time analysis for construction sites. H. Hu et. al. create a way to convert surface meshes of these geological models into solid finite element models by applying estimated material parameters to the surface meshes and building the interior volume accordingly \cite{RN38}.
 
 
 
@@ -561,8 +575,8 @@ The Advancing Front method is common in computer graphics software – especiall
 
 In the Advancing Front method, a mesh is constructed by progressively adding tetrahedra starting at the boundaries of the previous surface elements. At each iteration, the mesh boundary is propagated further across the set of surface points. New tetrahedra are determined based on the minimal delaunay triangluation between the boundary vertices and unreferenced points in space. Each new triangulation object is created by adding a single unreferenced point at a time \cite{RN66}.
 
-\subsubsection{Scale Space Reconstruction Method}
-At a grand scale, the Scale Space Reconstruction Method aims to optimize surface meshing in the face of discrete point cloud data. No matter how accurate or dense a point cloud may be, there is no way to verify the topology defined by the cloud is accurate to the true object topology. To simplify this ill-posed problem, and reduce mesh quality damage due to noisy points, the Scale Space algorithm casts the raw point cloud to a space of scale N by iteratively calculating the mean curvature of a neighborhood of points and casting each point pk to it’s nearest point on the curve. This results in a far more uniform point cloud, which can mesh via Delaunay triangulation at a high quality level. Once the meshing has occurred, the pointset is then recast to its original scale to maintain complex features. 
+\subsubsection{Scale-Space Reconstruction Method}
+At a grand scale, the Scale-Space Reconstruction Method aims to optimize surface meshing in the face of discrete point cloud data. No matter how accurate or dense a point cloud may be, there is no way to verify the topology defined by the cloud is accurate to the true object topology. To simplify this ill-posed problem, and reduce mesh quality damage due to noisy points, the Scale-Space algorithm casts the raw point cloud to a space of scale N by iteratively calculating the mean curvature of a neighborhood of points and casting each point pk to it’s nearest point on the curve. This results in a far more uniform point cloud, which can mesh via Delaunay triangulation at a high quality level. Once the meshing has occurred, the pointset is then recast to its original scale to maintain complex features. 
 
 \textbf{Algorithm 1:} Mean Curvature Calculation
 
@@ -581,7 +595,7 @@ At a grand scale, the Scale Space Reconstruction Method aims to optimize surface
 		(*$p' \cdot n = \frac{p-p'}{|p-p'|} \cdot sign(\langle p - p', p \cdot n \rangle ) $*	
 \end{lstlisting}
 
-\textbf{Algorithm 2:} Scale Space Iterator
+\textbf{Algorithm 2:} Scale-Space Iterator
 
   \textbf{Input:} A point set $P$, a number of iterations $N$, and a radius $r$
 	
@@ -664,7 +678,7 @@ The effects of Laplacian smoothing on a mesh can be drastic, as it relies solely
 \begin{figure}[!ht]
 	\centering
 	\includegraphics{holefilling/laplaciansmoothinglamdaonetenth.png}
-	\caption[Effects of global Laplacian smoothing with $\lambda=0.1$]{\centering Effects of global Laplacian smoothing on a noisy "8"-shaped mesh \cite{laplacianimage}.}
+	\caption[Effects of global Laplacian smoothing with $\lambda=0.1$]{\centering Effects of global Laplacian smoothing on a noisy ``Figure 8''-shaped mesh \cite{laplacianimage}.}
 	\label{lapsmoothing}
 \end{figure}
 
@@ -678,11 +692,10 @@ The effects of Laplacian smoothing on a mesh can be drastic, as it relies solely
 
 \subsection{Mesh Optimization}
 \label{subsec:meshoptimization}
-Now that the objects in the cloud are properly segmented, they must be meshed in a way that is both accurate to the real-world definition of the object and suitable to be converted from a surface mesh to a solid volume.
+After the initial meshing steps, the object is now fully bounded, but not optimized for conversion to a solid volume. This section will discuss the criteria for solid volume optimization, as well as the operations required to modify the mesh object to a more optimal triangulation set.
 
 \subsubsection{Criteria for Mesh Quality and Failure Criteria for Solid Volume Conversion}
 
-\subparagraph{Failure Criteria}
 The first criterion for surface mesh compatibility with solid volume conversion is “water-tightness.” Meaning, there are no gaps, holes, or unbounded edges (called half-edges in this thesis) in the triangulation. These gaps can be quantified as any edge in a polyhedron that is referenced by no other polyhedron in the triangulation.
 The other criteria are more abstract in nature and are more difficult to detect and handle independently. These criteria are defined as mesh “Quality.” Quality is a quantification of the level of simplicity of a triangulation object by evaluating ratios of different elements in the triangulation.
 
@@ -745,7 +758,8 @@ Optimized Delaunay Triangulation is known for maximinizing the minimum angle bet
 While  Voronoi  relaxation  and  ODT  are  large  scale  smoothing  and  refinement  techniques,  they  have  no  constraints  on  slivers  present  in  the  mesh.  Perturbation  and  exudation  are  are  necessary  to  oust  any  slivers  remaining  in  the  triangulation.  Slivers  are  defined  as  any  triangulation  with  an  angle  less  than  $\alpha$,  a  user-defined  parameter.  The  algorithm  iteratively  increases  the  angles  created  in  a  triangulation  by  applying  a  pseudo-random  perturbation  vector,  $p_{v}$,  to  vertices  coincident  with  triangulations  defined  as  slivers.  If  the  perturbation  results  in  a  success,  resulting  triangulation  is  kept.  Otherwise,  a  new  perturbation  vector  is  calculated  to  create  a  higher  quality  triangulation  \cite{RN63}. 
 
 \subsubsection{Mesh Exudation}
-Exudation  again  is  a  method  to  remove  any  slivers  remaining  in  the  surface.  Each  point  in  a  tetrahedron  classified  as  a  sliver  is  assigned  a  weight  based  on  its distance  relationship  to  it’s  neighbors.  The  point  weighted  most  heavily,  then,  is  the  tip  of  the  sliver,  and  is  modified  to  place  the  tetrahedron  within  the  acceptable  bounds  of  mesh  quality  \cite{RN64}.
+
+Exudation introduces new vertices into any remaining tetrahedra still classified as slivers. These new vertices are then perturbed psuedo-randomly in space in order to maximize the minimum angle between any two angles in the sliver object. Exudation is able to remedy the slivers unmodified by the pertubation step with the introduction of new vertices, as these create more degrees of freedom for the tetrahedra to be modified \cite{RN64}.
 
 
 
@@ -918,26 +932,26 @@ Detailed descriptions of how these algorithms operate, as well as general use ca
 
 \subsection{Initial Mesh Exploration}
 
-% There are two algorithms for the initial mesh construction intended for evaluation in this thesis: Scale Space Reconstruction and Avancing Front. Advancing front provides no robustness to noise or occlusion in the dataset, but guarantees no overlapping faces, so could be viable with the addition of hole patching and the optimization stage. Scale Space Reconstruction, on the other hand, is designed specifically for handling noisey, variable density datasets. It does not prevent overlapping elements, so removal of these elements must be added to the pipeline for this case. It should also be noted that because of Scale Space Reconstruction's casting steps (described in Section~\ref{subsec:meshing}), it is far more computationally expensive than the Advancing Front method. Table~\ref{table:intialmeshcompare} provides some visiualization of the effect of casting a mesh to varying scales.
+There are two algorithms for the initial mesh construction intended for evaluation in this thesis: Scale-Space Reconstruction and Avancing Front. Advancing front provides no robustness to noise or occlusion in the dataset, but guarantees no overlapping faces, so could be viable with the addition of hole patching and the optimization stage. Scale-Space Reconstruction, on the other hand, is designed specifically for handling noisey, variable density datasets. It does not prevent overlapping elements, so removal of these elements must be added to the pipeline for this case. It should also be noted that because of Scale-Space Reconstruction's casting steps (described in Section~\ref{subsec:meshing}), it is far more computationally expensive than the Advancing Front method.
 
 % \begin{table}[!ht]
 % 	\centering
-% 	\caption[Effect of increasing scale in a scale space reconstruction]{Effect of increasing scale in a scale space reconstruction}
+% 	\caption[Effect of increasing scale in a Scale-Space reconstruction]{Effect of increasing scale in a Scale-Space reconstruction}
 % 	\begin{tabular}{ | c | c | c | }
 % 	\hline
 % 	Input Clouds 	& \includegraphics[width=3cm]{l_block_pt_cloud.jpg}
 % 					& \includegraphics[width=3cm]{l_block_pt_cloud10pnoise.jpg}
 % 	\\
 % 	\hline
-% 	Scale Space 3 	& \includegraphics[width=3cm]{scalespace/clean/scalespace3.png} 
+% 	Scale-Space 3 	& \includegraphics[width=3cm]{scalespace/clean/scalespace3.png} 
 % 					& \includegraphics[width=3cm]{scalespace/10pnoise/scale3.png}
 % 	\\
 % 	\hline
-% 	Scale Space 5 	& \includegraphics[width=3cm]{scalespace/clean/scalespace5.png} 
+% 	Scale-Space 5 	& \includegraphics[width=3cm]{scalespace/clean/scalespace5.png} 
 % 					& \includegraphics[width=3cm]{scalespace/10pnoise/scale5.png}
 % 	\\
 % 	\hline
-% 	Scale Space 10 	& \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
+% 	Scale-Space 10 	& \includegraphics[width=3cm]{scalespace/clean/scalespace10.png} 
 % 					& \includegraphics[width=3cm]{scalespace/10pnoise/scale10.png}
 % 	\\
 % 	\hline
@@ -1047,36 +1061,36 @@ In a zero noise situation, the advancing front method returns a nearly perfect m
 		\label{zeronoise:advancingfront}
 \end{figure}
 
-Figure~\ref{zeronoise:scalespace2} shows the effects of Scale Space reconstruction at scale $S = 2$ -- definition for scale space reconstruction found in Section~\ref{subsec:meshing}. The predominantly visible effect is the change in topology of the beam. because of the localized fnunction estimation that occurs during the scale-space casting phase, the planar surface of the beam is reconstructed with a parabolic shape. The overall thickness is reduced.
+Figure~\ref{zeronoise:scalespace2} shows the effects of Scale-Space reconstruction at scale $S = 2$ -- definition for Scale-Space reconstruction found in Section~\ref{subsec:meshing}. The predominantly visible effect is the change in topology of the beam. because of the localized fnunction estimation that occurs during the Scale-Space casting phase, the planar surface of the beam is reconstructed with a parabolic shape. The overall thickness is reduced.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/cleanNeat/scalespace200.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/cleanNeat/scalespace201.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/cleanNeat/scalespace202.png}
-		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
+		\caption[Initial meshing using a Scale-Space reconstruction with $S = 2$]{\centering  Result of initial meshing using the Scale-Space reconstruction method with $S = 2$.}
 	\label{zeronoise:scalespace2}
 \end{figure}
 
-As the beam is cast into higher and higher scale-spaces, the thickness of the beam is continually reduced. At scale-space 4 and higher -- shown in Figures~\ref{zeronoise:scalespace4} and \ref{zeronoise:scalespace15}, the beam thickness (originally $\frac{1}{4}$in) is reduced to zero. This is due again to the piecewise function estimation that occurs in the specified scale space. Once all of the points are cast down far enough, they are no longer registered as being in two separate neighborhoods, and are instead identified as belonging to the same 2-dimensional curve.
+As the beam is cast into higher and higher scale-spaces, the thickness of the beam is continually reduced. At Scale-Space 4 and higher -- shown in Figures~\ref{zeronoise:scalespace4} and \ref{zeronoise:scalespace15}, the beam thickness (originally $\frac{1}{4}$in) is reduced to zero. This is due again to the piecewise function estimation that occurs in the specified Scale-Space. Once all of the points are cast down far enough, they are no longer registered as being in two separate neighborhoods, and are instead identified as belonging to the same 2-dimensional curve.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/cleanNeat/scalespace400.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/cleanNeat/scalespace401.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/cleanNeat/scalespace402.png}
-		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
+		\caption[Initial meshing using a Scale-Space reconstruction with $S = 4$]{\centering  Result of initial meshing using the Scale-Space reconstruction method with $S = 4$.}
 		\label{zeronoise:scalespace4}
 \end{figure}
 
-Figure~\ref{zeronoise:scalespace15} shows the extremes of what the scale space reconstruction can do to alter the topology of a mesh. Because the points are cast to such a high scale, there is virtually no thickness between points on one side of the beam and points on the other. For this reason, the shape is cast as a 2-dimensional object. It is clear that casting an object like the beam to as high a scale as shown here is not viable for initial meshing. 
+Figure~\ref{zeronoise:scalespace15} shows the extremes of what the Scale-Space reconstruction can do to alter the topology of a mesh. Because the points are cast to such a high scale, there is virtually no thickness between points on one side of the beam and points on the other. For this reason, the shape is cast as a 2-dimensional object. It is clear that casting an object like the beam to as high a scale as shown here is not viable for initial meshing. 
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/cleanNeat/scalespace1500.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/cleanNeat/scalespace1501.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/cleanNeat/scalespace1502.png}
-		\caption[Initial meshing using a scale space reconstruction with $S = 15$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 15$.}
+		\caption[Initial meshing using a Scale-Space reconstruction with $S = 15$]{\centering  Result of initial meshing using the Scale-Space reconstruction method with $S = 15$.}
 		\label{zeronoise:scalespace15}
 \end{figure}
 
@@ -1090,16 +1104,16 @@ In the zero noise case, Advancing Front reconstruction proves to be the most acc
 			\hline
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
 			\\ \hline Advacing Front & 0.0548 & 0.2916 & 0.0270 & 0.0274 & 1 & Yes & Yes
-			\\ \hline Scale Space 2  & 0.0577 & 0.0665 & 0.0082 & 0.0587 & 1 & No & No
-			\\ \hline Scale Space 4  & 0.0038 & 0.0185 & 0.0005 & 0.0035 & 1 & No & No
-			\\ \hline Scale Space 15 & 0.0022 & 0.0186 & 0.0002 & 0.0015 & 1 & No & No
+			\\ \hline Scale-Space 2  & 0.0577 & 0.0665 & 0.0082 & 0.0587 & 1 & No & No
+			\\ \hline Scale-Space 4  & 0.0038 & 0.0185 & 0.0005 & 0.0035 & 1 & No & No
+			\\ \hline Scale-Space 15 & 0.0022 & 0.0186 & 0.0002 & 0.0015 & 1 & No & No
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
 	\label{table:zeronoiseInit}
 \end{table}
 
-The advancing front case is the only case to be CAD compatible at first pass. This is due to the input set being completely noiseless. None of the Scale Space reconstructions pass the conversion test, as they all contain regions that are nearly or entirely two dimensional. These methods are revisited after the optimization steps are complete.
+The advancing front case is the only case to be CAD compatible at first pass. This is due to the input set being completely noiseless. None of the Scale-Space reconstructions pass the conversion test, as they all contain regions that are nearly or entirely two dimensional. These methods are revisited after the optimization steps are complete.
 
 \subsection{Optimization}
 \subsubsection{Effects of Voronoi Relaxation}
@@ -1118,7 +1132,7 @@ The relaxed mesh after 200 iterations of voronoi relaxation is shown in Figure~\
 	\label{zeronoise:advancedlloyd}
 \end{figure}
 
-Voronoi Relaxation has interesting effects of the scale space meshes. The mesh in Figure~\ref{zeronoise:scalespace2lloyd} is a relatively smooth, pock-marked version of the initial scale-space mesh. Notice on the left-most corner of the beam there are a few tall, narrow shapes. These shapes are the slivers remaining in the mesh. The next steps in the optimization process aim to remove these slivers.
+Voronoi Relaxation has interesting effects of the Scale-Space meshes. The mesh in Figure~\ref{zeronoise:scalespace2lloyd} is a relatively smooth, pock-marked version of the initial Scale-Space mesh. Notice on the left-most corner of the beam there are a few tall, narrow shapes. These shapes are the slivers remaining in the mesh. The next steps in the optimization process aim to remove these slivers.
 
 \begin{figure}[!ht]
 	
@@ -1127,11 +1141,11 @@ Voronoi Relaxation has interesting effects of the scale space meshes. The mesh i
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2lloyd01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2lloyd02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2lloyd03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale-Space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale-Space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace2lloyd}
 \end{figure}
 
-Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh is 2-dimensional due to the scale-space casting, but still shows the effects of voronoi relaxation quite vividly.
+Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh is 2-dimensional due to the Scale-Space casting, but still shows the effects of voronoi relaxation quite vividly.
 
 \begin{figure}[!ht]
 	\centering
@@ -1139,7 +1153,7 @@ Similar results are shown in Figure~\ref{zeronoise:scalespace4lloyd}. This mesh 
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4lloyd01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4lloyd02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4lloyd03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale-Space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale-Space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{zeronoise:scalespace4lloyd}
 \end{figure}
 
@@ -1158,7 +1172,7 @@ Delaunay optimization seeks to find the minimal triangulation conditions for the
 	\label{zeronoise:advancedodt}
 \end{figure}
 
-The negative effects of ODT are increasingly apparent at each greater scale of the scale space reconstruction. Any imperfections in the mesh are enunciated by a heavy, vacuum-like extrusion.
+The negative effects of ODT are increasingly apparent at each greater scale of the Scale-Space reconstruction. Any imperfections in the mesh are enunciated by a heavy, vacuum-like extrusion.
 
 \begin{figure}[!ht]
 	\centering
@@ -1166,11 +1180,11 @@ The negative effects of ODT are increasingly apparent at each greater scale of t
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2odt02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2odt03.png}
-		\caption[Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 2$ after ODT with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 2$ after ODT with a 30 second clock cap.}
 	\label{zeronoise:scalespace2odt}
 \end{figure}
 
-It is clear at this point that for low thickness objects in zero noise situations, $4^{th}$ scale space is too high, as it results in a zero volume surface mesh. There are no remedies for a mesh that fails to generate any surface hull at all.
+It is clear at this point that for low thickness objects in zero noise situations, $4^{th}$ Scale-Space is too high, as it results in a zero volume surface mesh. There are no remedies for a mesh that fails to generate any surface hull at all.
 
 \begin{figure}[!ht]
 	\centering
@@ -1178,7 +1192,7 @@ It is clear at this point that for low thickness objects in zero noise situation
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4odt02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4odt03.png}
-		\caption[Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 4$ after ODT with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 4$ after ODT with a 30 second clock cap.}
 	\label{zeronoise:scalespace4odt}
 \end{figure}
 
@@ -1198,7 +1212,7 @@ In Figure~\ref{zeronoise:advancedperturb}, the result of the Advancing Front mes
 	\label{zeronoise:advancedperturb}
 \end{figure}
 
-The next figure is the reconstruction at scale space $2$. Again the mesh is severely pock-marked, but far less so than its predecessor. Provided a higher clock limit, these pock-marks are slightly more relieved, but unfortunately perturbation does not converge at the ``smoothest'' mesh, but at the mesh that satisfies its constraints for quality.
+The next figure is the reconstruction at Scale-Space $2$. Again the mesh is severely pock-marked, but far less so than its predecessor. Provided a higher clock limit, these pock-marks are slightly more relieved, but unfortunately perturbation does not converge at the ``smoothest'' mesh, but at the mesh that satisfies its constraints for quality.
 
 \begin{figure}[!ht]
 	
@@ -1207,7 +1221,7 @@ The next figure is the reconstruction at scale space $2$. Again the mesh is seve
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2perturb02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2perturb03.png}
-		\caption[Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 2$ after perturbation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 2$ after perturbation with a 30 second clock cap.}
 	\label{zeronoise:scalespace2perturb}
 \end{figure}
 
@@ -1219,7 +1233,7 @@ The next figure is the reconstruction at scale space $2$. Again the mesh is seve
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4perturb03.png}
-		\caption[Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
 	\label{zeronoise:scalespace4perturb}
 \end{figure}
 
@@ -1236,7 +1250,7 @@ Exudation, similar to perturbation, aims to relieve any slivers remaining in the
 	\label{zeronoise:advancedeverything}
 \end{figure}
 
-The scale space reconstruction in the zero noise case is interesting. In future work, minimum volume parameters suitable for zero-noise cases will be quantified. Figure~\ref{zeronoise:scalespace2everything} shows a poor looking mesh as the final product of the algorithm. Non-uniform areas can be seen distributed throughout the edges, and the mesh is filled with pockmarks, which damage the overall quality level of the mesh. 
+The Scale-Space reconstruction in the zero noise case is interesting. In future work, minimum volume parameters suitable for zero-noise cases will be quantified. Figure~\ref{zeronoise:scalespace2everything} shows a poor looking mesh as the final product of the algorithm. Non-uniform areas can be seen distributed throughout the edges, and the mesh is filled with pockmarks, which damage the overall quality level of the mesh. 
 
 \begin{figure}[!ht]
 	\centering
@@ -1244,7 +1258,7 @@ The scale space reconstruction in the zero noise case is interesting. In future 
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2everything02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace2everything03.png}
-		\caption[Scale space reconstruction $S = 2$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after exudation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 2$ after exudation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 2$ after exudation with a 30 second clock cap.}
 	\label{zeronoise:scalespace2everything}
 \end{figure}
 
@@ -1256,13 +1270,13 @@ The scale space reconstruction in the zero noise case is interesting. In future 
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4everything02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/0noise/optimizedNeat/scalespace4everything03.png}
-		\caption[Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
 	\label{zeronoise:scalespace4everything}
 \end{figure}
 
 \subsection{Quality Analysis}
 
-After applying the optimization steps, the meshes -- with the exception of the Advancing Front method -- do not increase in quality. In fact, they actually decrease. This phenomenon cannot be attributed to the thickness of the test beam with 100\% certainty, but this is the probable cause of failure, as the Scale Space reconstructions cast both sides of the beam to the same surface.
+After applying the optimization steps, the meshes -- with the exception of the Advancing Front method -- do not increase in quality. In fact, they actually decrease. This phenomenon cannot be attributed to the thickness of the test beam with 100\% certainty, but this is the probable cause of failure, as the Scale-Space reconstructions cast both sides of the beam to the same surface.
 
 \begin{table}[!ht]
 	\centering
@@ -1273,10 +1287,10 @@ After applying the optimization steps, the meshes -- with the exception of the A
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
 			\\ \hline Initial Advacing Front 	& 0.0548 	& 0.2916 & 0.0270 & 0.0274 & 1 & Yes & Yes
 			\\ \hline Optimized Advancing Front & 0.3096 	& 0.1910 & 1.333  & 0.1548 & 1 & Yes & Yes
-			\\ \hline Initial Scale Space 2  	& 0.0577 	& 0.0665 & 0.0082 & 0.0587 & 1 & No & No
-			\\ \hline Optimized Scale Space 2   & 0.0072 	& 0.1085 & 0.0035 & 0.0037 & 1 & Yes & No
-			\\ \hline Initial Scale Space 4  	& 0.0038 	& 0.0185 & 0.0005 & 0.0035 & 1 & No & No
-			\\ \hline Optimized Scale Space 4   & 0.0031 	& 0.0786 & 0.0016 & 0.0016 & 1 & No & No
+			\\ \hline Initial Scale-Space 2  	& 0.0577 	& 0.0665 & 0.0082 & 0.0587 & 1 & No & No
+			\\ \hline Optimized Scale-Space 2   & 0.0072 	& 0.1085 & 0.0035 & 0.0037 & 1 & Yes & No
+			\\ \hline Initial Scale-Space 4  	& 0.0038 	& 0.0185 & 0.0005 & 0.0035 & 1 & No & No
+			\\ \hline Optimized Scale-Space 4   & 0.0031 	& 0.0786 & 0.0016 & 0.0016 & 1 & No & No
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
@@ -1359,18 +1373,18 @@ While Advancing Front touted itself as the superior method in the zero noise cas
 		\label{2cmnoise:advancingfront}
 \end{figure}
 
-Where Advancing Front fails, the Scale Space reconstruction method excels in its ability to compensate for noise. Figure~\ref{2cmnoise:scalepspace2} shows the initial meshing results using a scale space of 2. Note the uniformity in the mesh, and the singular surface area the mesh defines. This is unsurprising, as the scale space reconstruction method is built specifically for high noise and high variability cases.
+Where Advancing Front fails, the Scale-Space reconstruction method excels in its ability to compensate for noise. Figure~\ref{2cmnoise:scalepspace2} shows the initial meshing results using a Scale-Space of 2. Note the uniformity in the mesh, and the singular surface area the mesh defines. This is unsurprising, as the Scale-Space reconstruction method is built specifically for high noise and high variability cases.
 
 \begin{figure}[!ht] 
 	\centering
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/2cmmeshNeat/scalespace200.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmeshNeat/scalespace201.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmeshNeat/scalespace202.png}
-		\caption[Initial meshing using a scale space reconstruction with $S = 2$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 2$.}
+		\caption[Initial meshing using a Scale-Space reconstruction with $S = 2$]{\centering  Result of initial meshing using the Scale-Space reconstruction method with $S = 2$.}
 		\label{2cmnoise:scalepspace2}
 \end{figure}
 
-The scale space reconstruction, when the casting scale is increased to 4, once again shows a unified singular surface area, but suffers from the effects of the beam's lack of thickness seen in Figure~\ref{zeronoise:scalespace2} and Figure~\ref{zeronoise:scalespace4}. At this point, it is too early to make a definitive statement about whether scale space 4 is too drastic of a casting, but this method is re-evaluated  at the end of the optimization process.
+The Scale-Space reconstruction, when the casting scale is increased to 4, once again shows a unified singular surface area, but suffers from the effects of the beam's lack of thickness seen in Figure~\ref{zeronoise:scalespace2} and Figure~\ref{zeronoise:scalespace4}. At this point, it is too early to make a definitive statement about whether Scale-Space 4 is too drastic of a casting, but this method is re-evaluated  at the end of the optimization process.
 
 \begin{figure}[!ht]
 	
@@ -1378,7 +1392,7 @@ The scale space reconstruction, when the casting scale is increased to 4, once a
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/2cmmeshNeat/scalespace400.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmeshNeat/scalespace401.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/2cmmeshNeat/scalespace402.png}
-		\caption[Initial meshing using a scale space reconstruction with $S = 4$]{\centering  Result of initial meshing using the scale space reconstruction method with $S = 4$.}
+		\caption[Initial meshing using a Scale-Space reconstruction with $S = 4$]{\centering  Result of initial meshing using the Scale-Space reconstruction method with $S = 4$.}
 		\label{2cmnoise:scalespace4}
 \end{figure}
 
@@ -1392,8 +1406,8 @@ The Advancing Front reconstruction is once again ranked the highest in every qua
 			\hline
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
 			\\ \hline Advacing Front & 0.1518 & 0.0877 & 0.0133 & 0.0924 & 314	& No 	& No
-			\\ \hline Scale Space 2  & 0.0402 & 0.0594 & 0.0088 & 0.0259 & 1	& Yes 	& No
-			\\ \hline Scale Space 4  & 0.0080 & 0.0592 & 0.0035 & 0.0043 & 1	& No 	& No
+			\\ \hline Scale-Space 2  & 0.0402 & 0.0594 & 0.0088 & 0.0259 & 1	& Yes 	& No
+			\\ \hline Scale-Space 4  & 0.0080 & 0.0592 & 0.0035 & 0.0043 & 1	& No 	& No
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
@@ -1408,7 +1422,7 @@ Before traversing into the individual optimization sections, it is important to 
 
 \subsubsection{Effects of Voronoi Relaxation}
 
-As before, a voronoi relaxation algorithm is applied to the mesh, with exit criteria of convergence, or a maximum of 200 iterations. Clearly visible in Figure~\ref{2cmnoise:scalespace2lloyd}, the reconstruction at scale space 2 is relatively smooth compared the the raw point cloud, and exists as a singular bounded surface area.
+As before, a voronoi relaxation algorithm is applied to the mesh, with exit criteria of convergence, or a maximum of 200 iterations. Clearly visible in Figure~\ref{2cmnoise:scalespace2lloyd}, the reconstruction at Scale-Space 2 is relatively smooth compared the the raw point cloud, and exists as a singular bounded surface area.
 
 \begin{figure}[!ht]	
 	\centering
@@ -1416,11 +1430,11 @@ As before, a voronoi relaxation algorithm is applied to the mesh, with exit crit
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2lloyd01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2lloyd02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2lloyd03.png}
-		\caption[Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale-Space reconstruction $S = 2$ after 200 iterations of voronoi relaxation]{\centering Scale-Space reconstruction $S = 2$ after 200 iterations of voronoi relaxation.}
 	\label{2cmnoise:scalespace2lloyd}
 \end{figure}
 
-Voronoi relaxation applied on the reconstruction at scale space 4 has done some work to remedy the highly visible issues with the initial mesh. On the top left corner, the section no longer has zero implied volume, as the mesh has ballooned out slightly. However, there are still a series of discontinuities and sharp edges existant in the mesh. The next sections show how ODT, perturbation, and exudation affect these sharp edges.
+Voronoi relaxation applied on the reconstruction at Scale-Space 4 has done some work to remedy the highly visible issues with the initial mesh. On the top left corner, the section no longer has zero implied volume, as the mesh has ballooned out slightly. However, there are still a series of discontinuities and sharp edges existant in the mesh. The next sections show how ODT, perturbation, and exudation affect these sharp edges.
 
 \begin{figure}[!ht]
 	\centering
@@ -1428,7 +1442,7 @@ Voronoi relaxation applied on the reconstruction at scale space 4 has done some 
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4lloyd01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4lloyd02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4lloyd03.png}
-		\caption[Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
+		\caption[Scale-Space reconstruction $S = 4$ after 200 iterations of voronoi relaxation]{\centering Scale-Space reconstruction $S = 4$ after 200 iterations of voronoi relaxation.}
 	\label{2cmnoise:scalespace4lloyd}
 \end{figure}
 
@@ -1445,11 +1459,11 @@ Delaunay optimization has some more noticable effects on the noisy point cloud t
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2odt02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2odt03.png}
-		\caption[Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after ODT with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 2$ after ODT with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 2$ after ODT with a 30 second clock cap.}
 	\label{2cmnoise:scalespace2odt}
 \end{figure}
 
-The effects listed above are even more visible in scale space 4. Figure~\ref{2cmnoise:scalespace4odt} shows the extent ODT can go to to increase the quality in a mesh. The portion in the top left corner of the mesh -- initial a nearly 2-dimensional area -- is now defined as a shape with definite volume, and only slightly thinner than its surrounding edges.
+The effects listed above are even more visible in Scale-Space 4. Figure~\ref{2cmnoise:scalespace4odt} shows the extent ODT can go to to increase the quality in a mesh. The portion in the top left corner of the mesh -- initial a nearly 2-dimensional area -- is now defined as a shape with definite volume, and only slightly thinner than its surrounding edges.
 
 \begin{figure}[!ht]
 	\centering
@@ -1457,7 +1471,7 @@ The effects listed above are even more visible in scale space 4. Figure~\ref{2cm
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4odt01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4odt02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4odt03.png}
-		\caption[Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after ODT with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 4$ after ODT with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 4$ after ODT with a 30 second clock cap.}
 	\label{2cmnoise:scalespace4odt}
 \end{figure}
 
@@ -1465,7 +1479,7 @@ Because the reconstructions at scale 2 and 4 are already quite high in quality m
 
 \subsubsection{Effects of Mesh Perturbation}
 
-The algorithm will now attempt to remove the remaining slivers using perturbation with a 30 second time limit if convergence is not met. Figure~\ref{2cmnoise:scalespace2perturb} shows the mesh at scale space 2 after perturbation. In this case, perturbation does not return any overtly visible changes. It is likely that none or very few of the tetrahedra in the mesh met the criteria defining a sliver. This being the case, changes in the mesh would be very difficult to detect by visual inspection.
+The algorithm will now attempt to remove the remaining slivers using perturbation with a 30 second time limit if convergence is not met. Figure~\ref{2cmnoise:scalespace2perturb} shows the mesh at Scale-Space 2 after perturbation. In this case, perturbation does not return any overtly visible changes. It is likely that none or very few of the tetrahedra in the mesh met the criteria defining a sliver. This being the case, changes in the mesh would be very difficult to detect by visual inspection.
 
 \begin{figure}[!ht]
 	
@@ -1474,11 +1488,11 @@ The algorithm will now attempt to remove the remaining slivers using perturbatio
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2perturb02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2perturb03.png}
-		\caption[Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after perturbation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 2$ after perturbation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 2$ after perturbation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace2perturb}
 \end{figure}
 
-%Changes in scale space 4 reconstruction are subtle as well [[details]].
+%Changes in Scale-Space 4 reconstruction are subtle as well [[details]].
 
 \begin{figure}[!ht]
 	\centering
@@ -1486,7 +1500,7 @@ The algorithm will now attempt to remove the remaining slivers using perturbatio
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4perturb01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4perturb02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4perturb03.png}
-		\caption[Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 4$ after perturbation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 4$ after perturbation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace4perturb}
 \end{figure}
 
@@ -1495,7 +1509,7 @@ The algorithm will now attempt to remove the remaining slivers using perturbatio
 
 \subsubsection{Exudation}
 
-Changes due to exudation are more visible than perturbation in this case. Looking again at the lefthand side of the beam, there is a more uniform slope in the shape of the beam. while this modifies the topology of the mesh in a way that does not meet the true definition of the beam, it provides a smoother and more uniform mesh shape. Figure~\ref{2cmnoise:scalespace2everything} shows the final optimized mesh at a scale space of 2.
+Changes due to exudation are more visible than perturbation in this case. Looking again at the lefthand side of the beam, there is a more uniform slope in the shape of the beam. while this modifies the topology of the mesh in a way that does not meet the true definition of the beam, it provides a smoother and more uniform mesh shape. Figure~\ref{2cmnoise:scalespace2everything} shows the final optimized mesh at a Scale-Space of 2.
 
 \begin{figure}[!ht]
 	\centering
@@ -1503,11 +1517,11 @@ Changes due to exudation are more visible than perturbation in this case. Lookin
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2everything02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace2everything03.png}
-		\caption[Scale space reconstruction $S = 2$ after after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 2$ after exudation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 2$ after after exudation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 2$ after exudation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace2everything}
 \end{figure}
 
-Scale space 4 exaggerates the parabolic shape of the beam even more than scale space 2 -- again, unsurprisingly, as heavier interpolation is applied as the reconstruction is moved to higher scales. Viewing the final mesh in Figure~\ref{2cmnoise:scalespace4everything}, an evenly distributed set of tetrahedra defining the relatively smooth surface area of a beam with a parabolic cross-section is visible.
+Scale-Space 4 exaggerates the parabolic shape of the beam even more than Scale-Space 2 -- again, unsurprisingly, as heavier interpolation is applied as the reconstruction is moved to higher scales. Viewing the final mesh in Figure~\ref{2cmnoise:scalespace4everything}, an evenly distributed set of tetrahedra defining the relatively smooth surface area of a beam with a parabolic cross-section is visible.
 
 \begin{figure}[!ht]
 	\centering
@@ -1515,13 +1529,13 @@ Scale space 4 exaggerates the parabolic shape of the beam even more than scale s
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4everything01.png}
 		\includegraphics[width=2in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4everything02.png}
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4everything03.png}
-		\caption[Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
+		\caption[Scale-Space reconstruction $S = 4$ after exudation with a 30 second clock cap]{\centering Scale-Space reconstruction $S = 4$ after exudation with a 30 second clock cap.}
 	\label{2cmnoise:scalespace4everything}
 \end{figure}
 
 \subsection{Quality Analysis}
 
-At the end of the optimization phase, both Scale Space reconstructions are compatible with B-REP conversion. In both methods there is also an uptrend in all quality metrics of an entire order of magnitude. At this point, the ability to quantitatively say whether or not a mesh will meet criteria is not available, but the range of values this can happen is beginning to narrow.
+At the end of the optimization phase, both Scale-Space reconstructions are compatible with B-REP conversion. In both methods there is also an uptrend in all quality metrics of an entire order of magnitude. At this point, the ability to quantitatively say whether or not a mesh will meet criteria is not available, but the range of values this can happen is beginning to narrow.
 
 \begin{table}[!ht]
 	\centering
@@ -1530,10 +1544,10 @@ At the end of the optimization phase, both Scale Space reconstructions are compa
 		\begin{tabular}{ | c | c | c | c | c | c | c | c | c | }
 			\hline
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
-			\\ \hline Initial Scale Space 2  	& 0.0402 & 0.0594 & 0.0088 & 0.0259 & 1	& Yes	& No
-			\\ \hline Optimized Scale Space 2 	& 0.1367 & 0.1077 & 0.0147 & 0.0955 & 1 & Yes	& Yes
-			\\ \hline Initial Scale Space 4  	& 0.0080 & 0.0592 & 0.0035 & 0.0043 & 1	& No	& No
-			\\ \hline Optimized Scale Space 4 	& 0.1166 & 0.1444 & 0.0552 & 0.0595 & 1 & Yes	& Yes
+			\\ \hline Initial Scale-Space 2  	& 0.0402 & 0.0594 & 0.0088 & 0.0259 & 1	& Yes	& No
+			\\ \hline Optimized Scale-Space 2 	& 0.1367 & 0.1077 & 0.0147 & 0.0955 & 1 & Yes	& Yes
+			\\ \hline Initial Scale-Space 4  	& 0.0080 & 0.0592 & 0.0035 & 0.0043 & 1	& No	& No
+			\\ \hline Optimized Scale-Space 4 	& 0.1166 & 0.1444 & 0.0552 & 0.0595 & 1 & Yes	& Yes
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
@@ -1621,7 +1635,7 @@ Figure~\ref{lidar:advancefront} shows the results of a raw advancing front meshi
 	\label{lidar:advancefront}
 \end{figure}
 
-Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset using the scale space reconstruction method, at a scale of 2. While the mesh does not represent the beam accurately, and does not meet all of the criteria for a B-REP conversion compatibility, the topology represents one continuous surface, and is far smoother than the original input data. This mesh can be seen to fail by visual inspection. The horizontal section of the beam is represented as a volumeless surface. This is not compatible with CAD conversion.
+Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset using the Scale-Space reconstruction method, at a scale of 2. While the mesh does not represent the beam accurately, and does not meet all of the criteria for a B-REP conversion compatibility, the topology represents one continuous surface, and is far smoother than the original input data. This mesh can be seen to fail by visual inspection. The horizontal section of the beam is represented as a volumeless surface. This is not compatible with CAD conversion.
 
 \begin{figure}[!ht]
 	\centering
@@ -1629,11 +1643,11 @@ Figure~\ref{lidar:scalespace2} shows the results of the LiDAR collected dataset 
 		\includegraphics[width=2in]{real-lab-scans/meshedNeat/scalespace201.png}
 		\includegraphics[width=2in]{real-lab-scans/meshedNeat/scalespace202.png}
 		\includegraphics[width=5in]{real-lab-scans/meshedNeat/scalespace203.png}
-		\caption[Scale space reconstruction at scale $S$=2 of segmented LiDAR data]{\centering Scale space reconstruction at scale $S$=2 of resulting beam point cloud.}
+		\caption[Scale-Space reconstruction at scale $S$=2 of segmented LiDAR data]{\centering Scale-Space reconstruction at scale $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2}
 \end{figure}
 
-Reducing the input point cloud to scale space 4 provides similar results to scale space 2, the difference being in the smoothing level. This extra smoothing is most visible in the top left image. There are far less ridges in the vertical face than in scale space 2. While moving to higher scale spaces almost always guarantees a smoother reconstruction, it comes at the price of moving farther away from the true collected topology of the object.
+Reducing the input point cloud to Scale-Space 4 provides similar results to Scale-Space 2, the difference being in the smoothing level. This extra smoothing is most visible in the top left image. There are far less ridges in the vertical face than in Scale-Space 2. While moving to higher scale spaces almost always guarantees a smoother reconstruction, it comes at the price of moving farther away from the true collected topology of the object.
 
 \begin{figure}[!ht]
 	\centering
@@ -1641,7 +1655,7 @@ Reducing the input point cloud to scale space 4 provides similar results to scal
 		\includegraphics[width=2in]{real-lab-scans/meshedNeat/scalespace401.png}
 		\includegraphics[width=2in]{real-lab-scans/meshedNeat/scalespace402.png}
 		\includegraphics[width=5in]{real-lab-scans/meshedNeat/scalespace403.png}
-		\caption[Scale space reconstruction at scale $S$=4 of segmented LiDAR data]{\centering Scale space reconstruction at scale $S$=4 of resulting beam point cloud.}
+		\caption[Scale-Space reconstruction at scale $S$=4 of segmented LiDAR data]{\centering Scale-Space reconstruction at scale $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4}
 \end{figure}
 
@@ -1655,8 +1669,8 @@ None of the initial meshing methods create an instantaneously convertible surfac
 			\hline
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
 			\\ \hline Advacing Front & 0.1446 & 0.1072 & 0.0419 & 0.0849 & 28	& No & No
-			\\ \hline Scale Space 2  & 0.0175 & 0.0524 & 0.0066 & 0.0093 & 2	& No & No
-			\\ \hline Scale Space 4  & 0.0117 & 0.0562 & 0.0057 & 0.0059 & 2	& No & No
+			\\ \hline Scale-Space 2  & 0.0175 & 0.0524 & 0.0066 & 0.0093 & 2	& No & No
+			\\ \hline Scale-Space 4  & 0.0117 & 0.0562 & 0.0057 & 0.0059 & 2	& No & No
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
@@ -1670,7 +1684,7 @@ Unlike the simulated cases, none of the initial methods for the LiDAR collection
 
 \subsubsection{Effects of Voronoi Relaxation}
 
-As in previous sections, the first step in the optimization process is voronoi relaxation -- otherwise known as voronoi relaxation. The effect of voronoi relaxation on a mesh is the redistribution of surface area throughout the mesh triangulations. The exit conditions for relaxation is convergence of mesh centroids. Figure~\ref{lidar:scalespace2lloyd} demonstrates what a voronoi relaxation does for the LiDAR collected point cloud after being reconstructed at a scale space of 2.
+As in previous sections, the first step in the optimization process is voronoi relaxation -- otherwise known as voronoi relaxation. The effect of voronoi relaxation on a mesh is the redistribution of surface area throughout the mesh triangulations. The exit conditions for relaxation is convergence of mesh centroids. Figure~\ref{lidar:scalespace2lloyd} demonstrates what a voronoi relaxation does for the LiDAR collected point cloud after being reconstructed at a Scale-Space of 2.
 
 \begin{figure}[!ht]
 	\centering
@@ -1678,7 +1692,7 @@ As in previous sections, the first step in the optimization process is voronoi r
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace2lloyd01.png}
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace2lloyd02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace2lloyd03.png}
-		\caption[Lloyd + Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
+		\caption[Lloyd + Scale-Space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + Scale-Space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2lloyd}
 \end{figure}
 
@@ -1690,7 +1704,7 @@ After running the voronoi relaxation on the reconstruction at scale 4, the diffe
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4lloyd01.png}
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4lloyd02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace4lloyd03.png}
-		\caption[Lloyd + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
+		\caption[Lloyd + Scale-Space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + Scale-Space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4lloyd}
 \end{figure}
 
@@ -1703,7 +1717,7 @@ After running the voronoi relaxation on the reconstruction at scale 4, the diffe
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace2odt01.png}
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace2odt02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace2odt03.png}
-		\caption[Lloyd + ODT +Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
+		\caption[Lloyd + ODT +Scale-Space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Scale-Space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2odt}
 \end{figure}
 
@@ -1715,13 +1729,13 @@ The differences in the mesh before and after ODT is applied are subtle, but the 
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4odt01.png}
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4odt02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace4odt03.png}
-		\caption[Lloyd + ODT + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + ODT + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
+		\caption[Lloyd + ODT + Scale-Space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + ODT + Scale-Space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4odt}
 \end{figure}
 
 \subsubsection{Perturbation}
 
-The final steps in the optimization process, perturbation and exudation, aim to resolve any remaining poor quality tetrahedra in the surface topology. At this point, the only shapes designated as poor quality left in the mesh are slivers, identified in Table~\ref{table:meshquality} as tetrahedra with low volume ratios. In Figure~\ref{lidar:scalespace2perturb}, a ballooning effect on the mesh can be seen, especially visible in the verticale face of the beam. At this point, even at scale space 2, the optimization process has almost entirely removed the horizontal portion of the beam.
+The final steps in the optimization process, perturbation and exudation, aim to resolve any remaining poor quality tetrahedra in the surface topology. At this point, the only shapes designated as poor quality left in the mesh are slivers, identified in Table~\ref{table:meshquality} as tetrahedra with low volume ratios. In Figure~\ref{lidar:scalespace2perturb}, a ballooning effect on the mesh can be seen, especially visible in the verticale face of the beam. At this point, even at Scale-Space 2, the optimization process has almost entirely removed the horizontal portion of the beam.
 
 \begin{figure}[!ht]
 	\centering
@@ -1730,11 +1744,11 @@ The final steps in the optimization process, perturbation and exudation, aim to 
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace2perturb02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace2perturb03.png}
 		% \includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace2perturb04.png}
-		\caption[Lloyd + ODT + perturb +Scale space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Perturb + Scale space reconstruction at $S$=2 of resulting beam point cloud.}
+		\caption[Lloyd + ODT + perturb +Scale-Space reconstruction at $S$=2 of segmented LiDAR data]{\centering Lloyd + ODT + Perturb + Scale-Space reconstruction at $S$=2 of resulting beam point cloud.}
 	\label{lidar:scalespace2perturb}
 \end{figure}
 
-The reconstruction at scale space 4 again shows similar results to the scale space 2 reconstruction, with the except of the lower forward edge of the beam shown in the upper lefthand graphic of Figure~\ref{lidar:scalespace4perturb}. An artifact of the casting space, this corner does not extrude from the beam's surface as far as the case of scale space 2.
+The reconstruction at Scale-Space 4 again shows similar results to the Scale-Space 2 reconstruction, with the except of the lower forward edge of the beam shown in the upper lefthand graphic of Figure~\ref{lidar:scalespace4perturb}. An artifact of the casting space, this corner does not extrude from the beam's surface as far as the case of Scale-Space 2.
 
 \begin{figure}[!ht]
 	\centering
@@ -1743,7 +1757,7 @@ The reconstruction at scale space 4 again shows similar results to the scale spa
 		\includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4perturb02.png}
 		\includegraphics[width=5in]{real-lab-scans/optimizedNeat/scalespace4perturb03.png}
 		% \includegraphics[width=2in]{real-lab-scans/optimizedNeat/scalespace4perturb04.png}
-		\caption[Lloyd + ODT + perturb + Scale space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + ODT + perturb + Scale space reconstruction at $S$=4 of resulting beam point cloud.}
+		\caption[Lloyd + ODT + perturb + Scale-Space reconstruction at $S$=4 of segmented LiDAR data]{\centering Lloyd + ODT + perturb + Scale-Space reconstruction at $S$=4 of resulting beam point cloud.}
 	\label{lidar:scalespace4perturb}
 \end{figure}
 
@@ -1778,7 +1792,7 @@ Exudation represents the final step in the optimization process, and the complet
 
 \subsection{Quality Analysis}
 
-The quality of each Scale Space reconstruction is improved vastly after optimization. However, the meshes are not singular volumes, and contain two individual shapes each, connected at a single point. None of the meshes convert successfully to solid models as they are presented at this point.
+The quality of each Scale-Space reconstruction is improved vastly after optimization. However, the meshes are not singular volumes, and contain two individual shapes each, connected at a single point. None of the meshes convert successfully to solid models as they are presented at this point.
 
 \begin{table}[!ht]
 	\centering
@@ -1787,11 +1801,11 @@ The quality of each Scale Space reconstruction is improved vastly after optimiza
 		\begin{tabular}{ | c | c | c | c | c | c | c | c | c | }
 			\hline
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
-			\\ \hline Initial Scale Space 2 	& 0.0175 	& 0.0524 & 0.0066 & 0.0093 	& 2	& No 	& No
-			\\ \hline Optimized Scale Space 2 	& 0.2629  	& 0.1941 & 0.1099 & 0.1418 	& 2	& Yes 	& No
+			\\ \hline Initial Scale-Space 2 	& 0.0175 	& 0.0524 & 0.0066 & 0.0093 	& 2	& No 	& No
+			\\ \hline Optimized Scale-Space 2 	& 0.2629  	& 0.1941 & 0.1099 & 0.1418 	& 2	& Yes 	& No
 
-			\\ \hline Initial Scale Space 4  	& 0.0117	& 0.0562 & 0.0057 & 0.0059 	& 2	& No	& No
-			\\ \hline Optimized Scale Space 4 	& 0.2143	& 0.1229 & 0.0558 & 0.1087 	& 2 & Yes 	& No
+			\\ \hline Initial Scale-Space 4  	& 0.0117	& 0.0562 & 0.0057 & 0.0059 	& 2	& No	& No
+			\\ \hline Optimized Scale-Space 4 	& 0.2143	& 0.1229 & 0.0558 & 0.1087 	& 2 & Yes 	& No
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
@@ -1807,24 +1821,24 @@ The end result of the algorithm on the experimental data, when fully automated, 
 		\begin{tabular}{ | c | c | c | c | c | c | c | c | c | }
 			\hline
 			 Mesh Type & $Q_{1}$ & $Q_{2}$ & $Q_{3}$ & $Q_{4}$ & Bounded Surfaces & B-REP Compatible & FE Compatible
-			\\ \hline Optimized Scale Space 2 	& 0.2629  	& 0.1941 & 0.1099 & 0.1418 	& 1	& Yes	& No
-			\\ \hline Optimized Scale Space 4 	& 0.2143	& 0.1229 & 0.0558 & 0.1087 	& 1 & Yes	& Yes
+			\\ \hline Optimized Scale-Space 2 	& 0.2629  	& 0.1941 & 0.1099 & 0.1418 	& 1	& Yes	& Yes
+			\\ \hline Optimized Scale-Space 4 	& 0.2143	& 0.1229 & 0.0558 & 0.1087 	& 1 & Yes	& Yes
 			\\ \hline
 	\end{tabular}}
 	Quality values shown are defined in Section~\ref{subsec:meshoptimization} and represent the absolute minima in each category.
 	\label{table:realmodified}
 \end{table}
 
-Why the mesh at Scale Space 2 fails the finite element conversion at this point is still unclear. It is possible that there are unobservable sections of low or zero volume, or that there are overlapping sections inherent in the mesh. Interestingly, All of the quality metrics for Scale Space 2 are higher than those at Scale Space 4, so all expected parameters are met. Scale Space 2 serves as proof that although the metrics used to evaluate mesh quality in this thesis are valuable in estimating a mesh's surface-to-solid compatibility, they are not the only metrics that determine the ability to do so.
+% Why the mesh at Scale-Space 2 fails the finite element conversion at this point is still unclear. It is possible that there are unobservable sections of low or zero volume, or that there are overlapping sections inherent in the mesh. Interestingly, All of the quality metrics for Scale-Space 2 are higher than those at Scale-Space 4, so all expected parameters are met. Scale-Space 2 serves as proof that although the metrics used to evaluate mesh quality in this thesis are valuable in estimating a mesh's surface-to-solid compatibility, they are not the only metrics that determine the ability to do so.
 
-The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}. Comparing these figures with their unmodified counterparts (Figure~\ref{lidar:scalespace2everything} and Figure~\ref{lidar:scalespace4everything}), the only change is the removal of the bounded shape occupying the lower right section of the beam, which was connected to the rest of the beam object via single vertex point.
+The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{real:modified4}. Comparing these figures with their unmodified counterparts (Figure~\ref{lidar:scalespace2everything} and Figure~\ref{lidar:scalespace4everything}), the only change is the removal of the bounded shape occupying the lower right section of the beam, which was connected to the rest of the beam object via single vertex point. Both meshes at Scale-Space 2 and Scale-Space 4 are fully compatible with B-REP conversion at this stage.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace2Modified00.png}
 		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace2Modified01.png}
 		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace2Modified02.png}
-	\caption[Modified optimized surface mesh at scale space 2.]{\centering Manually corrected optimized scale space 2 reconstruction. [[Compare with Figure~\ref{lidar:scalespace2everything}.]]}
+	\caption[Modified optimized surface mesh at Scale-Space 2.]{\centering Manually corrected optimized Scale-Space 2 reconstruction. Compare with Figure~\ref{lidar:scalespace2everything}.}
 	\label{real:modified2}
 \end{figure}
 
@@ -1833,7 +1847,7 @@ The modified surface meshes are shown in Figures \ref{real:modified2} and \ref{r
 		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace4Modified00.png}
 		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace4Modified01.png}
 		\includegraphics[width=2in]{real-lab-scans/modmesh/scaleSpace4Modified02.png}
-	\caption[Modified optimized surface mesh at scale space 4.]{\centering Manually corrected optimized scale space 4 reconstruction. [[Compare with Figure~\ref{lidar:scalespace4everything}.]]}
+	\caption[Modified optimized surface mesh at Scale-Space 4.]{\centering Manually corrected optimized Scale-Space 4 reconstruction. Compare with Figure~\ref{lidar:scalespace4everything}.}
 	\label{real:modified4}
 \end{figure}
 
@@ -1875,13 +1889,17 @@ The rest of the quality metrics are shown in Table~\ref{table:qualitymetrics}.
 			\\ \hline Zero noise AF 	& 0.3096	& 0.191		& 1.333		& 0.1548	& 1					& Yes 				& Yes
 			\\ \hline Zero noise SS2 	& 0.0072	& 0.1085	& 0.0035	& 0.0037	& 1					& Yes 				& No
 			\\ \hline Zero noise SS4	& 0.0031	& 0.0486	& 0.0016	& 0.0016	& 1					& No				& No
-			\\ \hline 2cm noise SS2		& 0.1367	& 0.1077	& 0.0147	& 0.0955	& 1					& Yes				& Yes
-			\\ \hline 2cm noise SS4		& 0.1166	& 0.1444	& 0.0553	& 0.0595	& 1					& Yes				& Yes
-			\\ \hline Experimental SS2	& 0.2629	& 0.1941	& 0.1099	& 0.1418	& 2					& Yes				& Yes
-			\\ \hline Experimental SS4	& 0.2143	& 0.1229	& 0.0558	& 0.1087	& 2					& Yes				& No
+			\\ \hline 2cm noise SS2		& 0.1367	& 0.1077	& 0.0147	& 0.0955	& 1					& Yes				& Yes*
+			\\ \hline 2cm noise SS4		& 0.1166	& 0.1444	& 0.0553	& 0.0595	& 1					& Yes				& Yes*
+			\\ \hline Experimental SS2	& 0.2629	& 0.1941	& 0.1099	& 0.1418	& 1**					& Yes				& Yes
+			\\ \hline Experimental SS4	& 0.2143	& 0.1229	& 0.0558	& 0.1087	& 1**					& Yes				& No
 			\\ \hline
 	\end{tabular}}
-	AF -- Advancing Front, SS -- Scale Space
+	AF -- Advancing Front, SS -- Scale-Space
+
+	*Failed during iterative remeshing step of finite element loading analysis.
+
+	**Manually modified for mesh compatibility.
 	\label{table:qualitymetrics}
 \end{table}
 
@@ -1901,13 +1919,15 @@ Evaluating these metrics based on successful conversion to finite elements, the 
 			\\ \hline
 	\end{tabular}%}
 	
-	*Excludes experimental data meshed at scale space 2.
+	*Excludes experimental data meshed at Scale-Space 2.
 	\label{table:qualityanalysis}
 \end{table}
 
 As seen in the experimental meshing section, these parameters are not the be-all end-all of surface-to-solid compatibility, but they are definitely related to a mesh's ability to be converted to a solid volume.
 
 \section{Finite Element Models of Compatible Meshes}
+
+
 
 \begin{figure}[!ht]
 	\centering
@@ -1959,7 +1979,7 @@ The algorithm built is highly customizable. At each step in the pipeline, the de
 																			\\ Fuzzy C-means: Number of bins $k$ 
 																			\\ Agglomerative Clustering: Number of bins $k$ 
 																			\\ Euclidean Clustering* }
-			\\	\hline		Initial Meshing Method			&	\shortstack{Advancing Front \\ Scale Space Reconstruction: scale space $S$}
+			\\	\hline		Initial Meshing Method			&	\shortstack{Advancing Front \\ Scale-Space Reconstruction: Scale-Space $S$}
 			\\	\hline		Hole filling and refinement		&	\shortstack{Refinement ratio $r$}
 			\\	\hline		Optimization steps				&	\shortstack{ 	Voronoi relaxation** 
 																			\\ 	Optimal Delaunay triangulation** 
