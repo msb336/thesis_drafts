@@ -49,6 +49,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgements}
+	% I'd like to thank my advisor, Dr. Kontsos, for pushing me to complete a thesis as part of my Master's degree. He has been a huge resource for me to find knowledge, make connections, and learn about what kind of researcher I am. I'd also like to thank my fellow researchers in the Theoretical and Applied Mechanics Group, without you, I would never have gotten this far.
+
+	% This research was supported by the National Science Foundation under award number 1538389 (CMMI). I also thank Dragonfly Pictures Incorporated for supplying the LiDAR device. In addition, I thank the faculty and staff of Drexel University’s Mechanical & Structural Testing Facility for providing the space and materials necessary for this research.
 
 \end{acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1926,7 +1929,7 @@ Evaluating these metrics based on successful conversion to finite elements, the 
 As seen in the experimental meshing section, these parameters are not the be-all end-all of surface-to-solid compatibility, but they are definitely related to a mesh's ability to be converted to a solid volume.
 
 \section{Finite Element Models of Compatible Meshes}
-
+\label{sec:FEAresults}
 The optimized meshes compatible with finite element mesh conversion are shown in this section, placed in a cantilever setup with an identical vertical load placed on the far right end of the beam. Figure~\ref{conc:zeronoiseload} shows the result of finite element analysis of the control beam, with zero noise or occlusion induction.
 
 \begin{figure}[!ht]
@@ -1954,13 +1957,14 @@ Because of the remaining slivers, the finite element solver could not converge o
 	\label{conc:gnoiseproblem}
 \end{figure}
 
-
+Moving to the experimental results, the compatible Reconstruction at Scale-Space 2 can be seen in Figure~\ref{conc:realSS2FEresult} under the same loading conditions as the zero-noise case. Notice in this case that there are many sharp points and irregular features in the mesh, which undoubtedly modify the finite element analysis results. The future work section of this thesis speaks on how these irregularities can be remedied.
 
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=4in]{conclusion/realSS2FEresult.jpg}
 		\includegraphics[width=4in]{conclusion/realSS2FEresult01.jpg}
 		\caption[Finite element simulation of LiDAR collected point cloud data]{\centering Finite element simulation results of LiDAR collected point cloud data optimized after reconstruction at Scale-Space 2.}
+		\label{conc:realSS2FEresult}
 \end{figure}
 
 
@@ -2076,8 +2080,21 @@ C_{n}
 
 The speed, accuracy, and versatility of a CNN are functions of the number of hidden layers, the size of the convolutional layers, the type of activation functions, and the size and versatility of the training dataset \cite{RN7}. Because CNNs -- and all supervised learning methods -- require a large amount of training data, they do not fit within the scope of the proof of concept inside of this paper. However, supervised learning has proven to be one of the most effective forms of classification, and is a promising tool for implemention to further the effectiveness of the algorithm proposed in this thesis.
 
-\section{Guaranteed FEA compatibility}
-[[]]
+\section{Smoothing for reliable Finite Element Compatibility}
+As shown in Section~\ref{sec:FEAresults}, a mesh optimized by the quality measures set in this paper is not a mesh optimized for smoothness. Because of this, irregularities and singularities are still apparent in the mesh, making Finite Element analysis unreliable at best, and impossible at worst. There are many methods to smooth meshes, all of which come with the caveat of heavy topology modification. The two most readily available methods are Laplacian smoothing, defined in Section~\ref{subsec:holefill}, and Gaussian Curvature Flow \cite{RN44}.
+
+Both methods build a series of piecewise functions based on neighborhood relationships between vertices, and smooth the mesh by forcing the vertices to conform to a more uniform continuous function. Figure~\ref{gausscurve} demonstrates the effects of Gaussian Curvature Flow on an object with sharp edges.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4in]{gauscurve.png}
+	\caption[Gaussian Curvature Flow example]{\centering Gaussian Curvature Flow compared to mean curvature flow. a) Original shape b) Result of Gaussian Curvature Flow evolution c) the result of mean curvature flow evolution \cite{RN44}.}
+	\label{gausscurve}
+\end{figure}
+
+These methods are easily implemented, and result in a much more uniform mesh shape than the shapes currently being output by the optimization algorithm. For heavily noisy data, these smoothing steps are necessary, but when the collected point cloud is clean the resulting mesh is less representative after the smoothing steps.
+
+For this reason, finding methods of shape smoothing that do not deteriorate the topology accuracy of the mesh are necessary.
 
 \section{Informed Shape Estimation}
 \label{subsubsec:informedshape}
