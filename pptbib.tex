@@ -1,0 +1,114 @@
+
+\ExecuteOptions{letterpaper,oneside,12pt,onecolumn,final,openany}
+\documentclass[12pt]{drexelthesis}
+\usepackage[numbers]{natbib}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{placeins}
+\usepackage{textcomp}
+\let\Oldsection\section
+\renewcommand{\section}{\FloatBarrier\Oldsection}
+
+\let\Oldsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\Oldsubsection}
+
+\let\Oldsubsubsection\subsubsection
+\renewcommand{\subsubsection}{\FloatBarrier\Oldsubsubsection}
+
+
+
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\graphicspath{{images/}}
+
+\title{Automated Conversion of 3D Point Clouds to Solid Geometrical Computer Models}
+\author{Matthew S.~Brown}
+\advisor{Antonios~Kontsos, Ph.~D.~}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cite{RN29}
+\cite{RN40}
+\cite{RN30}
+\cite{RN31}
+
+% Sfm
+\cite{RN20}
+\cite{sift}
+\cite{surf}
+
+%Active collection
+\cite{basic-measurement-principles}
+
+%brep/nurbs
+\cite{Stroud2006}
+
+% ISS and RANSAC
+\cite{RN60}
+\cite{ransac1}
+
+% Delaunay Triangulation
+\cite{RN33}
+
+%advancing front
+\cite{RN66}
+
+% scale space
+\cite{ballpivot}
+\cite{RN67}
+
+%hole filling
+\cite{meshrefinement}
+\cite{meshfairing}
+\cite{laplacianimage}
+
+%Voronoi relaxation
+\cite{RN61}
+
+
+%odt
+\cite{ODT}
+
+%perturbation
+\cite{RN63}
+
+%exudation
+\cite{RN64}
+
+% CNN
+\cite{RN8}
+\cite{RN72}
+
+
+% fairing
+\cite{RN44}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+\addcontentsline{toc}{chapter}{Bibliography}
+\begin{spacing}{1.0}
+\bibliographystyle{IEEEtranN}
+\bibliography{references}
+\end{spacing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                
+\end{document}

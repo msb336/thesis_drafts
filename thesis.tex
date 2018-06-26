@@ -54,7 +54,7 @@ This thesis is dedicated to my family. Joel, Liz, Brianna, and Tziporah, you hav
 
 	I would also like to thank my thesis defense committee members, Dr. Tangorra and Dr. Kwatny, who dedicated a fair share of their time to understand and provide feedback to my research, as well as helped shape my academic career.
 
-	This research was supported by the National Science Foundation under award number 1538389 (CMMI). I also thank Dragonfly Pictures Incorporated for supplying the LiDAR device. In addition, I thank the faculty and staff of Drexel University’s Mechanical & Structural Testing Facility for providing the space and materials necessary for this research.
+	This research was supported by the National Science Foundation under award number 1538389 (CMMI). I also thank Dragonfly Pictures Incorporated for supplying the LiDAR device. In addition, I thank the faculty and staff of Drexel University’s Mechanical \& Structural Testing Facility for providing the space and materials necessary for this research.
 
 	Finally, I thank my friends and family. Their undying support and belief in me throughout the process was crucial to my success.
 
@@ -1501,8 +1501,6 @@ The algorithm will now attempt to remove the remaining slivers using perturbatio
 	\label{2cmnoise:scalespace2perturb}
 \end{figure}
 
-%Changes in Scale-Space 4 reconstruction are subtle as well [[details]].
-
 \begin{figure}[!ht]
 	\centering
 		\includegraphics[width=5in]{simulated-lab-scan/2cmnoise/optimizedNeat/scalespace4perturb00.png}
@@ -1936,11 +1934,11 @@ As seen in the experimental meshing section, these parameters are not the be-all
 
 \section{Finite Element Models of Compatible Meshes}
 \label{sec:FEAresults}
-The optimized meshes compatible with finite element mesh conversion are shown in this section, placed in a cantilever setup with an identical vertical load placed on the far right end of the beam. Figure~\ref{conc:zeronoiseload} shows the result of finite element analysis of the control beam, with zero noise or occlusion induction.
+The optimized meshes compatible with finite element mesh conversion are shown in this section, placed in a cantilever setup with an identical vertical load placed on the far right end of the beam. Figure~\ref{conc:zeronoiseload} shows the result of finite element analysis of the control beam, with zero noise or occlusion induction. The load applied is representative of 500 Newtons in the negative $z$-direction (towards the ground). Results are acquired using AutoDesk Fusion. 
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=2in]{conclusion/advancedfrontloading.png}
+		\includegraphics[width=2in]{conclusion/zeronoiseFEA.png}
 		\caption[FEA loading results on the zero noise beam]{\centering The zero noise beam, using the advancing front reconstruction, is subjected to an arbitrary load to certify FEA compatibility.}
 	\label{conc:zeronoiseload}
 \end{figure} 
@@ -1967,8 +1965,7 @@ Moving to the experimental results, the compatible Reconstruction at Scale-Space
 
 \begin{figure}[!ht]
 	\centering
-		\includegraphics[width=4in]{conclusion/realSS2FEresult.jpg}
-		\includegraphics[width=4in]{conclusion/realSS2FEresult01.jpg}
+		\includegraphics[width=4in]{conclusion/realscalnv1.png}
 		\caption[Finite element simulation of LiDAR collected point cloud data]{\centering Finite element simulation results of LiDAR collected point cloud data optimized after reconstruction at Scale-Space 2.}
 		\label{conc:realSS2FEresult}
 \end{figure}
