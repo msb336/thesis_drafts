@@ -43,15 +43,20 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{dedication}
+This thesis is dedicated to my family. Joel, Liz, Brianna, and Tziporah, you have always been there for me unconditionally. Thank you so much.
 
 \end{dedication}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgements}
-	% I'd like to thank my advisor, Dr. Kontsos, for pushing me to complete a thesis as part of my Master's degree. He has been a huge resource for me to find knowledge, make connections, and learn about what kind of researcher I am. I'd also like to thank my fellow researchers in the Theoretical and Applied Mechanics Group, without you, I would never have gotten this far.
+	Firstly, I'd like to thank my advisor, Dr. Kontsos, for pushing me to complete a thesis as part of my Master's degree. He has been a huge resource for me to find knowledge, make connections, and learn about what kind of researcher I am. I'd also like to thank my fellow researchers in the Theoretical and Applied Mechanics Group, without you, I would never have gotten this far.
 
-	% This research was supported by the National Science Foundation under award number 1538389 (CMMI). I also thank Dragonfly Pictures Incorporated for supplying the LiDAR device. In addition, I thank the faculty and staff of Drexel University’s Mechanical & Structural Testing Facility for providing the space and materials necessary for this research.
+	I would also like to thank my thesis defense committee members, Dr. Tangorra and Dr. Kwatny, who dedicated a fair share of their time to understand and provide feedback to my research, as well as helped shape my academic career.
+
+	This research was supported by the National Science Foundation under award number 1538389 (CMMI). I also thank Dragonfly Pictures Incorporated for supplying the LiDAR device. In addition, I thank the faculty and staff of Drexel University’s Mechanical & Structural Testing Facility for providing the space and materials necessary for this research.
+
+	Finally, I thank my friends and family. Their undying support and belief in me throughout the process was crucial to my success.
 
 \end{acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -625,6 +630,7 @@ Using the Ball Pivoting Algorithm \cite{ballpivot}, a reconstruction is implemen
 At this point, the vertices of the smoothed mesh are recast to zero-scale ( their initial points in the point cloud). The result is a mesh built based on a smoothed input, with minimual noise reduction in the process \cite{RN67}.
 
 \subsubsection{Hole Filling, Refinement, and Fairing}
+\label{subsec:holefill}
 \paragraph{Hole Filling}
 Surface meshes, defined in Section~\ref{subsubsec:surfdef}, contain vertices and faces. Inherently, they do not contain any methods to maintain a bounded volume. For this reason, it is necessary to detect discontinuities in the mesh, and develop a method to resolve them. Two types of mesh edges are defined in this section: A full edge, and a half edge.
 A full edge occurs when an edge is referenced by more than one polyhedral object. What this means in physical terms is that the edge is not on the boundary of the shape. Half edges, on the other hand, are only referenced by a single polyhedral object. Half edges are indicators of holes in the mesh, as they are unreferenced anywhere else in the surface area.
@@ -2087,7 +2093,7 @@ Both methods build a series of piecewise functions based on neighborhood relatio
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4in]{gauscurve.png}
+	\includegraphics[width=4in]{gaussflow.png}
 	\caption[Gaussian Curvature Flow example]{\centering Gaussian Curvature Flow compared to mean curvature flow. a) Original shape b) Result of Gaussian Curvature Flow evolution c) the result of mean curvature flow evolution \cite{RN44}.}
 	\label{gausscurve}
 \end{figure}
